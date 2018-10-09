@@ -1,12 +1,32 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar color='primary'>
     <ion-title>
-      Ionic Blank
+      Employee List
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content padding>
-  The world is your oyster.
-  <p>If you get lost, the <a target="_blank" rel="noopener" href="https://ionicframework.com/docs">docs</a> will be your guide.</p>
+  <ion-list>
+    <ion-item *ngFor="let employee of employees">
+      <ion-avatar slot="start">
+        <img [src]="employee.avatar" alt="Avatar" />
+      </ion-avatar>
+      <ion-label>
+        <h2>{{ employee.employee_name }}</h2>
+        <h3>{{ employee.job_position }}</h3>
+        <p>{{ employee.description }}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
 </ion-content>
+
+<ion-footer>
+  <ion-toolbar color="primary">
+      <ion-title>© {{ currentYear }} Adrián Brito Pacheco</ion-title>
+      <ion-buttons slot="end">
+        <div class="github-button"><iframe allowtransparency="true" scrolling="no" frameborder="0" src="https://buttons.github.io/buttons.html#href=https%3A%2F%2Fgithub.com%2Fabritopach%2Fangular-ionic-master-detail&amp;title=&amp;aria-label=Star%20abritopach%2Fangular-ionic-master-detail%20on%20GitHub&amp;data-icon=octicon-star&amp;data-text=Star" style="width: 50px; height: 20px; border: none; padding-right: 5px"></iframe></div>
+        <div class="github-button"><iframe allowtransparency="true" scrolling="no" frameborder="0" src="https://buttons.github.io/buttons.html#href=https%3A%2F%2Fgithub.com%2Fabritopach&amp;title=&amp;aria-label=Follow%20%40abritopach%20on%20GitHub&amp;data-text=GitHub" style="width: 67px; height: 20px; border: none;"></iframe></div>
+      </ion-buttons>
+  </ion-toolbar>
+</ion-footer>
