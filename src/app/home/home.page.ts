@@ -14,5 +14,4 @@ export class HomePage {
     {'employee_name': 'José Antonio Pérez Florencia', 'job_position': 'Software Developer', 'avatar': 'http://i.pravatar.cc/150?img=2',
     'description': 'Description'}
   ];
-  
 }
