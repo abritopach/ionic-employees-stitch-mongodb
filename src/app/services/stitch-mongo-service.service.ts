@@ -9,6 +9,14 @@ export class StitchMongoServiceService {
   client: StitchAppClient;
   db: RemoteMongoDatabase;
 
+  fakeEmployees = [
+    {employee_name: 'Adrián Brito Pacheco', job_position: 'Project Manager', avatar: 'http://i.pravatar.cc/150?img=1',
+     description: 'Description', owner_id: '5bbdcc24698a67d75541832d'},
+    {employee_name: 'José Antonio Pérez Florencia', job_position: 'Software Developer', avatar: 'http://i.pravatar.cc/150?img=2',
+    description: 'Description', owner_id: '5bbdcc24698a67d75541832d'}
+  ];
+
+
   constructor() { }
 
   initializeAppCliente(appID: string) {
@@ -24,9 +32,16 @@ export class StitchMongoServiceService {
   }
 
   insertMany(collection: string, docs: any) {
+    console.log('docs', docs);
     this.db.collection(collection).insertMany(docs).then(results => {
       const { insertedIds } = results;
       console.log(insertedIds);
+    }).catch(err => {
+      console.error(err);
     });
+  }
+
+  populateFakeEmployees() {
+    this.insertMany('employees', this.fakeEmployees);
   }
 }
