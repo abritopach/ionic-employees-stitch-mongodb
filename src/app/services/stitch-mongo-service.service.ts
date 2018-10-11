@@ -27,8 +27,8 @@ export class StitchMongoServiceService {
     this.db = this.client.getServiceClient(RemoteMongoClient.factory, 'mongodb-atlas').db(dbName);
   }
 
-  find(collection: string) {
-    return this.db.collection(collection).find({}, { limit: 100}).asArray();
+  find(collection: string, filter: any) {
+    return this.db.collection(collection).find(filter, { limit: 100}).asArray();
   }
 
   insertMany(collection: string, docs: any) {
