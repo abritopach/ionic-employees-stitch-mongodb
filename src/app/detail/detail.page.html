@@ -8,7 +8,52 @@
 </ion-header>
 
 <ion-content padding>
-
+  <ion-list>
+    <ion-grid fixed>
+      <ion-row align-items-stretch>
+      <ion-col col-12 align-self-stretch align-self-center>
+        <ion-card *ngIf="employee !== null">
+            <ion-item lines="none">
+              <h2><b>{{ employee.employee_name }}</b></h2>
+            </ion-item>
+            <ion-item>
+              <ion-chip color="tertiary" slot="end">
+                <ion-label>{{ employee.job_position }}</ion-label>
+              </ion-chip>
+            </ion-item>
+            <ion-item class="image">
+                <img [src]="employee.avatar" alt="Employee Image Detail Page">
+            </ion-item>
+            <ion-card-content>
+              <ion-item>
+                <p><ion-icon name="information-circle-outline"></ion-icon> {{ employee.description}}</p>
+              </ion-item>
+            </ion-card-content>
+            <ion-row no-padding justify-content-center>
+                <ion-col col-auto text-left>
+                  <ion-button fill="clear" size="small" color="primary" (click)="onClickEmail()">
+                    <ion-icon name="mail" slot="start"></ion-icon>
+                    Email
+                  </ion-button>
+                </ion-col>
+                <ion-col col-auto text-right>
+                    <ion-button fill="clear" size="small" color="primary" (click)="onClickCall()">
+                      <ion-icon name='call' slot="start"></ion-icon>
+                      Call
+                    </ion-button>
+                </ion-col>
+                <ion-col col-auto text-center>
+                    <ion-button fill="clear" size="small" color="primary" (click)="onClickMessage()">
+                      <ion-icon name='chatbubbles' slot="start"></ion-icon>
+                      message
+                    </ion-button>
+                </ion-col>
+              </ion-row>
+          </ion-card>
+        </ion-col>
+    </ion-row>
+  </ion-grid>
+  </ion-list>
 </ion-content>
 
 <ion-footer>
