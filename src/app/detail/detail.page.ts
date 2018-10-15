@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, ParamMap } from '@angular/router';
 
 import { StitchMongoServiceService } from '../services/stitch-mongo-service.service';
 
 import { AnonymousCredential} from 'mongodb-stitch-browser-sdk';
+import { switchMap } from 'rxjs/operators';
+import { of } from 'rxjs';
 
 @Component({
   selector: 'app-detail',
@@ -22,7 +24,7 @@ export class DetailPage implements OnInit {
   ionViewWillEnter() {
     // console.log('ionViewWillEnter');
     const empployeeId = this.route.snapshot.paramMap.get('id');
-    // console.log('employeeId', empployeeId);
+    console.log('employeeId', empployeeId);
     this.findEmployee(empployeeId);
   }
 
@@ -42,5 +44,16 @@ export class DetailPage implements OnInit {
     });
   }
 
+  onClickEmail() {
+    console.log('HomePage::onClickEmail() | method called');
+  }
+
+  onClickCall() {
+    console.log('HomePage::onClickCall() | method called');
+  }
+
+  onClickMessage() {
+    console.log('HomePage::onClickMessage() | method called');
+  }
 
 }

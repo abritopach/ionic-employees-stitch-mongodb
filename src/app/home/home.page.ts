@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 import { Stitch, RemoteMongoClient, AnonymousCredential} from 'mongodb-stitch-browser-sdk';
 
@@ -19,7 +19,7 @@ export class HomePage {
   employees: any;
   searchControl: FormControl;
 
-  constructor(private router: Router, private stichMongoService: StitchMongoServiceService) {
+  constructor(private router: Router, private stichMongoService: StitchMongoServiceService, private route: ActivatedRoute) {
     console.log('HomePage::constructor() | method called');
     console.log('employees', this.employees);
 
@@ -50,7 +50,7 @@ export class HomePage {
 
   viewEmployeeDetails(employee) {
     console.log('HomePage::viewEmployeeDetails() | method called');
-    this.router.navigateByUrl(`/detail`);
+    this.router.navigateByUrl('/detail');
   }
 
   searchEmployees(ev: any) {

@@ -13,6 +13,7 @@
 <ion-content padding>
   <ion-list>
     <ion-item *ngFor="let employee of employees" tappable routerLink="/detail/{{ employee.employee_name }}">
+    <!--<ion-item *ngFor="let employee of employees" tappable (click)="viewEmployeeDetails(employee)">-->
       <ion-avatar slot="start">
         <img [src]="employee.avatar" alt="Avatar" />
       </ion-avatar>
