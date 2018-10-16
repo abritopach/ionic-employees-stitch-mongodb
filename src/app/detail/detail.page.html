@@ -54,6 +54,7 @@
     </ion-row>
   </ion-grid>
   </ion-list>
+  <app-employees-per-department *ngIf="employee !== null" [department]="employee.department"></app-employees-per-department>
 </ion-content>
 
 <ion-footer>
