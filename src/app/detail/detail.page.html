@@ -28,6 +28,9 @@
               <ion-item>
                 <p><ion-icon name="information-circle-outline"></ion-icon> {{ employee.description}}</p>
               </ion-item>
+              <ion-item tappable (click)="presentModal()">
+                <ion-badge slot="start" color="primary"><ion-icon name="eye"></ion-icon> Projects 11</ion-badge>
+              </ion-item>
             </ion-card-content>
             <ion-row no-padding justify-content-center>
                 <ion-col col-auto text-left>

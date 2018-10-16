@@ -7,6 +7,9 @@ import { AnonymousCredential} from 'mongodb-stitch-browser-sdk';
 import { switchMap } from 'rxjs/operators';
 import { of } from 'rxjs';
 
+import { ModalController } from '@ionic/angular';
+import { ProjectsModalComponent } from '../modals/projects-modal/projects.modal';
+
 @Component({
   selector: 'app-detail',
   templateUrl: './detail.page.html',
@@ -16,7 +19,8 @@ export class DetailPage implements OnInit {
 
   employee: any = null;
 
-  constructor(private route: ActivatedRoute, private stichMongoService: StitchMongoServiceService) { }
+  constructor(private route: ActivatedRoute, private stichMongoService: StitchMongoServiceService,
+              private modalCtrl: ModalController) { }
 
   ngOnInit() {
   }
@@ -54,6 +58,19 @@ export class DetailPage implements OnInit {
 
   onClickMessage() {
     console.log('HomePage::onClickMessage() | method called');
+  }
+
+  async presentModal(componentProps: any) {
+    const modal = await this.modalCtrl.create({
+      component: ProjectsModalComponent,
+      componentProps: componentProps
+    });
+    await modal.present();
+
+    const {data} = await modal.onWillDismiss();
+    if (data) {
+      console.log('data', data);
+    }
   }
 
 }
