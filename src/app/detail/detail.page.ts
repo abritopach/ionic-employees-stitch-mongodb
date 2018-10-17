@@ -60,7 +60,8 @@ export class DetailPage implements OnInit {
     console.log('HomePage::onClickMessage() | method called');
   }
 
-  async presentModal(componentProps: any) {
+  async presentModal() {
+    const componentProps = { modalProps: { title: 'Projects', projects: this.employee.projects}};
     const modal = await this.modalCtrl.create({
       component: ProjectsModalComponent,
       componentProps: componentProps

@@ -12,15 +12,17 @@
 </ion-header>
 
 <ion-content padding>
-    <ion-list>
+    <ion-list *ngIf="projects.length !== 0">
         <ion-item *ngFor="let project of projects">
             <ion-thumbnail slot="start">
-                <img src="http://www.xpmconsulting.com/wp-content/uploads/MS-project.jpg">
+                <img *ngIf="project.thumbnail !== ''" [src]="project.thumbnail">
+                <img *ngIf="project.thumbnail === ''" src="assets/images/thumb-not-available.png">
             </ion-thumbnail>
             <ion-label>
             <h2>{{ project.name }}</h2>
             <h3>{{ project.description }}</h3>
-            <p>Technologies: {{ project.technologies }}</p>
+            <p>Technologies</p>
+            <ion-badge class="technology" *ngFor="let technology of project.technologies.split(',')" color="primary">{{technology}}</ion-badge>
             </ion-label>
         </ion-item>
     </ion-list>
