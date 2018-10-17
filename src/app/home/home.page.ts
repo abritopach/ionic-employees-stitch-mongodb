@@ -3,10 +3,12 @@ import { Router, ActivatedRoute } from '@angular/router';
 
 import { Stitch, RemoteMongoClient, AnonymousCredential} from 'mongodb-stitch-browser-sdk';
 
-import { StitchMongoServiceService} from '../services/stitch-mongo-service.service';
+import { StitchMongoService} from '../services/stitch-mongo.service';
 
 import { FormControl } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
+
+import { LoadingController } from '@ionic/angular';
 
 @Component({
   selector: 'app-home',
@@ -18,8 +20,10 @@ export class HomePage {
   currentYear = new Date().getFullYear();
   employees: any;
   searchControl: FormControl;
+  loading: any;
 
-  constructor(private router: Router, private stichMongoService: StitchMongoServiceService, private route: ActivatedRoute) {
+  constructor(private router: Router, private stichMongoService: StitchMongoService, private route: ActivatedRoute,
+              private loadingCtrl: LoadingController) {
     console.log('HomePage::constructor() | method called');
     console.log('employees', this.employees);
 
@@ -40,9 +44,14 @@ export class HomePage {
         this.fetchEmployees();
       } else {
         console.log('search is not empty');
-        this.stichMongoService.client.callFunction('search', search)
-        .then(employees => console.log('success: ', employees))
-          .catch(e => console.log('error: ', e));
+        this.stichMongoService.client.auth.loginWithCredential(new AnonymousCredential()).then(user => {
+            const args = [];
+            args.push(search);
+            this.stichMongoService.client.callFunction('search', args)
+            .then(employees => this.employees = employees)
+              .catch(e => console.log('error: ', e));
+        }
+        );
       }
     });
 
@@ -62,6 +71,7 @@ export class HomePage {
   }
 
   fetchEmployees() {
+    this.presentLoading();
     this.stichMongoService.client.auth.loginWithCredential(new AnonymousCredential()).then(user =>
       this.stichMongoService.find('employees', {})
     )/*.then(() =>
@@ -74,10 +84,35 @@ export class HomePage {
         } else {
           console.log('Found docs', docs);
           this.employees = docs;
+          setTimeout(() => this.dismissLoading(), 2000);
         }
         console.log('[MongoDB Stitch] Connected to Stitch');
     }).catch(err => {
         console.error(err);
     });
+  }
+
+  /*
+  async presentLoading() {
+    const loading = await this.loadingCtrl.create({
+      message: 'Please wait, loading movies...',
+    });
+    await loading.present();
+
+    const { data } = await loading.onWillDismiss();
+  }
+  */
+
+  async presentLoading() {
+    this.loading = null;
+    this.loading = await this.loadingCtrl.create({
+      message: 'Please wait, loading employees...',
+    });
+
+    return await this.loading.present();
+  }
+
+  async dismissLoading() {
+    this.loading.dismiss();
   }
 }

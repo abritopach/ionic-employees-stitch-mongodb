@@ -16,7 +16,7 @@ export class ProjectsModalComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log(this.navParams.data.modalProps.projects);
+    // console.log(this.navParams.data.modalProps.projects);
     this.projects = this.navParams.data.modalProps.projects;
     // this.technologies =  this.navParams.data.modalProps.projects..split(" ")
   }

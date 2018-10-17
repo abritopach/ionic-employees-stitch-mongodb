@@ -1,6 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 
-import { StitchMongoServiceService } from '../../services/stitch-mongo-service.service';
+import { StitchMongoService } from '../../services/stitch-mongo.service';
 
 import { AnonymousCredential} from 'mongodb-stitch-browser-sdk';
 
@@ -14,7 +14,7 @@ export class EmployeesPerDepartmentComponent implements OnInit {
   employees: any = null;
   @Input() department: string;
 
-  constructor(private stichMongoService: StitchMongoServiceService) { }
+  constructor(private stichMongoService: StitchMongoService) { }
 
   ngOnInit() {
     this.findEmployeePerDepartment();
@@ -22,13 +22,13 @@ export class EmployeesPerDepartmentComponent implements OnInit {
 
   findEmployeePerDepartment() {
     this.stichMongoService.client.auth.loginWithCredential(new AnonymousCredential()).then(user => {
-      console.log('user', user);
+      // console.log('user', user);
       return this.stichMongoService.find('employees', {'department': this.department});
       }
     ).then(docs => {
         // Collection is empty.
         if (docs.length !== 0) {
-          console.log(docs);
+          // console.log(docs);
           this.employees = docs;
         }
     }).catch(err => {

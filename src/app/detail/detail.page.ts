@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 
-import { StitchMongoServiceService } from '../services/stitch-mongo-service.service';
+import { StitchMongoService } from '../services/stitch-mongo.service';
 
 import { AnonymousCredential} from 'mongodb-stitch-browser-sdk';
 import { switchMap } from 'rxjs/operators';
@@ -19,7 +19,7 @@ export class DetailPage implements OnInit {
 
   employee: any = null;
 
-  constructor(private route: ActivatedRoute, private stichMongoService: StitchMongoServiceService,
+  constructor(private route: ActivatedRoute, private stichMongoService: StitchMongoService,
               private modalCtrl: ModalController) { }
 
   ngOnInit() {

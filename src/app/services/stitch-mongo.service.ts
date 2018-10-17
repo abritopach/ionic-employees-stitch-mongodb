@@ -4,7 +4,7 @@ import { Stitch, RemoteMongoClient, AnonymousCredential, StitchAppClient, Remote
 @Injectable({
   providedIn: 'root'
 })
-export class StitchMongoServiceService {
+export class StitchMongoService {
 
   client: StitchAppClient;
   db: RemoteMongoDatabase;
