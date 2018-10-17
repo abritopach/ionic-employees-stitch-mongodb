@@ -9,6 +9,12 @@ import { ModalController, NavParams } from '@ionic/angular';
 })
 export class ProjectsModalComponent implements OnInit {
 
+  projects = [
+    {name: 'Project 1', description: 'Description 1', technologies: 'Ionic, Angular, MongoDB'},
+    {name: 'Project 2', description: 'Description 2', technologies: 'Ionic, Angular, MongoDB'},
+    {name: 'Project 3', description: 'Description 3', technologies: 'Ionic, Angular, MongoDB'}
+  ];
+
   constructor(private modalCtrl: ModalController, private navParams: NavParams, ) {
   }
 

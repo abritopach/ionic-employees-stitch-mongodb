@@ -12,10 +12,16 @@ export class StitchMongoServiceService {
   fakeEmployees = [
     {employee_name: 'Adrián Brito Pacheco', job_position: 'Project Manager', avatar: 'http://i.pravatar.cc/150?img=7',
      description: 'Lorem ipsum dolor sit amet consectetur adipiscing elit, eu auctor convallis ultrices volutpat himenaeos',
-     owner_id: '5bbdcc24698a67d75541832d', phone: '123456789', email: 'fakeemail@gmail.com', department: 'Technical'},
+     owner_id: '5bbdcc24698a67d75541832d', phone: '123456789', email: 'fakeemail@gmail.com', department: 'Technical',
+    projects: [{name: 'Project 1', description: 'Description 1', technologies: 'Ionic, Angular, MongoDB'},
+    {name: 'Project 2', description: 'Description 2', technologies: 'Ionic, Angular, MongoDB'},
+    {name: 'Project 3', description: 'Description 3', technologies: 'Ionic, Angular, MongoDB'}]},
     {employee_name: 'José Antonio Pérez Florencia', job_position: 'Software Developer', avatar: 'http://i.pravatar.cc/150?img=2',
     description: 'Lorem ipsum dolor sit amet consectetur adipiscing elit, eu auctor convallis ultrices volutpat himenaeos',
-     owner_id: '5bbdcc24698a67d75541832d', phone: '123456789', email: 'fakeemail@gmail.com', department: 'Technical'}
+     owner_id: '5bbdcc24698a67d75541832d', phone: '123456789', email: 'fakeemail@gmail.com', department: 'Technical',
+    projects: [{name: 'Project 1', description: 'Description 1', technologies: 'Ionic, Angular, MongoDB'},
+    {name: 'Project 2', description: 'Description 2', technologies: 'Ionic, Angular, MongoDB'},
+    {name: 'Project 3', description: 'Description 3', technologies: 'Ionic, Angular, MongoDB'}]}
   ];
 
   constructor() { }
