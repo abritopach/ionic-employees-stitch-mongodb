@@ -115,4 +115,9 @@ export class HomePage {
   async dismissLoading() {
     this.loading.dismiss();
   }
+
+  showOrganizationChart() {
+    console.log('HomePage::showOrganizationChart() | method called');
+    this.router.navigateByUrl('/organization');
+  }
 }
