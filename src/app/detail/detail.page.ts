@@ -48,12 +48,22 @@ export class DetailPage implements OnInit {
     });
   }
 
-  onClickEmail() {
+  onClickEmail(employee) {
     console.log('HomePage::onClickEmail() | method called');
+    const windowRef = window.open(`mailto:${employee.email}`, '_blank');
+
+    windowRef.focus();
+
+    setTimeout(function() {
+      if (!windowRef.document.hasFocus()) {
+          windowRef.close();
+      }
+    }, 500);
   }
 
-  onClickCall() {
+  onClickCall(employee) {
     console.log('HomePage::onClickCall() | method called');
+    window.open(`tel:${employee.phone}`, '_system', 'location=yes');
   }
 
   onClickMessage() {
