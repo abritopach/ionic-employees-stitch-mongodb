@@ -6,6 +6,8 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 Technologies: Angular, Ionic, Stitch MongoDB, TypeScript.
 
+![Technologies](readme_resources/technologies.jpg "Technologies")
+
 ## Running
 
 Before you go through this example, you should have at least a basic understanding of Ionic concepts. You must also already have Ionic installed on your machine.
