@@ -26,12 +26,12 @@
 /* Generic styling */
 
 body{
-	background: #F5EEC9;	
+	background: #F5EEC9;
 }
 
 .content{
 	width: 100%;
-	max-width: 1142px;
+	// max-width: 1142px;
 	margin: 0 auto;
 	padding: 0 20px;
 }
@@ -77,11 +77,28 @@ ul a{
 	}
 }
 
+ul a div {
+    width: 100%;
+    height: 100%;
+    display: inline-block;
+}
 
-ul a span{
-	top: 50%;
-	margin-top: -0.7em;
-	display: block;
+ul a div span{
+    top: 30%;
+    // left: 70px;
+	// margin-top: -0.7em;
+	// display: inline-block;
+}
+
+ul a div img {
+    // top: 50%;
+    // margin-top: -1.95em;
+    // margin-left: 0.5em;
+    height: 100%;
+    display: block;
+    border-radius: 50%;
+    padding: 2px;
+    float: left;
 }
 
 /*
@@ -175,6 +192,10 @@ ul a span{
 .departments li:nth-child(2){
 	margin-left: 0;
 	clear: left;	
+}
+
+.department a span {
+    top: 30%;
 }
 
 .departments:after{
@@ -284,7 +305,7 @@ ul a span{
 	width: 90%;
 	height: 60px;
 	vertical-align: middle;
-	right: -1px;
+    right: -1px;
 	background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMTAwJSI+CiAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjMDAwMDAwIiBzdG9wLW9wYWNpdHk9IjAuMjUiLz4KICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzAwMDAwMCIgc3RvcC1vcGFjaXR5PSIwIi8+CiAgPC9saW5lYXJHcmFkaWVudD4KICA8cmVjdCB4PSIwIiB5PSIwIiB3aWR0aD0iMSIgaGVpZ2h0PSIxIiBmaWxsPSJ1cmwoI2dyYWQtdWNnZy1nZW5lcmF0ZWQpIiAvPgo8L3N2Zz4=);
 	background-image: -moz-linear-gradient(-45deg,  rgba(0,0,0,0.25) 0%, rgba(0,0,0,0) 100%) !important;
 	background-image: -webkit-gradient(linear, left top, right bottom, color-stop(0%,rgba(0,0,0,0.25)), color-stop(100%,rgba(0,0,0,0)))!important;
@@ -300,12 +321,12 @@ ul a span{
 	height: 80px;
 	width: 95%;
 	top: 39px;
-	background-image: none!important;
+    background-image: none!important;
 }
 
 /* Department/ section colors */
-.department.dep-a a{ background: #FFD600; }
-.department.dep-b a{ background: #AAD4E7; }
-.department.dep-c a{ background: #FDB0FD; }
-.department.dep-d a{ background: #A3A2A2; }
-.department.dep-e a{ background: #f0f0f0; }
+.department.dep-a a{ background: #E91E63; color: white;  }
+.department.dep-b a{ background: #009688; color: white; }
+.department.dep-c a{ background: #FF9800; color: white; }
+.department.dep-d a{ background: #00BCD4; color: white; }
+.department.dep-e a{ background: #3F51B5; color: white; }
