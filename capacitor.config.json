@@ -1,0 +1,6 @@
+{
+  "appId": "com.employees.app",
+  "appName": "ionic-employees-stitch-mongodb",
+  "bundledWebRuntime": false,
+  "webDir": "www"
+}

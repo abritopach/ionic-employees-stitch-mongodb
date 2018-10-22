@@ -1,0 +1,67 @@
+<ion-header>
+    <ion-toolbar color="tertiary">
+        <ion-buttons slot="end">
+            <ion-button (click)="dismiss()">
+                <ion-icon name="close" color="light"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+        <ion-title>
+            Send SMS
+        </ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+    <ion-grid fixed>
+            <ion-row align-items-stretch>
+            <ion-col col-12 align-self-stretch align-self-center>
+                <ion-card>
+                    <form [formGroup]="smsForm" novalidate (ngSubmit)="smsFormSubmit()">
+                    <ion-card-content>
+                        <ion-list inset>
+                            <ion-item [class.has-error]="smsForm.get('phoneNumber').hasError('required') && smsForm.get('phoneNumber').touched">
+                            <ion-label position="floating">Phone number *</ion-label>
+                            <ion-input type="number" formControlName="phoneNumber"></ion-input>
+                            </ion-item>
+                            <ion-item *ngIf="smsForm.get('phoneNumber').hasError('required') && smsForm.get('phoneNumber').touched" no-lines>
+                            <div class="error-message">
+                                This field is required.
+                            </div>
+                            </ion-item>
+                            <ion-item>
+                            <ion-label position="floating">Message</ion-label>
+                            <ion-textarea formControlName="message"></ion-textarea>
+                            </ion-item>
+                            <ion-item *ngIf="smsForm.get('message').hasError('required') && smsForm.get('message').touched" no-lines>
+                            <div class="error-message">
+                                This field is required.
+                            </div>
+                            </ion-item>
+                            <ion-item *ngIf="isWeb === 'web'" [class.has-error]="smsForm.get('platform').hasError('required') && smsForm.get('platform').touched">
+                            <ion-label position="floating">Platform</ion-label>
+                            <ion-select #platform formControlName="platform" interface="popover" (ionChange)="selectedPlatform(platform.value)">
+                                <ion-select-option value="nexmo">Nexmo</ion-select-option>
+                                <ion-select-option value="twilio">Twilio</ion-select-option>
+                            </ion-select>
+                            </ion-item>
+                            <ion-item *ngIf="smsForm.get('platform').hasError('required') && smsForm.get('platform').touched" no-lines>
+                            <div class="error-message">
+                                This field is required.
+                            </div>
+                            </ion-item>
+                        </ion-list>
+                    </ion-card-content>
+                    <ion-row no-padding justify-content-center>
+                        <ion-col col-auto text-right>
+                            <ion-button [disabled]='!smsForm.valid' type="submit" fill="clear" size="small" color="primary">
+                            <ion-icon name='send' slot="start"></ion-icon>
+                            Send
+                            </ion-button>
+                        </ion-col>
+                    </ion-row>
+                </form>
+                </ion-card>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+</ion-content>

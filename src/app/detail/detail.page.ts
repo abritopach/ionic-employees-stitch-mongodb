@@ -9,6 +9,7 @@ import { of } from 'rxjs';
 
 import { ModalController } from '@ionic/angular';
 import { ProjectsModalComponent } from '../modals/projects-modal/projects.modal';
+import { SendSMSModalComponent } from './../modals/send-sms-modal/send-sms.modal';
 
 @Component({
   selector: 'app-detail',
@@ -68,6 +69,7 @@ export class DetailPage implements OnInit {
 
   onClickMessage() {
     console.log('HomePage::onClickMessage() | method called');
+    this.presentSendSMSModal();
   }
 
   async presentModal() {
@@ -75,6 +77,18 @@ export class DetailPage implements OnInit {
     const modal = await this.modalCtrl.create({
       component: ProjectsModalComponent,
       componentProps: componentProps
+    });
+    await modal.present();
+
+    const {data} = await modal.onWillDismiss();
+    if (data) {
+      console.log('data', data);
+    }
+  }
+
+  async presentSendSMSModal() {
+    const modal = await this.modalCtrl.create({
+      component: SendSMSModalComponent
     });
     await modal.present();
 
