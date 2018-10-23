@@ -30,7 +30,12 @@
                   </a>
                 </li>
                 <li *ngFor="let department of organization.departments" class="department" [ngClass]="department.class">
-                    <a href="#"><span>{{ department.name }}</span></a>
+                    <a href="#">
+                      <div>
+                        <img [src]="department.avatar"/>
+                        <span>{{ department.name }}</span>
+                      </div>
+                    </a>
                     <ul class="sections">
                       <li *ngFor="let employee of department.children" class="section">
                         <a href="#">
