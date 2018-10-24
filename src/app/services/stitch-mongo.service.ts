@@ -21,7 +21,11 @@ export class StitchMongoService {
      owner_id: '5bbdcc24698a67d75541832d', phone: '123456789', email: 'fakeemail@gmail.com', department: 'Technical',
     projects: [{name: 'Project 1', description: 'Description 1', technologies: 'Ionic, Angular, MongoDB', thumbnail: ''},
     {name: 'Project 2', description: 'Description 2', technologies: 'Ionic, Angular, MongoDB', thumbnail: ''},
-    {name: 'Project 3', description: 'Description 3', technologies: 'Ionic, Angular, MongoDB', thumbnail: ''}]}
+    {name: 'Project 3', description: 'Description 3', technologies: 'Ionic, Angular, MongoDB', thumbnail: ''}]},
+    {employee_name: 'Patricia Acosta García', job_position: 'Marketing Account Manager', avatar: 'http://i.pravatar.cc/150?img=5',
+     description: 'Lorem ipsum dolor sit amet consectetur adipiscing elit, eu auctor convallis ultrices volutpat himenaeos',
+     owner_id: '5bbdcc24698a67d75541832d', phone: '123456789', email: 'fakeemail@gmail.com', department: 'Marketing',
+    projects: [{name: 'Project 1', description: 'Description 1', technologies: 'Video 360', thumbnail: ''}]},
   ];
 
   constructor() { }

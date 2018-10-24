@@ -34,7 +34,7 @@
                 <p><ion-icon name="information-circle-outline"></ion-icon> {{ employee.description}}</p>
               </ion-item>
               <ion-item tappable (click)="presentModal()">
-                <ion-badge slot="start" color="primary"><ion-icon name="eye"></ion-icon> Projects {{ employee.projects.length}}</ion-badge>
+                <ion-badge slot="start" color="primary"><ion-icon name="eye"></ion-icon> {{ employee.projects.length}} Projects</ion-badge>
               </ion-item>
             </ion-card-content>
             <ion-row no-padding justify-content-center>
@@ -62,7 +62,7 @@
     </ion-row>
   </ion-grid>
   </ion-list>
-  <app-employees-per-department *ngIf="employee !== null" [department]="employee.department"></app-employees-per-department>
+  <app-employees-per-department *ngIf="employee !== null" [employee]="employee"></app-employees-per-department>
 </ion-content>
 
 <ion-footer>

@@ -12,7 +12,7 @@ import { AnonymousCredential} from 'mongodb-stitch-browser-sdk';
 export class EmployeesPerDepartmentComponent implements OnInit {
 
   employees: any = null;
-  @Input() department: string;
+  @Input() employee: any;
 
   constructor(private stichMongoService: StitchMongoService) { }
 
@@ -23,7 +23,8 @@ export class EmployeesPerDepartmentComponent implements OnInit {
   findEmployeePerDepartment() {
     this.stichMongoService.client.auth.loginWithCredential(new AnonymousCredential()).then(user => {
       // console.log('user', user);
-      return this.stichMongoService.find('employees', {'department': this.department});
+      return this.stichMongoService.find('employees', {'department': this.employee.department, 'employee_name':
+       { $ne: this.employee.employee_name }});
       }
     ).then(docs => {
         // Collection is empty.

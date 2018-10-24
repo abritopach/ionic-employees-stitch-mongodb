@@ -104,7 +104,6 @@ export class HomePage {
   */
 
   async presentLoading() {
-    this.loading = null;
     this.loading = await this.loadingCtrl.create({
       message: 'Please wait, loading employees...',
     });
@@ -114,6 +113,7 @@ export class HomePage {
 
   async dismissLoading() {
     this.loading.dismiss();
+    this.loading = null;
   }
 
   showOrganizationChart() {
