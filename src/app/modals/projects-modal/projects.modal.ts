@@ -1,5 +1,7 @@
 import { Component, ViewEncapsulation, OnInit } from '@angular/core';
-import { ModalController, NavParams } from '@ionic/angular';
+import { ModalController, NavParams, PopoverController } from '@ionic/angular';
+
+import { ShowPeoplePopoverComponent } from '../../popovers/show-people.popover';
 
 @Component({
   selector: 'app-projects-modal',
@@ -12,7 +14,7 @@ export class ProjectsModalComponent implements OnInit {
   projects: any = [];
   // technologies: any = [];
 
-  constructor(private modalCtrl: ModalController, private navParams: NavParams, ) {
+  constructor(private modalCtrl: ModalController, private navParams: NavParams, private popoverCtrl: PopoverController) {
   }
 
   ngOnInit() {
@@ -26,6 +28,27 @@ export class ProjectsModalComponent implements OnInit {
     // can "dismiss" itself and pass back data.
     // console.log('dismiss', data);
     this.modalCtrl.dismiss();
+  }
+
+  showPeople() {
+    console.log('ProjectsModalComponent::showPeople() | method called');
+    this.presentPopover();
+  }
+
+  async presentPopover(/*event*/) {
+    const popover = await this.popoverCtrl.create({
+      component: ShowPeoplePopoverComponent,
+      // event: event
+    });
+
+    await popover.present();
+
+    const { data } = await popover.onWillDismiss();
+
+    if (data) {
+      console.log('data popover.onWillDismiss', data);
+    }
+
   }
 
 }

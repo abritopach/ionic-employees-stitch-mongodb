@@ -18,7 +18,7 @@
                 <img *ngIf="project.thumbnail !== ''" [src]="project.thumbnail">
                 <img *ngIf="project.thumbnail === ''" src="assets/images/thumb-not-available.png">
             </ion-thumbnail>
-            <ion-badge slot="end" color="secondary"><ion-icon name="people"></ion-icon> 5</ion-badge>
+            <ion-badge tappable slot="end" color="secondary" (click)="showPeople()"><ion-icon name="people"></ion-icon> 5</ion-badge>
             <ion-label>
             <h2>{{ project.name }}</h2>
             <h3>{{ project.description }}</h3>
