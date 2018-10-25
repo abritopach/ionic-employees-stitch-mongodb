@@ -6,7 +6,7 @@
     </ion-toolbar>
 </ion-header>
 <ion-content padding>
-    <ion-grid>
+    <ion-grid *ngIf="people !== null">
         <ion-row>
             <ion-col size="2" *ngFor="let person of people">
               <ion-avatar>

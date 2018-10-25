@@ -3,6 +3,9 @@ import { ModalController, NavParams, PopoverController } from '@ionic/angular';
 
 import { ShowPeoplePopoverComponent } from '../../popovers/show-people.popover';
 
+import { StitchMongoService } from './../../services/stitch-mongo.service';
+import { AnonymousCredential} from 'mongodb-stitch-browser-sdk';
+
 @Component({
   selector: 'app-projects-modal',
   templateUrl: 'projects.modal.html',
@@ -13,13 +16,16 @@ export class ProjectsModalComponent implements OnInit {
 
   projects: any = [];
   // technologies: any = [];
+  people: any;
 
-  constructor(private modalCtrl: ModalController, private navParams: NavParams, private popoverCtrl: PopoverController) {
+  constructor(private modalCtrl: ModalController, private navParams: NavParams, private popoverCtrl: PopoverController,
+    private stitchMongoService: StitchMongoService) {
   }
 
   ngOnInit() {
     // console.log(this.navParams.data.modalProps.projects);
     this.projects = this.navParams.data.modalProps.projects;
+    // this.findPeople();
     // this.technologies =  this.navParams.data.modalProps.projects..split(" ")
   }
 
@@ -30,14 +36,16 @@ export class ProjectsModalComponent implements OnInit {
     this.modalCtrl.dismiss();
   }
 
-  showPeople() {
-    console.log('ProjectsModalComponent::showPeople() | method called');
-    this.presentPopover();
+  showPeople(projectName) {
+    console.log('ProjectsModalComponent::showPeople() | method called', projectName);
+    this.presentPopover(projectName);
   }
 
-  async presentPopover(/*event*/) {
+  async presentPopover(/*event*/projectName) {
+    const componentProps = { popoverProps: { projectName: projectName}};
     const popover = await this.popoverCtrl.create({
       component: ShowPeoplePopoverComponent,
+      componentProps: componentProps
       // event: event
     });
 
@@ -49,6 +57,23 @@ export class ProjectsModalComponent implements OnInit {
       console.log('data popover.onWillDismiss', data);
     }
 
+  }
+
+  findPeople() {
+    this.stitchMongoService.client.auth.loginWithCredential(new AnonymousCredential()).then(user =>
+      this.stitchMongoService.find('employees', {'projects.name' : { $in : [this.navParams.data.popoverProps.projectName]}})
+    ).then(docs => {
+        // Collection is empty.
+        if (docs.length === 0) {
+          console.log('Collection is empty');
+        } else {
+          console.log('Found docs in findPeople', docs);
+          this.people = docs;
+        }
+        console.log('[MongoDB Stitch] Connected to Stitch');
+    }).catch(err => {
+        console.error(err);
+    });
   }
 
 }
