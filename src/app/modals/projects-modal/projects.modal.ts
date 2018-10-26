@@ -16,7 +16,7 @@ export class ProjectsModalComponent implements OnInit {
 
   projects: any = [];
   // technologies: any = [];
-  people: any;
+  people: any[] = [];
 
   constructor(private modalCtrl: ModalController, private navParams: NavParams, private popoverCtrl: PopoverController,
     private stitchMongoService: StitchMongoService) {
@@ -25,7 +25,9 @@ export class ProjectsModalComponent implements OnInit {
   ngOnInit() {
     // console.log(this.navParams.data.modalProps.projects);
     this.projects = this.navParams.data.modalProps.projects;
-    // this.findPeople();
+    console.log('this.projects', this.projects);
+    this.projects.map(project => this.findPeople(project.name));
+    console.log('this.people', this.people);
     // this.technologies =  this.navParams.data.modalProps.projects..split(" ")
   }
 
@@ -59,16 +61,16 @@ export class ProjectsModalComponent implements OnInit {
 
   }
 
-  findPeople() {
+  findPeople(projectName) {
     this.stitchMongoService.client.auth.loginWithCredential(new AnonymousCredential()).then(user =>
-      this.stitchMongoService.find('employees', {'projects.name' : { $in : [this.navParams.data.popoverProps.projectName]}})
+      this.stitchMongoService.find('employees', {'projects.name' : { $in : [projectName]}})
     ).then(docs => {
         // Collection is empty.
         if (docs.length === 0) {
           console.log('Collection is empty');
         } else {
           console.log('Found docs in findPeople', docs);
-          this.people = docs;
+          this.people.push(docs);
         }
         console.log('[MongoDB Stitch] Connected to Stitch');
     }).catch(err => {
