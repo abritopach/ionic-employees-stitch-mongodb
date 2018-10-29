@@ -1,5 +1,5 @@
 import { Component, ViewEncapsulation, OnInit } from '@angular/core';
-import { ModalController, NavParams, PopoverController } from '@ionic/angular';
+import { ModalController, NavParams, PopoverController, LoadingController } from '@ionic/angular';
 
 import { ShowPeoplePopoverComponent } from '../../popovers/show-people.popover';
 
@@ -17,16 +17,21 @@ export class ProjectsModalComponent implements OnInit {
   projects: any = [];
   // technologies: any = [];
   people: any[] = [];
+  loading: any;
 
   constructor(private modalCtrl: ModalController, private navParams: NavParams, private popoverCtrl: PopoverController,
-    private stitchMongoService: StitchMongoService) {
+    private stitchMongoService: StitchMongoService, private loadingCtrl: LoadingController) {
   }
 
   ngOnInit() {
+    this.presentLoading();
     // console.log(this.navParams.data.modalProps.projects);
     this.projects = this.navParams.data.modalProps.projects;
     console.log('this.projects', this.projects);
-    this.projects.map(project => this.findPeople(project.name));
+    this.projects.map(project => {
+      this.findPeople(project.name);
+      setTimeout(() => this.dismissLoading(), 1000);
+    });
     console.log('this.people', this.people);
     // this.technologies =  this.navParams.data.modalProps.projects..split(" ")
   }
@@ -77,6 +82,19 @@ export class ProjectsModalComponent implements OnInit {
     }).catch(err => {
         console.error(err);
     });
+  }
+
+  async presentLoading() {
+    this.loading = await this.loadingCtrl.create({
+      message: 'Please wait, loading...',
+    });
+
+    return await this.loading.present();
+  }
+
+  async dismissLoading() {
+    this.loadingCtrl.dismiss();
+    this.loading = null;
   }
 
 }
