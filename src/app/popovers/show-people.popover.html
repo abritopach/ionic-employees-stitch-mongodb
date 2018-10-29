@@ -9,7 +9,7 @@
     <ion-grid *ngIf="people !== null">
         <ion-row>
             <ion-col size="2" *ngFor="let person of people">
-              <ion-avatar>
+              <ion-avatar [@scaleAvatar]="person.avatarState" (click)="onClickEmployee(person)" tappable>
                 <img [src]="person.avatar">
               </ion-avatar>
             </ion-col>

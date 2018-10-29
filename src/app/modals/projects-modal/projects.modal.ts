@@ -57,6 +57,7 @@ export class ProjectsModalComponent implements OnInit {
 
     if (data) {
       console.log('data popover.onWillDismiss', data);
+      this.dismiss();
     }
 
   }

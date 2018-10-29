@@ -1,14 +1,29 @@
-import { Component, ViewEncapsulation, OnInit } from '@angular/core';
+import { Component, ViewEncapsulation, OnInit, ChangeDetectorRef } from '@angular/core';
 import { PopoverController, NavParams } from '@ionic/angular';
 
 import { StitchMongoService } from './../services/stitch-mongo.service';
 import { AnonymousCredential} from 'mongodb-stitch-browser-sdk';
 
+import { trigger, state, style, animate, transition } from '@angular/animations';
+
+import { Router } from '@angular/router';
+
 @Component({
   selector: 'app-show-people-popover',
   templateUrl: 'show-people.popover.html',
   styleUrls: ['./show-people.popover.scss'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  animations: [
+    trigger('scaleAvatar', [
+        state('idle', style({
+            transform: 'scale(1)'
+        })),
+        state('clicking', style({
+            transform: 'scale(1.5)'
+        })),
+        transition('idle <=> clicking', animate('100ms linear')),
+    ]),
+]
 })
 export class ShowPeoplePopoverComponent implements OnInit {
 
@@ -24,7 +39,8 @@ export class ShowPeoplePopoverComponent implements OnInit {
   */
   people: any;
 
-  constructor(private popoverCtrl: PopoverController, private stitchMongoService: StitchMongoService, private navParams: NavParams) {
+  constructor(private popoverCtrl: PopoverController, private stitchMongoService: StitchMongoService, private navParams: NavParams,
+              private changeDetector: ChangeDetectorRef, private router: Router) {
   }
 
   ngOnInit() {
@@ -44,11 +60,23 @@ export class ShowPeoplePopoverComponent implements OnInit {
         } else {
           console.log('Found docs', docs);
           this.people = docs;
+          this.people.map(people => {
+            people.avatarState = 'iddle';
+          });
         }
         console.log('[MongoDB Stitch] Connected to Stitch');
     }).catch(err => {
         console.error(err);
     });
+  }
+
+  onClickEmployee(person) {
+    person.avatarState = 'clicking';
+    // this.changeDetector.detectChanges();
+    setTimeout(() => {
+      this.popoverCtrl.dismiss({data: 'dismissShowPeople'});
+      this.router.navigate(['/detail', person.employee_name]);
+  }, 300);
   }
 
 }
