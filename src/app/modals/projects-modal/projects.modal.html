@@ -15,8 +15,8 @@
     <ion-list *ngIf="projects.length !== 0">
         <ion-item *ngFor="let project of projects; let i = index">
             <ion-thumbnail slot="start">
-                <img *ngIf="project.thumbnail !== ''" [src]="project.thumbnail">
-                <img *ngIf="project.thumbnail === ''" src="assets/images/thumb-not-available.png">
+                <img *ngIf="project.thumbnail !== ''" [src]="project.thumbnail" class="thumbnailImg">
+                <img *ngIf="project.thumbnail === ''" src="assets/images/thumb-not-available.png" class="thumbnailImg">
             </ion-thumbnail>
             <ion-badge *ngIf="people.length === projects.length" tappable slot="end" color="secondary" (click)="showPeople(project.name)"><ion-icon name="people"></ion-icon> {{people[i].length}}</ion-badge>
             <ion-label>

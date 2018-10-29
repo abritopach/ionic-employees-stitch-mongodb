@@ -4,6 +4,18 @@ Sample project that shows how to build a Employees List with Angular, Ionic 4 an
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.7.4.
 
+This project shows you how to:
+
+    * Use Stitch MongoDB with Ionic 4.
+    * Show employees list.
+    * Filter employees list.
+    * Show employee detail.
+        * Show employee projects.
+        * Call employee.
+        * Send email.
+        * Send message.
+    * Show project participants.
+
 Technologies: Angular, Ionic, Stitch MongoDB, TypeScript.
 
 ![Technologies](readme_resources/technologies.jpg "Technologies")
