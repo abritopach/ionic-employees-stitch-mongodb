@@ -33,6 +33,7 @@ export class HomePage {
     this.stichMongoService.getServiceClient('mongo-employees');
 
     this.fetchEmployees();
+    this.fetchEmployeesGroupByFirstLetter();
 
   }
 
@@ -85,6 +86,22 @@ export class HomePage {
           console.log('Found docs', docs);
           this.employees = docs;
           setTimeout(() => this.dismissLoading(), 2000);
+        }
+        console.log('[MongoDB Stitch] Connected to Stitch');
+    }).catch(err => {
+        console.error(err);
+    });
+  }
+
+  fetchEmployeesGroupByFirstLetter() {
+    this.stichMongoService.client.auth.loginWithCredential(new AnonymousCredential()).then(user =>
+      this.stichMongoService.aggregate('employees', '$employee_name')
+    ).then(docs => {
+        // Collection is empty.
+        if (docs.length === 0) {
+          console.log('Collection is empty');
+        } else {
+          console.log('Found docs', docs);
         }
         console.log('[MongoDB Stitch] Connected to Stitch');
     }).catch(err => {

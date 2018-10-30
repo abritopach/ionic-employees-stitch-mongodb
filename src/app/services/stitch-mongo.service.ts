@@ -26,6 +26,16 @@ export class StitchMongoService {
      description: 'Lorem ipsum dolor sit amet consectetur adipiscing elit, eu auctor convallis ultrices volutpat himenaeos',
      owner_id: '5bbdcc24698a67d75541832d', phone: '123456789', email: 'fakeemail@gmail.com', department: 'Marketing',
     projects: [{name: 'Project Marketing 1', description: 'Description 1', technologies: 'Video 360', thumbnail: ''}]},
+    {employee_name: 'Ana Ruiz Pérez', job_position: 'Software Developer', avatar: 'http://i.pravatar.cc/150?img=9',
+     description: 'Lorem ipsum dolor sit amet consectetur adipiscing elit, eu auctor convallis ultrices volutpat himenaeos',
+     owner_id: '5bbdcc24698a67d75541832d', phone: '123456789', email: 'fakeemail@gmail.com', department: 'Marketing',
+    projects: [{name: 'Project Technical 1', description: 'Description 1', technologies: 'Ionic, Angular, MongoDB', thumbnail: ''}]},
+    {employee_name: 'Juan Olmos Gil', job_position: 'Software Developer', avatar: 'http://i.pravatar.cc/150?img=4',
+    description: 'Lorem ipsum dolor sit amet consectetur adipiscing elit, eu auctor convallis ultrices volutpat himenaeos',
+     owner_id: '5bbdcc24698a67d75541832d', phone: '123456789', email: 'fakeemail@gmail.com', department: 'Technical',
+    projects: [{name: 'Project Technical 1', description: 'Description 1', technologies: 'Ionic, Angular, MongoDB', thumbnail: ''},
+    {name: 'Project Technical 2', description: 'Description 2', technologies: 'Ionic, Angular, MongoDB', thumbnail: ''},
+    {name: 'Project Technical 3', description: 'Description 3', technologies: 'Ionic, Angular, MongoDB', thumbnail: ''}]}
   ];
 
   constructor() { }
@@ -40,6 +50,14 @@ export class StitchMongoService {
 
   find(collection: string, filter: any) {
     return this.db.collection(collection).find(filter, { limit: 100}).asArray();
+  }
+
+  aggregate(collection: string, field: string) {
+    return this.db.collection(collection).aggregate([{$group: {
+      _id: {$substr: [field, 0, 1]}, employees: {$push: { employee_name: '$employee_name', job_position: '$job_position',
+      avatar: '$avatar', description: '$description', phone: '$phone', email: '$email', department: '$department', projects: '$projects'
+    }}
+    }}, { $sort: { _id: 1 } }]).asArray();
   }
 
   insertMany(collection: string, docs: any) {

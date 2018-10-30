@@ -17,6 +17,13 @@
 
 <ion-content padding>
   <ion-list>
+    <!--
+    <ion-item-group>
+      <ion-item-divider color="light">A</ion-item-divider>
+      <ion-item>Angola</ion-item>
+      <ion-item>Argentina</ion-item>
+    </ion-item-group>
+    -->
     <ion-item *ngFor="let employee of employees" tappable routerLink="/detail/{{ employee.employee_name }}">
     <!--<ion-item *ngFor="let employee of employees" tappable (click)="viewEmployeeDetails(employee)">-->
       <ion-avatar slot="start">
