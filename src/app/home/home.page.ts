@@ -44,13 +44,21 @@ export class HomePage {
       if (search === '') {
         console.log('search is empty');
         this.fetchEmployees();
+        this.fetchEmployeesGroupByFirstLetter();
       } else {
         console.log('search is not empty');
         this.stichMongoService.client.auth.loginWithCredential(new AnonymousCredential()).then(user => {
             const args = [];
             args.push(search);
             this.stichMongoService.client.callFunction('search', args)
-            .then(employees => this.employees = employees)
+            .then(employees => {
+              console.log('employees', employees);
+              const item = [];
+              item.push({'employees': employees});
+              this.result = item;
+              console.log('this.result.employees', this.result);
+              this.employees = employees;
+            })
               .catch(e => console.log('error: ', e));
         }
         );
