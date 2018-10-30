@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { Stitch, RemoteMongoClient, AnonymousCredential} from 'mongodb-stitch-browser-sdk';
@@ -15,7 +15,7 @@ import { LoadingController } from '@ionic/angular';
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
 })
-export class HomePage {
+export class HomePage implements OnInit {
 
   currentYear = new Date().getFullYear();
   employees: any;
@@ -28,14 +28,18 @@ export class HomePage {
     console.log('HomePage::constructor() | method called');
     console.log('employees', this.employees);
 
-    this.searchControl = new FormControl();
-
     this.stichMongoService.initializeAppCliente('ionic-employees-priuv');
     this.stichMongoService.getServiceClient('mongo-employees');
 
     this.fetchEmployees();
     this.fetchEmployeesGroupByFirstLetter();
 
+    this.searchControl = new FormControl();
+
+  }
+
+  ngOnInit() {
+    console.log('HomePage::ngOnInit | method called');
   }
 
   ionViewWillEnter() {

@@ -7,6 +7,7 @@ const routes: Routes = [
   // { path: 'detail', loadChildren: './detail/detail.module#DetailPageModule', data: {name: 'foo', age: 23} }
   { path: 'detail/:id', loadChildren: './detail/detail.module#DetailPageModule' },
   { path: 'organization', loadChildren: './organization/organization.module#OrganizationPageModule' },
+  { path: 'schedule', loadChildren: './schedule/schedule.module#SchedulePageModule' },
 ];
 
 @NgModule({
