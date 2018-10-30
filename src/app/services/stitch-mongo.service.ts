@@ -28,7 +28,7 @@ export class StitchMongoService {
     projects: [{name: 'Project Marketing 1', description: 'Description 1', technologies: 'Video 360', thumbnail: ''}]},
     {employee_name: 'Ana Ruiz Pérez', job_position: 'Software Developer', avatar: 'http://i.pravatar.cc/150?img=9',
      description: 'Lorem ipsum dolor sit amet consectetur adipiscing elit, eu auctor convallis ultrices volutpat himenaeos',
-     owner_id: '5bbdcc24698a67d75541832d', phone: '123456789', email: 'fakeemail@gmail.com', department: 'Marketing',
+     owner_id: '5bbdcc24698a67d75541832d', phone: '123456789', email: 'fakeemail@gmail.com', department: 'Technical',
     projects: [{name: 'Project Technical 1', description: 'Description 1', technologies: 'Ionic, Angular, MongoDB', thumbnail: ''}]},
     {employee_name: 'Juan Olmos Gil', job_position: 'Software Developer', avatar: 'http://i.pravatar.cc/150?img=4',
     description: 'Lorem ipsum dolor sit amet consectetur adipiscing elit, eu auctor convallis ultrices volutpat himenaeos',

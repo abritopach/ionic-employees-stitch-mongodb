@@ -21,6 +21,7 @@ export class HomePage {
   employees: any;
   searchControl: FormControl;
   loading: any;
+  result: any;
 
   constructor(private router: Router, private stichMongoService: StitchMongoService, private route: ActivatedRoute,
               private loadingCtrl: LoadingController) {
@@ -102,6 +103,7 @@ export class HomePage {
           console.log('Collection is empty');
         } else {
           console.log('Found docs', docs);
+          this.result = docs;
         }
         console.log('[MongoDB Stitch] Connected to Stitch');
     }).catch(err => {

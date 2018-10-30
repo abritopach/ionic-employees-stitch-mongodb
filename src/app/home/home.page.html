@@ -17,15 +17,23 @@
 
 <ion-content padding>
   <ion-list>
-    <!--
-    <ion-item-group>
-      <ion-item-divider color="light">A</ion-item-divider>
-      <ion-item>Angola</ion-item>
-      <ion-item>Argentina</ion-item>
+    <ion-item-group *ngFor="let item of result">
+      <ion-item-divider color="light">{{item._id}}</ion-item-divider>
+      <ion-item *ngFor="let employee of item.employees" tappable routerLink="/detail/{{ employee.employee_name }}">
+        <ion-avatar slot="start">
+          <img [src]="employee.avatar" alt="Avatar" />
+        </ion-avatar>
+        <ion-label>
+          <h2>{{ employee.employee_name }}</h2>
+          <h3>{{ employee.job_position }}</h3>
+          <p>{{ employee.description }}</p>
+        </ion-label>
+        <ion-badge slot="end" color="primary">{{ employee.department }}</ion-badge>
+      </ion-item>
     </ion-item-group>
-    -->
-    <ion-item *ngFor="let employee of employees" tappable routerLink="/detail/{{ employee.employee_name }}">
     <!--<ion-item *ngFor="let employee of employees" tappable (click)="viewEmployeeDetails(employee)">-->
+    <!--
+    <ion-item *ngFor="let employee of employees" tappable routerLink="/detail/{{ employee.employee_name }}">
       <ion-avatar slot="start">
         <img [src]="employee.avatar" alt="Avatar" />
       </ion-avatar>
@@ -36,6 +44,7 @@
       </ion-label>
       <ion-badge slot="end" color="primary">{{ employee.department }}</ion-badge>
     </ion-item>
+    -->
   </ion-list>
 </ion-content>
 
