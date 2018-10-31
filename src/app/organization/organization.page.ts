@@ -7,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class OrganizationPage implements OnInit {
 
+  currentYear = new Date().getFullYear();
+
   // https://codepen.io/siiron/pen/aLkdE
   constructor() { }
 
