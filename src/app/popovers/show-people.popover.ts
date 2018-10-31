@@ -44,8 +44,12 @@ export class ShowPeoplePopoverComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log(this.navParams.data.popoverProps.projectName);
-    this.findPeople();
+    // console.log(this.navParams.data.popoverProps.projectName);
+    if (typeof this.navParams.data.popoverProps.projectName !== 'undefined') {
+      this.findPeople();
+    } else {
+      this.people = this.navParams.data.popoverProps.people;
+    }
   }
 
   // {"projects.name" : { $in : ["Project Technical 1"]}}
