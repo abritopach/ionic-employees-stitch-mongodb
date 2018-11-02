@@ -7,6 +7,8 @@ import { IonicModule } from '@ionic/angular';
 
 import { SchedulePage } from './schedule.page';
 
+import { AgmCoreModule } from '@agm/core';
+
 const routes: Routes = [
   {
     path: '',
@@ -19,7 +21,10 @@ const routes: Routes = [
     CommonModule,
     FormsModule,
     IonicModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+    AgmCoreModule.forRoot({
+      apiKey: 'API_KEY' // Google API key for maps
+    })
   ],
   declarations: [SchedulePage]
 })

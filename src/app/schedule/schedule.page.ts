@@ -36,6 +36,10 @@ export class SchedulePage implements OnInit {
     {avatar: 'http://i.pravatar.cc/150?img=20'}
   ];
 
+  // https://www.code-sample.com/2018/07/angular-6-google-maps-agm-core.html
+  lat = 26.765844;
+  lng = 83.364944;
+
   constructor(private popoverCtrl: PopoverController) { }
 
   ngOnInit() {
