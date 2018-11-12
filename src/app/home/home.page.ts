@@ -10,6 +10,8 @@ import { debounceTime } from 'rxjs/operators';
 
 import { LoadingController } from '@ionic/angular';
 
+import { NetworkService } from './../services/network.service';
+
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
@@ -24,7 +26,7 @@ export class HomePage implements OnInit {
   result: any;
 
   constructor(private router: Router, private stichMongoService: StitchMongoService, private route: ActivatedRoute,
-              private loadingCtrl: LoadingController) {
+              private loadingCtrl: LoadingController, private networkService: NetworkService) {
     console.log('HomePage::constructor() | method called');
     console.log('employees', this.employees);
 
