@@ -33,15 +33,14 @@ export class HomePage implements OnInit {
     this.stichMongoService.initializeAppCliente('ionic-employees-priuv');
     this.stichMongoService.getServiceClient('mongo-employees');
 
-    this.fetchEmployees();
-    this.fetchEmployeesGroupByFirstLetter();
-
     this.searchControl = new FormControl();
 
   }
 
   ngOnInit() {
     console.log('HomePage::ngOnInit | method called');
+    this.fetchEmployees();
+    this.fetchEmployeesGroupByFirstLetter();
   }
 
   ionViewWillEnter() {
@@ -93,10 +92,11 @@ export class HomePage implements OnInit {
     )/*.then(() =>
       db.collection('employees').find({owner_id: client.auth.user.id}, { limit: 100}).asArray()
     )*/.then(docs => {
+        console.log('docs in fetchEmployees', docs);
         // Collection is empty.
         if (docs.length === 0) {
           console.log('Collection is empty');
-          this.stichMongoService.populateFakeEmployees();
+          // this.stichMongoService.populateFakeEmployees();
         } else {
           console.log('Found docs', docs);
           this.employees = docs;
@@ -112,6 +112,7 @@ export class HomePage implements OnInit {
     this.stichMongoService.client.auth.loginWithCredential(new AnonymousCredential()).then(user =>
       this.stichMongoService.aggregate('employees', '$employee_name')
     ).then(docs => {
+      console.log('docs in fetchEmployeesGroupByFirstLetter', docs);
         // Collection is empty.
         if (docs.length === 0) {
           console.log('Collection is empty');
