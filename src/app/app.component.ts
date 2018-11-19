@@ -47,6 +47,6 @@ export class AppComponent {
   }
 
   navigateByURL(url) {
-    this.router.navigateByUrl(url, { skipLocationChange: true });
+    this.router.navigateByUrl(url);
   }
 }
