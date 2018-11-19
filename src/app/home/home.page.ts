@@ -29,9 +29,16 @@ export class HomePage implements OnInit {
               private loadingCtrl: LoadingController, private networkService: NetworkService) {
     console.log('HomePage::constructor() | method called');
     console.log('employees', this.employees);
+    console.log('client', this.stichMongoService.client);
+    console.log('db', this.stichMongoService.db);
 
-    this.stichMongoService.initializeAppCliente('ionic-employees-priuv');
-    this.stichMongoService.getServiceClient('mongo-employees');
+    if ((this.stichMongoService.client === null) && (this.stichMongoService.db === null)) {
+      this.stichMongoService.initializeAppClient('ionic-employees-priuv');
+      this.stichMongoService.getServiceClient('mongo-employees');
+    }
+
+    this.fetchEmployees();
+    this.fetchEmployeesGroupByFirstLetter();
 
     this.searchControl = new FormControl();
 
@@ -39,8 +46,6 @@ export class HomePage implements OnInit {
 
   ngOnInit() {
     console.log('HomePage::ngOnInit | method called');
-    this.fetchEmployees();
-    this.fetchEmployeesGroupByFirstLetter();
   }
 
   ionViewWillEnter() {
@@ -87,16 +92,17 @@ export class HomePage implements OnInit {
 
   fetchEmployees() {
     this.presentLoading();
-    this.stichMongoService.client.auth.loginWithCredential(new AnonymousCredential()).then(user =>
-      this.stichMongoService.find('employees', {})
-    )/*.then(() =>
+    this.stichMongoService.client.auth.loginWithCredential(new AnonymousCredential()).then(user => {
+      console.log('user', user);
+      return this.stichMongoService.find('employees', {});
+    })/*.then(() =>
       db.collection('employees').find({owner_id: client.auth.user.id}, { limit: 100}).asArray()
     )*/.then(docs => {
         console.log('docs in fetchEmployees', docs);
         // Collection is empty.
         if (docs.length === 0) {
           console.log('Collection is empty');
-          // this.stichMongoService.populateFakeEmployees();
+          this.stichMongoService.populateFakeEmployees();
         } else {
           console.log('Found docs', docs);
           this.employees = docs;
