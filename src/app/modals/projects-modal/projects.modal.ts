@@ -27,13 +27,21 @@ export class ProjectsModalComponent implements OnInit {
     this.presentLoading();
     // console.log(this.navParams.data.modalProps.projects);
     this.projects = this.navParams.data.modalProps.projects;
-    console.log('this.projects', this.projects);
-    this.projects.map(project => {
-      this.findPeople(project.name);
-      setTimeout(() => this.dismissLoading(), 1000);
-    });
-    console.log('this.people', this.people);
+    // console.log('this.projects', this.projects);
     // this.technologies =  this.navParams.data.modalProps.projects..split(" ")
+
+    Promise.all(
+      this.projects.map(project => {
+        return this.findPeople(project.name);
+      })
+    ).then(results => {
+      // console.log('results', results);
+      results.map((result, index) => {
+        // console.log(result);
+        this.people.push(result);
+        setTimeout(() => this.dismissLoading(), 1000);
+      });
+    });
   }
 
   dismiss() {
@@ -67,21 +75,21 @@ export class ProjectsModalComponent implements OnInit {
 
   }
 
-  findPeople(projectName) {
-    this.stitchMongoService.client.auth.loginWithCredential(new AnonymousCredential()).then(user =>
-      this.stitchMongoService.find('employees', {'projects.name' : { $in : [projectName]}})
-    ).then(docs => {
+  async findPeople(projectName) {
+    // this.stitchMongoService.client.auth.loginWithCredential(new AnonymousCredential()).then(user => {
+      return this.stitchMongoService.find('employees', {'projects.name' : { $in : [projectName]}});
+    /*});*/ /*.then(docs => {
         // Collection is empty.
         if (docs.length === 0) {
           console.log('Collection is empty');
         } else {
           console.log('Found docs in findPeople', docs);
-          this.people.push(docs);
+          this.people[projectName] = docs;
         }
         console.log('[MongoDB Stitch] Connected to Stitch');
     }).catch(err => {
         console.error(err);
-    });
+    });*/
   }
 
   async presentLoading() {
