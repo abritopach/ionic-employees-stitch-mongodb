@@ -17,10 +17,6 @@ ion-avatar img {
     height: 48px;
 }
 
-.labelMore {
-    margin-left: 10px;
-}
-
 .avatar-badge {
     position: absolute;
     top: -3px;
@@ -30,4 +26,8 @@ ion-avatar img {
 
 agm-map {
     height: 150px;
+}
+
+.chipCol {
+    padding: 0!important;
 }

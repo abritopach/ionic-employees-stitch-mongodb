@@ -50,7 +50,6 @@ export class SchedulePage implements OnInit {
 
   ngOnInit() {
     this.innerWidth = window.innerWidth;
-    console.log('innerWidth', this.innerWidth);
     this.checkWidth(this.innerWidth);
     this.people = this.peopleMore.slice(0, this.countPeople);
   }
@@ -81,27 +80,36 @@ export class SchedulePage implements OnInit {
 
   checkWidth(width) {
 
-    // Extra small
+    // Extra small.
     if (width <= 400) {
       this.countPeople = 2;
       this.avatarColSize = 2;
       this.chipColSize = 2;
     }
-    // Small
+    // Small.
     if ((width >= 401) && (width <= 640)) {
       this.countPeople = 3;
       this.avatarColSize = 2;
       this.chipColSize = 2;
     }
-    // Medium 641px to 1007px
+    // Medium.
     if ((width >= 641) && (width <= 1007)) {
       this.countPeople = 6;
       this.avatarColSize = 1;
       this.chipColSize = 6;
     }
-    // Large
-    console.log('avatarColSize', this.avatarColSize);
-    console.log('chipColSize', this.chipColSize);
+    // Large.
+    if ((width >= 1008) && (width <= 1199)) {
+      this.countPeople = 8;
+      this.avatarColSize = 1;
+      this.chipColSize = 4;
+    }
+    // Extra Large.
+    if (width >= 1200) {
+      this.countPeople = 10;
+      this.avatarColSize = 1;
+      this.chipColSize = 2;
+    }
   }
 
 }
