@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Stitch, RemoteMongoClient, AnonymousCredential, StitchAppClient, RemoteMongoDatabase} from 'mongodb-stitch-browser-sdk';
+import { Stitch, RemoteMongoClient, AnonymousCredential, StitchAppClient, RemoteMongoDatabase,
+   UserPasswordCredential } from 'mongodb-stitch-browser-sdk';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +16,30 @@ export class StitchMongoService {
      owner_id: '5bee844f698a67224235d074', phone: '123456789', email: 'fakeemail@gmail.com', department: 'Technical',
     projects: [{name: 'Project Technical 1', description: 'Description 1', technologies: 'Ionic, Angular, MongoDB', thumbnail: ''},
     {name: 'Project Technical 2', description: 'Description 2', technologies: 'Ionic, Angular, MongoDB', thumbnail: ''},
-    {name: 'Project Marketing 1', description: 'Description 3', technologies: 'Ionic, Angular, MongoDB', thumbnail: ''}]},
+    {name: 'Project Marketing 1', description: 'Description 3', technologies: 'Ionic, Angular, MongoDB', thumbnail: ''}], events: [
+  {title: 'My Event 1', time: '5:00p - 1:00a', date: 'Monday, November 5, 2018', meeting_participants: [
+    {avatar: 'http://i.pravatar.cc/150?img=7'},
+    {avatar: 'http://i.pravatar.cc/150?img=8'},
+    {avatar: 'http://i.pravatar.cc/150?img=9'},
+    {avatar: 'http://i.pravatar.cc/150?img=10'},
+    {avatar: 'http://i.pravatar.cc/150?img=11'},
+    {avatar: 'http://i.pravatar.cc/150?img=12'},
+    {avatar: 'http://i.pravatar.cc/150?img=13'},
+    {avatar: 'http://i.pravatar.cc/150?img=14'},
+    {avatar: 'http://i.pravatar.cc/150?img=15'},
+    {avatar: 'http://i.pravatar.cc/150?img=16'},
+    {avatar: 'http://i.pravatar.cc/150?img=17'},
+    {avatar: 'http://i.pravatar.cc/150?img=18'},
+    {avatar: 'http://i.pravatar.cc/150?img=19'},
+    {avatar: 'http://i.pravatar.cc/150?img=20'}
+  ]},
+  {title: 'My Event 2', time: '5:00p - 1:00a', date: 'Friday, December 14, 2018', meeting_participants: [
+    {avatar: 'http://i.pravatar.cc/150?img=7'},
+    {avatar: 'http://i.pravatar.cc/150?img=8'},
+    {avatar: 'http://i.pravatar.cc/150?img=9'},
+    {avatar: 'http://i.pravatar.cc/150?img=10'},
+    {avatar: 'http://i.pravatar.cc/150?img=11'}
+    ]}]},
     {employee_name: 'José Antonio Pérez Florencia', job_position: 'Software Developer', avatar: 'http://i.pravatar.cc/150?img=2',
     description: 'Lorem ipsum dolor sit amet consectetur adipiscing elit, eu auctor convallis ultrices volutpat himenaeos',
      owner_id: '5bee844f698a67224235d074', phone: '123456789', email: 'fakeemail@gmail.com', department: 'Technical',
@@ -48,6 +72,14 @@ export class StitchMongoService {
   getServiceClient(dbName: string) {
     this.db = this.client.getServiceClient(RemoteMongoClient.factory, 'mongodb-atlas').db(dbName);
     console.log('db in getServiceClient', this.db);
+  }
+
+  login(user) {
+    const credential = new UserPasswordCredential(user.email, user.password);
+    this.client.auth.loginWithCredential(credential).then(authedId => {
+      console.log(`successfully logged in with id: ${authedId}`);
+  })
+    .catch(err => console.error(`login failed with error: ${err}`));
   }
 
   find(collection: string, filter: any) {
