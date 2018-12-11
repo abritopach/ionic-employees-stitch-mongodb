@@ -161,8 +161,4 @@ export class HomePage implements OnInit {
     this.router.navigateByUrl('/organization');
   }
 
-  login() {
-    console.log('HomePage::login() | method called');
-    // this.stichMongoService.login({email: '', password: ''});
-  }
 }
