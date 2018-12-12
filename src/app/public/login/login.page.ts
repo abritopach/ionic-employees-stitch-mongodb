@@ -1,6 +1,8 @@
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 
+import { StitchMongoService } from './../../services/stitch-mongo.service';
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.page.html',
@@ -10,7 +12,7 @@ export class LoginPage implements OnInit {
 
   loginForm: FormGroup;
 
-  constructor(private formBuilder: FormBuilder) {
+  constructor(private formBuilder: FormBuilder, private stichMongoService: StitchMongoService) {
     this.createForm();
   }
 

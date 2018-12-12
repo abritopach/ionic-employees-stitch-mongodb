@@ -77,6 +77,7 @@ export class StitchMongoService {
   login(user) {
     const credential = new UserPasswordCredential(user.email, user.password);
     this.client.auth.loginWithCredential(credential).then(authedId => {
+      console.log(authedId);
       console.log(`successfully logged in with id: ${authedId.id}`);
   })
     .catch(err => console.error(`login failed with error: ${err}`));
