@@ -12,6 +12,9 @@ import { LoadingController } from '@ionic/angular';
 
 import { NetworkService } from './../services/network.service';
 
+import { AuthGuardService } from './../services/auth-guard.service';
+import { AuthenticationService } from './../services/authentication.service';
+
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
@@ -26,7 +29,8 @@ export class HomePage implements OnInit {
   result: any;
 
   constructor(private router: Router, private stichMongoService: StitchMongoService, private route: ActivatedRoute,
-              private loadingCtrl: LoadingController, private networkService: NetworkService) {
+              private loadingCtrl: LoadingController, private networkService: NetworkService, private authGuard: AuthGuardService,
+              private authenticationService: AuthenticationService) {
     console.log('HomePage::constructor() | method called');
     console.log('employees', this.employees);
     console.log('client', this.stichMongoService.client);
@@ -159,6 +163,11 @@ export class HomePage implements OnInit {
   showOrganizationChart() {
     console.log('HomePage::showOrganizationChart() | method called');
     this.router.navigateByUrl('/organization');
+  }
+
+  logout() {
+    console.log('HomePage::logout() | method called');
+    this.authenticationService.logout();
   }
 
 }

@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { Stitch, RemoteMongoClient, AnonymousCredential, StitchAppClient, RemoteMongoDatabase,
    UserPasswordCredential } from 'mongodb-stitch-browser-sdk';
 
+   import { AuthenticationService } from './authentication.service';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -62,7 +64,7 @@ export class StitchMongoService {
     {name: 'Project Technical 3', description: 'Description 3', technologies: 'Ionic, Angular, MongoDB', thumbnail: ''}]}
   ];
 
-  constructor() { }
+  constructor(private authService: AuthenticationService) { }
 
   initializeAppClient(appID: string) {
     this.client = Stitch.initializeDefaultAppClient(appID);
@@ -79,6 +81,7 @@ export class StitchMongoService {
     this.client.auth.loginWithCredential(credential).then(authedId => {
       console.log(authedId);
       console.log(`successfully logged in with id: ${authedId.id}`);
+      this.authService.login(authedId.id);
   })
     .catch(err => console.error(`login failed with error: ${err}`));
   }

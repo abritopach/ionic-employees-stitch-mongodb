@@ -10,8 +10,11 @@
         <ion-button (click)="showOrganizationChart()">
             <ion-icon slot="icon-only" name="people"></ion-icon>
         </ion-button>
-        <ion-button routerLink="/login">
+        <ion-button *ngIf="!authGuard.canActivate()" routerLink="/login">
           <ion-icon slot="icon-only" name="log-in"></ion-icon>
+        </ion-button>
+        <ion-button  *ngIf="authGuard.canActivate()" (click)="logout()">
+          <ion-icon slot="icon-only" name="log-out"></ion-icon>
         </ion-button>
       </ion-buttons>
   </ion-toolbar>
@@ -22,6 +25,7 @@
 </ion-header>
 
 <ion-content padding>
+  <p *ngIf="!authGuard.canActivate()" class="note"><b>NOTE: Login to be able to use all the functionality.</b></p>
   <ion-list>
     <ion-item-group *ngFor="let item of result">
       <ion-item-divider color="light">{{item._id}}</ion-item-divider>

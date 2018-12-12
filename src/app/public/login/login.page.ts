@@ -29,7 +29,7 @@ export class LoginPage implements OnInit {
   loginFormSubmit() {
     console.log('HomePage::loginFormSubmit() | method called');
     console.log(this.loginForm.value);
-    // this.stichMongoService.login({email: '', password: ''});
+    this.stichMongoService.login(this.loginForm.value);
   }
 
 }
