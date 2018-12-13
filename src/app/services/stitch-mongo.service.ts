@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { Stitch, RemoteMongoClient, AnonymousCredential, StitchAppClient, RemoteMongoDatabase,
    UserPasswordCredential } from 'mongodb-stitch-browser-sdk';
 
-   import { AuthenticationService } from './authentication.service';
+import { AuthenticationService } from './authentication.service';
+import config from '../config/config';
 
 @Injectable({
   providedIn: 'root'
@@ -76,6 +77,7 @@ export class StitchMongoService {
     console.log('db in getServiceClient', this.db);
   }
 
+  /*
   login(user) {
     const credential = new UserPasswordCredential(user.email, user.password);
     this.client.auth.loginWithCredential(credential).then(authedId => {
@@ -85,6 +87,12 @@ export class StitchMongoService {
   })
     .catch(err => console.error(`login failed with error: ${err}`));
   }
+  */
+
+ login(user) {
+  const credential = new UserPasswordCredential(user.email, user.password);
+  return this.client.auth.loginWithCredential(credential);
+}
 
   find(collection: string, filter: any) {
     console.log('filter in find', filter);
@@ -111,6 +119,6 @@ export class StitchMongoService {
   }
 
   populateFakeEmployees() {
-    this.insertMany('employees', this.fakeEmployees);
+    this.insertMany(config.COLLECTION_KEY, this.fakeEmployees);
   }
 }

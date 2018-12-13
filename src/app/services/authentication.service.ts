@@ -1,10 +1,9 @@
-import { Router } from '@angular/router';
 import { Injectable } from '@angular/core';
 import { Platform } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import { BehaviorSubject } from 'rxjs';
 
-const TOKEN_KEY = 'auth-token';
+import config from '../config/config';
 
 @Injectable({
   providedIn: 'root'
@@ -13,14 +12,14 @@ export class AuthenticationService {
 
   authenticationState = new BehaviorSubject(false);
 
-  constructor(private storage: Storage, private plt: Platform, private router: Router) {
+  constructor(private storage: Storage, private plt: Platform) {
     this.plt.ready().then(() => {
       this.checkToken();
     });
   }
 
   checkToken() {
-    this.storage.get(TOKEN_KEY).then(res => {
+    this.storage.get(config.TOKEN_KEY).then(res => {
       if (res) {
         this.authenticationState.next(true);
       }
@@ -28,14 +27,13 @@ export class AuthenticationService {
   }
 
   login(token) {
-    return this.storage.set(TOKEN_KEY, token).then(() => {
+    return this.storage.set(config.TOKEN_KEY, token).then(() => {
       this.authenticationState.next(true);
-      this.router.navigateByUrl('/home');
     });
   }
 
   logout() {
-    return this.storage.remove(TOKEN_KEY).then(() => {
+    return this.storage.remove(config.TOKEN_KEY).then(() => {
       this.authenticationState.next(false);
     });
   }

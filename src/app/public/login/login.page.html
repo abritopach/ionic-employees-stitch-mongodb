@@ -11,8 +11,11 @@
   <form [formGroup]="loginForm" novalidate (ngSubmit)="loginFormSubmit()">
     <ion-card>
       <ion-card-header>
-        <ion-avatar class="login-avatar">
+        <ion-avatar *ngIf="avatar === null" class="login-avatar">
             <img src="assets/images/login-avatar.png">
+        </ion-avatar>
+        <ion-avatar *ngIf="avatar !== null" class="login-avatar">
+            <img [src]="avatar">
         </ion-avatar>
       </ion-card-header>
       <ion-card-content>

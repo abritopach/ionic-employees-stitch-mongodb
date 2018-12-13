@@ -8,6 +8,8 @@ import { trigger, state, style, animate, transition } from '@angular/animations'
 
 import { Router } from '@angular/router';
 
+import config from '../config/config';
+
 @Component({
   selector: 'app-show-people-popover',
   templateUrl: 'show-people.popover.html',
@@ -56,7 +58,7 @@ export class ShowPeoplePopoverComponent implements OnInit {
 
   findPeople() {
     this.stitchMongoService.client.auth.loginWithCredential(new AnonymousCredential()).then(user =>
-      this.stitchMongoService.find('employees', {'projects.name' : { $in : [this.navParams.data.popoverProps.projectName]}})
+      this.stitchMongoService.find(config.COLLECTION_KEY, {'projects.name' : { $in : [this.navParams.data.popoverProps.projectName]}})
     ).then(docs => {
         // Collection is empty.
         if (docs.length === 0) {

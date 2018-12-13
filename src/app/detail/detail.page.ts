@@ -11,6 +11,8 @@ import { ModalController } from '@ionic/angular';
 import { ProjectsModalComponent } from '../modals/projects-modal/projects.modal';
 import { SendSMSModalComponent } from './../modals/send-sms-modal/send-sms.modal';
 
+import config from '../config/config';
+
 @Component({
   selector: 'app-detail',
   templateUrl: './detail.page.html',
@@ -36,7 +38,7 @@ export class DetailPage implements OnInit {
   findEmployee(employeId) {
     this.stichMongoService.client.auth.loginWithCredential(new AnonymousCredential()).then(user => {
       console.log('user', user);
-      return this.stichMongoService.find('employees', {'employee_name': employeId});
+      return this.stichMongoService.find(config.COLLECTION_KEY, {'employee_name': employeId});
       }
     ).then(docs => {
         // Collection is empty.

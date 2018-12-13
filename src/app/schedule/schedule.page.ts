@@ -10,7 +10,7 @@ import { ObjectId } from 'bson';
 
 import { Storage } from '@ionic/storage';
 
-const TOKEN_KEY = 'auth-token';
+import config from '../config/config';
 
 @Component({
   selector: 'app-schedule',
@@ -50,10 +50,10 @@ export class SchedulePage implements OnInit {
     this.innerWidth = window.innerWidth;
     this.checkWidth(this.innerWidth);
 
-    this.storage.get(TOKEN_KEY).then(res => {
+    this.storage.get(config.TOKEN_KEY).then(res => {
       if (res) {
         const objectId = new ObjectId(res);
-        this.stitchMongoService.find('employees', {user_id: objectId}).then(result => {
+        this.stitchMongoService.find(config.COLLECTION_KEY, {user_id: objectId}).then(result => {
           if ((result.length !== 0) && (typeof result[0]['events'] !== 'undefined')) {
             this.events = result[0]['events'];
             this.events.map(event => {

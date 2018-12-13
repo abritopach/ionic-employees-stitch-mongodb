@@ -4,6 +4,8 @@ import { StitchMongoService } from '../../services/stitch-mongo.service';
 
 import { AnonymousCredential} from 'mongodb-stitch-browser-sdk';
 
+import config from '../../config/config';
+
 @Component({
   selector: 'app-employees-per-department',
   templateUrl: './employees-per-department.component.html',
@@ -23,7 +25,7 @@ export class EmployeesPerDepartmentComponent implements OnInit {
   findEmployeePerDepartment() {
     this.stichMongoService.client.auth.loginWithCredential(new AnonymousCredential()).then(user => {
       // console.log('user', user);
-      return this.stichMongoService.find('employees', {'department': this.employee.department, 'employee_name':
+      return this.stichMongoService.find(config.COLLECTION_KEY, {'department': this.employee.department, 'employee_name':
        { $ne: this.employee.employee_name }});
       }
     ).then(docs => {

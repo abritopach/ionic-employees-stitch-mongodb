@@ -6,6 +6,8 @@ import { ShowPeoplePopoverComponent } from '../../popovers/show-people.popover';
 import { StitchMongoService } from './../../services/stitch-mongo.service';
 import { AnonymousCredential} from 'mongodb-stitch-browser-sdk';
 
+import config from '../../config/config';
+
 @Component({
   selector: 'app-projects-modal',
   templateUrl: 'projects.modal.html',
@@ -77,7 +79,7 @@ export class ProjectsModalComponent implements OnInit {
 
   async findPeople(projectName) {
     // this.stitchMongoService.client.auth.loginWithCredential(new AnonymousCredential()).then(user => {
-      return this.stitchMongoService.find('employees', {'projects.name' : { $in : [projectName]}});
+      return this.stitchMongoService.find(config.COLLECTION_KEY, {'projects.name' : { $in : [projectName]}});
     /*});*/ /*.then(docs => {
         // Collection is empty.
         if (docs.length === 0) {

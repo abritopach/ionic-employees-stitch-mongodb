@@ -10,6 +10,8 @@ import { LoadingController } from '@ionic/angular';
 
 import { StitchMongoService, NetworkService, AuthGuardService, AuthenticationService } from './../services';
 
+import config from '../config/config';
+
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
@@ -93,9 +95,9 @@ export class HomePage implements OnInit {
     this.presentLoading();
     this.stichMongoService.client.auth.loginWithCredential(new AnonymousCredential()).then(user => {
       console.log('user', user);
-      return this.stichMongoService.find('employees', {});
+      return this.stichMongoService.find(config.COLLECTION_KEY, {});
     })/*.then(() =>
-      db.collection('employees').find({owner_id: client.auth.user.id}, { limit: 100}).asArray()
+      db.collection(config.COLLECTION_KEY).find({owner_id: client.auth.user.id}, { limit: 100}).asArray()
     )*/.then(docs => {
         console.log('docs in fetchEmployees', docs);
         // Collection is empty.
@@ -115,7 +117,7 @@ export class HomePage implements OnInit {
 
   fetchEmployeesGroupByFirstLetter() {
     this.stichMongoService.client.auth.loginWithCredential(new AnonymousCredential()).then(user =>
-      this.stichMongoService.aggregate('employees', '$employee_name')
+      this.stichMongoService.aggregate(config.COLLECTION_KEY, '$employee_name')
     ).then(docs => {
       console.log('docs in fetchEmployeesGroupByFirstLetter', docs);
         // Collection is empty.
