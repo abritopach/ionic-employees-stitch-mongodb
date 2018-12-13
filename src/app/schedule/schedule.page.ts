@@ -8,6 +8,10 @@ import { StitchMongoService } from './../services/stitch-mongo.service';
 
 import { ObjectId } from 'bson';
 
+import { Storage } from '@ionic/storage';
+
+const TOKEN_KEY = 'auth-token';
+
 @Component({
   selector: 'app-schedule',
   templateUrl: './schedule.page.html',
@@ -16,7 +20,7 @@ import { ObjectId } from 'bson';
 export class SchedulePage implements OnInit {
 
   currentYear = new Date().getFullYear();
-  events: any;
+  events: any = null;
   participants: any = [];
 
   // https://www.code-sample.com/2018/07/angular-6-google-maps-agm-core.html
@@ -39,19 +43,26 @@ export class SchedulePage implements OnInit {
     });
   }
 
-  constructor(private popoverCtrl: PopoverController, private stitchMongoService: StitchMongoService) { }
+  constructor(private popoverCtrl: PopoverController, private stitchMongoService: StitchMongoService,
+              private storage: Storage) { }
 
   ngOnInit() {
     this.innerWidth = window.innerWidth;
     this.checkWidth(this.innerWidth);
 
-    const objectId = new ObjectId('5c0fb033048b4514d529caba');
-    this.stitchMongoService.find('employees', {_id: objectId}).then(result => {
-      this.events = result[0]['events'];
-      this.events.map(event => {
-        const visibleParticipants = event.meeting_participants.slice(0, this.countPeople);
-        this.participants.push(visibleParticipants);
-      });
+    this.storage.get(TOKEN_KEY).then(res => {
+      if (res) {
+        const objectId = new ObjectId(res);
+        this.stitchMongoService.find('employees', {user_id: objectId}).then(result => {
+          if ((result.length !== 0) && (typeof result[0]['events'] !== 'undefined')) {
+            this.events = result[0]['events'];
+            this.events.map(event => {
+              const visibleParticipants = event.meeting_participants.slice(0, this.countPeople);
+              this.participants.push(visibleParticipants);
+            });
+          }
+        });
+      }
     });
   }
 

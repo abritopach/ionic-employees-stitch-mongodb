@@ -7,6 +7,7 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 This project shows you how to:
 
     * Use Stitch MongoDB with Ionic 4.
+    * Email/Password Authentication Stitch MongoDB.
     * Show employees list.
     * Filter employees list.
     * Show employee detail.
@@ -15,6 +16,8 @@ This project shows you how to:
         * Send email.
         * Send message.
     * Show project participants.
+    * Show organization.
+    * Show employee events.
 
 Technologies: Angular, Ionic, Stitch MongoDB, TypeScript.
 
