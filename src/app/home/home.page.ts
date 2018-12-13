@@ -3,17 +3,12 @@ import { Router, ActivatedRoute } from '@angular/router';
 
 import { Stitch, RemoteMongoClient, AnonymousCredential} from 'mongodb-stitch-browser-sdk';
 
-import { StitchMongoService} from '../services/stitch-mongo.service';
-
 import { FormControl } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
 
 import { LoadingController } from '@ionic/angular';
 
-import { NetworkService } from './../services/network.service';
-
-import { AuthGuardService } from './../services/auth-guard.service';
-import { AuthenticationService } from './../services/authentication.service';
+import { StitchMongoService, NetworkService, AuthGuardService, AuthenticationService } from './../services';
 
 @Component({
   selector: 'app-home',
