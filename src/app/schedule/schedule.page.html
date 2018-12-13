@@ -10,21 +10,21 @@
 <ion-content padding>
     <ion-list>
         <ion-grid fixed>
-          <ion-row align-items-stretch>
+          <ion-row *ngFor="let event of events; let i = index" align-items-stretch >
           <ion-col col-12 align-self-stretch align-self-center>
             <ion-card>
               <ion-item class="eventClass">
-                <b>My Event</b>
+                <b>{{ event.title }}</b>
                 <ion-icon name="arrow-dropright" slot="end"></ion-icon>
               </ion-item>
                 <ion-item lines="none">
                   <span class="spanClass">YOUR NEXT EVENT</span>
                 </ion-item>
                 <ion-item lines="none">
-                    <span class="timeClass">5:00p - 1:00a</span>
+                    <span class="timeClass">{{ event.time }}</span>
                 </ion-item>
                 <ion-item lines="none" class="spanClass">
-                    <ion-icon name="calendar"></ion-icon><b>Monday, November 5, 2018</b>
+                    <ion-icon name="calendar"></ion-icon><b>{{ event.date }}</b>
                 </ion-item>
                 <ion-card-content>
                     <agm-map [latitude]="lat" [longitude]="lng">
@@ -37,17 +37,17 @@
                   <b>Meeting Participants</b>
                   <ion-icon name="arrow-dropright" slot="end"></ion-icon>
                 </ion-item>
-                <ion-item>
+                <ion-item *ngIf="participants.length != 0">
                   <ion-row>
-                    <ion-col size="avatarColSize" *ngFor="let person of people">
+                    <ion-col size="avatarColSize" *ngFor="let participant of participants[i]">
                       <!--<ion-badge class="avatarBadge"><ion-icon name="calendar"></ion-icon></ion-badge>-->
                       <ion-avatar tappable>
-                        <img [src]="person.avatar">
+                        <img [src]="participant.avatar">
                       </ion-avatar>
                     </ion-col>
                     <ion-col class="chipCol" size="chipColSize">
-                      <ion-chip tappable color="tertiary" (click)="onClickShowPeople()">
-                        <ion-label>+ 10 MORE</ion-label>
+                      <ion-chip *ngIf="event.meeting_participants.length - participants[i].length !== 0" tappable color="tertiary" (click)="onClickShowPeople(event)">
+                        <ion-label>+ {{event.meeting_participants.length - participants[i].length}} MORE</ion-label>
                       </ion-chip>
                     </ion-col>
                   </ion-row>

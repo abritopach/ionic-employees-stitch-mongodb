@@ -4,6 +4,10 @@ import { PopoverController } from '@ionic/angular';
 
 import { ShowPeoplePopoverComponent } from './../popovers/show-people.popover';
 
+import { StitchMongoService } from './../services/stitch-mongo.service';
+
+import { ObjectId } from 'bson';
+
 @Component({
   selector: 'app-schedule',
   templateUrl: './schedule.page.html',
@@ -12,24 +16,8 @@ import { ShowPeoplePopoverComponent } from './../popovers/show-people.popover';
 export class SchedulePage implements OnInit {
 
   currentYear = new Date().getFullYear();
-  people: any;
-
-  peopleMore: any = [
-    {avatar: 'http://i.pravatar.cc/150?img=7'},
-    {avatar: 'http://i.pravatar.cc/150?img=8'},
-    {avatar: 'http://i.pravatar.cc/150?img=9'},
-    {avatar: 'http://i.pravatar.cc/150?img=10'},
-    {avatar: 'http://i.pravatar.cc/150?img=11'},
-    {avatar: 'http://i.pravatar.cc/150?img=12'},
-    {avatar: 'http://i.pravatar.cc/150?img=13'},
-    {avatar: 'http://i.pravatar.cc/150?img=14'},
-    {avatar: 'http://i.pravatar.cc/150?img=15'},
-    {avatar: 'http://i.pravatar.cc/150?img=16'},
-    {avatar: 'http://i.pravatar.cc/150?img=17'},
-    {avatar: 'http://i.pravatar.cc/150?img=18'},
-    {avatar: 'http://i.pravatar.cc/150?img=19'},
-    {avatar: 'http://i.pravatar.cc/150?img=20'}
-  ];
+  events: any;
+  participants: any = [];
 
   // https://www.code-sample.com/2018/07/angular-6-google-maps-agm-core.html
   lat = 26.765844;
@@ -41,26 +29,39 @@ export class SchedulePage implements OnInit {
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
-    console.log(event.target.innerWidth);
+    // console.log(event.target.innerWidth);
     this.checkWidth(event.target.innerWidth);
-    this.people = this.peopleMore.slice(0, this.countPeople);
+    // this.people = this.peopleMore.slice(0, this.countPeople);
+    this.participants = [];
+    this.events.map(e => {
+      const visibleParticipants = e.meeting_participants.slice(0, this.countPeople);
+      this.participants.push(visibleParticipants);
+    });
   }
 
-  constructor(private popoverCtrl: PopoverController) { }
+  constructor(private popoverCtrl: PopoverController, private stitchMongoService: StitchMongoService) { }
 
   ngOnInit() {
     this.innerWidth = window.innerWidth;
     this.checkWidth(this.innerWidth);
-    this.people = this.peopleMore.slice(0, this.countPeople);
+
+    const objectId = new ObjectId('5c0fb033048b4514d529caba');
+    this.stitchMongoService.find('employees', {_id: objectId}).then(result => {
+      this.events = result[0]['events'];
+      this.events.map(event => {
+        const visibleParticipants = event.meeting_participants.slice(0, this.countPeople);
+        this.participants.push(visibleParticipants);
+      });
+    });
   }
 
-  onClickShowPeople() {
+  onClickShowPeople(event) {
     console.log('SchedulePage::onClickShowPeople | method called');
-    this.presentPopover();
+    this.presentPopover(event);
   }
 
-  async presentPopover() {
-    const componentProps = { popoverProps: { people: this.peopleMore}};
+  async presentPopover(event) {
+    const componentProps = { popoverProps: { people: event.meeting_participants}};
     const popover = await this.popoverCtrl.create({
       component: ShowPeoplePopoverComponent,
       componentProps: componentProps
