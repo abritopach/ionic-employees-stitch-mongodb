@@ -38,6 +38,9 @@
               },
               {
                 "input": "src/global.scss"
+              },
+              {
+                "input": "node_modules/izitoast/dist/css/iziToast.min.css"
               }
             ],
             "scripts": []

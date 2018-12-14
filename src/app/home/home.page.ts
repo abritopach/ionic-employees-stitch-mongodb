@@ -8,7 +8,7 @@ import { debounceTime } from 'rxjs/operators';
 
 import { LoadingController } from '@ionic/angular';
 
-import { StitchMongoService, NetworkService, AuthGuardService, AuthenticationService } from './../services';
+import { StitchMongoService, NetworkService, AuthGuardService, AuthenticationService, IziToastService } from './../services';
 
 import config from '../config/config';
 
@@ -27,7 +27,7 @@ export class HomePage implements OnInit {
 
   constructor(private router: Router, private stichMongoService: StitchMongoService, private route: ActivatedRoute,
               private loadingCtrl: LoadingController, private networkService: NetworkService, private authGuard: AuthGuardService,
-              private authenticationService: AuthenticationService) {
+              private authenticationService: AuthenticationService, private iziToast: IziToastService) {
     console.log('HomePage::constructor() | method called');
     console.log('employees', this.employees);
     console.log('client', this.stichMongoService.client);
@@ -47,6 +47,10 @@ export class HomePage implements OnInit {
 
   ngOnInit() {
     console.log('HomePage::ngOnInit | method called');
+
+    if (!this.authGuard.canActivate()) {
+      this.iziToast.show('Important NOTE', 'Login to be able to use all the functionality.', 'red', 'ico-error', 'assets/avatar.png');
+    }
   }
 
   ionViewWillEnter() {

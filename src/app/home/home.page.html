@@ -25,7 +25,7 @@
 </ion-header>
 
 <ion-content padding>
-  <p *ngIf="!authGuard.canActivate()" class="note"><b>NOTE: Login to be able to use all the functionality.</b></p>
+  <!--<p *ngIf="!authGuard.canActivate()" class="note"><b>NOTE: Login to be able to use all the functionality.</b></p>-->
   <ion-list>
     <ion-item-group *ngFor="let item of result">
       <ion-item-divider color="light">{{item._id}}</ion-item-divider>
