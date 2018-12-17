@@ -2,7 +2,6 @@ import { Component, ViewEncapsulation, OnInit, ChangeDetectorRef } from '@angula
 import { PopoverController, NavParams } from '@ionic/angular';
 
 import { StitchMongoService } from './../services/stitch-mongo.service';
-import { AnonymousCredential} from 'mongodb-stitch-browser-sdk';
 
 import { trigger, state, style, animate, transition } from '@angular/animations';
 
@@ -54,12 +53,9 @@ export class ShowPeoplePopoverComponent implements OnInit {
     }
   }
 
-  // {"projects.name" : { $in : ["Project Technical 1"]}}
-
   findPeople() {
-    this.stitchMongoService.client.auth.loginWithCredential(new AnonymousCredential()).then(user =>
       this.stitchMongoService.find(config.COLLECTION_KEY, {'projects.name' : { $in : [this.navParams.data.popoverProps.projectName]}})
-    ).then(docs => {
+      .then(docs => {
         // Collection is empty.
         if (docs.length === 0) {
           console.log('Collection is empty');
@@ -70,10 +66,9 @@ export class ShowPeoplePopoverComponent implements OnInit {
             people.avatarState = 'iddle';
           });
         }
-        console.log('[MongoDB Stitch] Connected to Stitch');
-    }).catch(err => {
-        console.error(err);
-    });
+      }).catch(err => {
+          console.error(err);
+      });
   }
 
   onClickEmployee(person) {

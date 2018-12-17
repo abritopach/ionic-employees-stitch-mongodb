@@ -1,11 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 import { StitchMongoService } from '../services/stitch-mongo.service';
-
-import { AnonymousCredential} from 'mongodb-stitch-browser-sdk';
-import { switchMap } from 'rxjs/operators';
-import { of } from 'rxjs';
 
 import { ModalController } from '@ionic/angular';
 import { ProjectsModalComponent } from '../modals/projects-modal/projects.modal';
@@ -36,11 +32,8 @@ export class DetailPage implements OnInit {
   }
 
   findEmployee(employeId) {
-    this.stichMongoService.client.auth.loginWithCredential(new AnonymousCredential()).then(user => {
-      console.log('user', user);
-      return this.stichMongoService.find(config.COLLECTION_KEY, {'employee_name': employeId});
-      }
-    ).then(docs => {
+    this.stichMongoService.find(config.COLLECTION_KEY, {'employee_name': employeId})
+    .then(docs => {
         // Collection is empty.
         if (docs.length !== 0) {
           // console.log(docs);

@@ -2,8 +2,6 @@ import { Component, OnInit, Input } from '@angular/core';
 
 import { StitchMongoService } from '../../services/stitch-mongo.service';
 
-import { AnonymousCredential} from 'mongodb-stitch-browser-sdk';
-
 import config from '../../config/config';
 
 @Component({
@@ -23,12 +21,9 @@ export class EmployeesPerDepartmentComponent implements OnInit {
   }
 
   findEmployeePerDepartment() {
-    this.stichMongoService.client.auth.loginWithCredential(new AnonymousCredential()).then(user => {
-      // console.log('user', user);
-      return this.stichMongoService.find(config.COLLECTION_KEY, {'department': this.employee.department, 'employee_name':
-       { $ne: this.employee.employee_name }});
-      }
-    ).then(docs => {
+      this.stichMongoService.find(config.COLLECTION_KEY, {'department': this.employee.department, 'employee_name':
+       { $ne: this.employee.employee_name }})
+      .then(docs => {
         // Collection is empty.
         if (docs.length !== 0) {
           // console.log(docs);

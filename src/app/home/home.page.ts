@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
-import { AnonymousCredential} from 'mongodb-stitch-browser-sdk';
-
 import { FormControl } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
 
@@ -52,7 +50,7 @@ export class HomePage implements OnInit {
         this.fetchEmployees();
         this.fetchEmployeesGroupByFirstLetter();
       } else {
-        this.stichMongoService.client.auth.loginWithCredential(new AnonymousCredential()).then(user => {
+        this.stichMongoService.login(null).then(user => {
             const args = [];
             args.push(search);
             this.stichMongoService.client.callFunction('search', args)
@@ -87,7 +85,7 @@ export class HomePage implements OnInit {
 
   fetchEmployees() {
     this.presentLoading();
-    this.stichMongoService.client.auth.loginWithCredential(new AnonymousCredential()).then(user => {
+    this.stichMongoService.login(null).then(user => {
       return this.stichMongoService.find(config.COLLECTION_KEY, {});
     })/*.then(() =>
       db.collection(config.COLLECTION_KEY).find({owner_id: client.auth.user.id}, { limit: 100}).asArray()
@@ -106,7 +104,7 @@ export class HomePage implements OnInit {
   }
 
   fetchEmployeesGroupByFirstLetter() {
-    this.stichMongoService.client.auth.loginWithCredential(new AnonymousCredential()).then(user =>
+    this.stichMongoService.login(null).then(user =>
       this.stichMongoService.aggregate(config.COLLECTION_KEY, '$employee_name')
     ).then(docs => {
         // Collection is empty.

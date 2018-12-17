@@ -87,10 +87,18 @@ export class StitchMongoService {
   }
   */
 
- login(user) {
-  const credential = new UserPasswordCredential(user.email, user.password);
-  return this.client.auth.loginWithCredential(credential);
-}
+  login(user) {
+
+    // Anonymous login.
+    let credential = new AnonymousCredential();
+    if (user !== null) {
+      credential = new UserPasswordCredential(user.email, user.password);
+      console.log('Authenticated user logged');
+    } else {
+      console.log('Anonymous user logged');
+    }
+    return this.client.auth.loginWithCredential(credential);
+  }
 
   find(collection: string, filter: any) {
     return this.db.collection(collection).find(filter, { limit: 100}).asArray();
