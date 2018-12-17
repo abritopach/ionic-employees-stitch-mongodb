@@ -38,11 +38,11 @@ export class LoginPage implements OnInit {
     console.log('HomePage::loginFormSubmit() | method called');
     // this.stichMongoService.login(this.loginForm.value);
     this.stitchMongoService.login(this.loginForm.value).then(authedId => {
-      console.log(authedId);
-      console.log(`successfully logged in with id: ${authedId.id}`);
+      // console.log(authedId);
+      // console.log(`successfully logged in with id: ${authedId.id}`);
       this.authService.login(authedId.id).then(result => {
         this.stitchMongoService.find(config.COLLECTION_KEY, {user_id: new ObjectId(authedId.id)}).then(employee => {
-          console.log(employee);
+          // console.log(employee);
           this.avatar = employee[0]['avatar'];
           setTimeout(() => this.router.navigateByUrl('/home'), 2000);
         });

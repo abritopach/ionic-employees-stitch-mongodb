@@ -69,12 +69,10 @@ export class StitchMongoService {
 
   initializeAppClient(appID: string) {
     this.client = Stitch.initializeDefaultAppClient(appID);
-    console.log('client in initializeAppClient', this.client);
   }
 
   getServiceClient(dbName: string) {
     this.db = this.client.getServiceClient(RemoteMongoClient.factory, 'mongodb-atlas').db(dbName);
-    console.log('db in getServiceClient', this.db);
   }
 
   /*
@@ -95,8 +93,6 @@ export class StitchMongoService {
 }
 
   find(collection: string, filter: any) {
-    console.log('filter in find', filter);
-    console.log('collection in find', collection);
     return this.db.collection(collection).find(filter, { limit: 100}).asArray();
   }
 
@@ -109,7 +105,6 @@ export class StitchMongoService {
   }
 
   insertMany(collection: string, docs: any) {
-    console.log('docs', docs);
     this.db.collection(collection).insertMany(docs).then(results => {
       const { insertedIds } = results;
       console.log(insertedIds);

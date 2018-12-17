@@ -20,7 +20,9 @@ export class IziToastService {
     layout: 2,
   };
 
-  constructor() { }
+  constructor() {
+    console.log('IziToastService::constructor() | method called', iziToast);
+  }
 
   show(title, message, color, icon, image) {
     const newSettings: IziToastSettings = {title: title, message: message, color: color, icon: icon, image: image};
@@ -30,5 +32,9 @@ export class IziToastService {
   success() {
     const newSettings: IziToastSettings = {title: 'Test', message: 'Test.', position: 'bottomLeft'};
     iziToast.success({...this.defaultIziToastSettings, ...newSettings});
+  }
+
+  destroy() {
+    iziToast.destroy();
   }
 }

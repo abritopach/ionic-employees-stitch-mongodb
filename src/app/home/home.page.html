@@ -7,13 +7,10 @@
       Employee List
     </ion-title>
     <ion-buttons slot='end'>
-        <ion-button (click)="showOrganizationChart()">
-            <ion-icon slot="icon-only" name="people"></ion-icon>
-        </ion-button>
-        <ion-button *ngIf="!authGuard.canActivate()" routerLink="/login">
+        <ion-button *ngIf="!authenticationService.isAuthenticated()" routerLink="/login">
           <ion-icon slot="icon-only" name="log-in"></ion-icon>
         </ion-button>
-        <ion-button  *ngIf="authGuard.canActivate()" (click)="logout()">
+        <ion-button  *ngIf="authenticationService.isAuthenticated()" (click)="logout()">
           <ion-icon slot="icon-only" name="log-out"></ion-icon>
         </ion-button>
       </ion-buttons>

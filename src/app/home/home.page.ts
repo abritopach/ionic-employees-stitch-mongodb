@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 
-import { Stitch, RemoteMongoClient, AnonymousCredential} from 'mongodb-stitch-browser-sdk';
+import { AnonymousCredential} from 'mongodb-stitch-browser-sdk';
 
 import { FormControl } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
 
 import { LoadingController } from '@ionic/angular';
 
-import { StitchMongoService, NetworkService, AuthGuardService, AuthenticationService, IziToastService } from './../services';
+import { StitchMongoService, AuthenticationService } from './../services';
 
 import config from '../config/config';
 
@@ -25,13 +25,9 @@ export class HomePage implements OnInit {
   loading: any;
   result: any;
 
-  constructor(private router: Router, private stichMongoService: StitchMongoService, private route: ActivatedRoute,
-              private loadingCtrl: LoadingController, private networkService: NetworkService, private authGuard: AuthGuardService,
-              private authenticationService: AuthenticationService, private iziToast: IziToastService) {
+  constructor(private router: Router, private stichMongoService: StitchMongoService,
+              private loadingCtrl: LoadingController, private authenticationService: AuthenticationService) {
     console.log('HomePage::constructor() | method called');
-    console.log('employees', this.employees);
-    console.log('client', this.stichMongoService.client);
-    console.log('db', this.stichMongoService.db);
 
     if ((this.stichMongoService.client === null) && (this.stichMongoService.db === null)) {
       this.stichMongoService.initializeAppClient('ionic-employees-priuv');
@@ -47,21 +43,15 @@ export class HomePage implements OnInit {
 
   ngOnInit() {
     console.log('HomePage::ngOnInit | method called');
-
-    if (!this.authGuard.canActivate()) {
-      this.iziToast.show('Important NOTE', 'Login to be able to use all the functionality.', 'red', 'ico-error', 'assets/avatar.png');
-    }
   }
 
   ionViewWillEnter() {
     console.log('HomePage::ionViewWillEnter | method called');
     this.searchControl.valueChanges.pipe(debounceTime(700)).subscribe(search => {
       if (search === '') {
-        console.log('search is empty');
         this.fetchEmployees();
         this.fetchEmployeesGroupByFirstLetter();
       } else {
-        console.log('search is not empty');
         this.stichMongoService.client.auth.loginWithCredential(new AnonymousCredential()).then(user => {
             const args = [];
             args.push(search);
@@ -98,18 +88,14 @@ export class HomePage implements OnInit {
   fetchEmployees() {
     this.presentLoading();
     this.stichMongoService.client.auth.loginWithCredential(new AnonymousCredential()).then(user => {
-      console.log('user', user);
       return this.stichMongoService.find(config.COLLECTION_KEY, {});
     })/*.then(() =>
       db.collection(config.COLLECTION_KEY).find({owner_id: client.auth.user.id}, { limit: 100}).asArray()
     )*/.then(docs => {
-        console.log('docs in fetchEmployees', docs);
         // Collection is empty.
         if (docs.length === 0) {
-          console.log('Collection is empty');
           this.stichMongoService.populateFakeEmployees();
         } else {
-          console.log('Found docs', docs);
           this.employees = docs;
           setTimeout(() => this.dismissLoading(), 2000);
         }
@@ -123,12 +109,10 @@ export class HomePage implements OnInit {
     this.stichMongoService.client.auth.loginWithCredential(new AnonymousCredential()).then(user =>
       this.stichMongoService.aggregate(config.COLLECTION_KEY, '$employee_name')
     ).then(docs => {
-      console.log('docs in fetchEmployeesGroupByFirstLetter', docs);
         // Collection is empty.
         if (docs.length === 0) {
           console.log('Collection is empty');
         } else {
-          console.log('Found docs', docs);
           this.result = docs;
         }
         console.log('[MongoDB Stitch] Connected to Stitch');
@@ -136,17 +120,6 @@ export class HomePage implements OnInit {
         console.error(err);
     });
   }
-
-  /*
-  async presentLoading() {
-    const loading = await this.loadingCtrl.create({
-      message: 'Please wait, loading movies...',
-    });
-    await loading.present();
-
-    const { data } = await loading.onWillDismiss();
-  }
-  */
 
   async presentLoading() {
     this.loading = await this.loadingCtrl.create({
@@ -159,11 +132,6 @@ export class HomePage implements OnInit {
   async dismissLoading() {
     this.loading.dismiss();
     this.loading = null;
-  }
-
-  showOrganizationChart() {
-    console.log('HomePage::showOrganizationChart() | method called');
-    this.router.navigateByUrl('/organization');
   }
 
   logout() {

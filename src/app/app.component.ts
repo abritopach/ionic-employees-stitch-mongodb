@@ -1,30 +1,30 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 import { Platform } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 
-import { Router } from '@angular/router';
+import { Router, RoutesRecognized } from '@angular/router';
 
-import { AuthenticationService } from './services/authentication.service';
+import { AuthenticationService, IziToastService } from './services/';
 
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html'
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
 
   public appPages = [
     {
       title: 'Home',
       url: '/home',
       icon: 'home'
-    }, /*
+    },
     {
       title: 'Organization',
       url: '/organization',
       icon: 'people'
-    },*/
+    },
     {
       title: 'Schedule',
       url: '/schedule',
@@ -37,9 +37,21 @@ export class AppComponent {
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
     private router: Router,
-    private authenticationService: AuthenticationService
+    private authenticationService: AuthenticationService,
+    private iziToast: IziToastService
   ) {
     this.initializeApp();
+  }
+
+  ngOnInit() {
+    this.router.events
+      .subscribe(event => {
+        if (event instanceof RoutesRecognized) {
+          if ((!this.authenticationService.isAuthenticated()) && (event.url !== '/home') && (event.url !== '/login')) {
+            this.iziToast.show('Important NOTE', 'Login to be able to use all the functionality.', 'red', 'ico-error', 'assets/avatar.png');
+          }
+        }
+    });
   }
 
   initializeApp() {
