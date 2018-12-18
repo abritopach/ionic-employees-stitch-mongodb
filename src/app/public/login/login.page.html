@@ -21,7 +21,7 @@
       <ion-card-content>
           <ion-item [class.has-error]="loginForm.get('email').hasError('required') && loginForm.get('email').touched">
             <ion-label position="floating">Email</ion-label>
-            <ion-input type="text" formControlName="email"></ion-input>
+            <ion-input type="email" formControlName="email"></ion-input>
           </ion-item>
           <ion-item *ngIf="loginForm.get('email').hasError('required') && loginForm.get('email').touched" no-lines>
             <div class="error-message">
