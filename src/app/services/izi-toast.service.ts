@@ -18,6 +18,7 @@ export class IziToastService {
     image: 'assets/avatar.png',
     imageWidth: 70,
     layout: 2,
+    displayMode: 2
   };
 
   constructor() {

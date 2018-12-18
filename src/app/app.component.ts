@@ -47,7 +47,8 @@ export class AppComponent implements OnInit {
     this.router.events
       .subscribe(event => {
         if (event instanceof RoutesRecognized) {
-          if ((!this.authenticationService.isAuthenticated()) && (event.url !== '/home') && (event.url !== '/login')) {
+          if ((!this.authenticationService.isAuthenticated()) && (event.url !== '/home') && (event.url !== '/login')
+          && (event.url !== '/') && (event.url !== '/login')) {
             this.iziToast.show('Important NOTE', 'Login to be able to use all the functionality.', 'red', 'ico-error', 'assets/avatar.png');
           }
         }
