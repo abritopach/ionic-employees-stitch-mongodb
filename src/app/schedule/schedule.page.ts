@@ -1,6 +1,6 @@
 import { Component, OnInit, HostListener } from '@angular/core';
 
-import { PopoverController } from '@ionic/angular';
+import { PopoverController, ModalController } from '@ionic/angular';
 
 import { ShowPeoplePopoverComponent } from './../popovers/show-people.popover';
 
@@ -11,6 +11,8 @@ import { ObjectId } from 'bson';
 import { Storage } from '@ionic/storage';
 
 import config from '../config/config';
+
+import { EventModalComponent } from './../modals/event-modal/event.modal';
 
 @Component({
   selector: 'app-schedule',
@@ -44,7 +46,7 @@ export class SchedulePage implements OnInit {
   }
 
   constructor(private popoverCtrl: PopoverController, private stitchMongoService: StitchMongoService,
-              private storage: Storage) { }
+              private storage: Storage, private modalCtrl: ModalController) { }
 
   ngOnInit() {
     this.innerWidth = window.innerWidth;
@@ -121,6 +123,25 @@ export class SchedulePage implements OnInit {
       this.countPeople = 10;
       this.avatarColSize = 1;
       this.chipColSize = 2;
+    }
+  }
+
+  addEvent() {
+    console.log('SchedulePage::addEvent() | method called');
+    this.presentModal();
+  }
+
+  async presentModal() {
+    const componentProps = { modalProps: { title: 'Add event' }};
+    const modal = await this.modalCtrl.create({
+      component: EventModalComponent,
+      componentProps: componentProps
+    });
+    await modal.present();
+
+    const {data} = await modal.onWillDismiss();
+    if (data) {
+      console.log('data', data);
     }
   }
 

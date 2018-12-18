@@ -23,7 +23,7 @@
             <ion-label position="floating">Email</ion-label>
             <ion-input type="email" formControlName="email"></ion-input>
           </ion-item>
-          <ion-item *ngIf="loginForm.get('email').hasError('required') && loginForm.get('email').touched" no-lines>
+          <ion-item lines="none" *ngIf="loginForm.get('email').hasError('required') && loginForm.get('email').touched">
             <div class="error-message">
                 This field is required.
             </div>
@@ -32,7 +32,7 @@
               <ion-label position="floating">Password</ion-label>
               <ion-input type="password" formControlName="password"></ion-input>
           </ion-item>
-          <ion-item *ngIf="loginForm.get('password').hasError('required') && loginForm.get('password').touched" no-lines>
+          <ion-item lines="none" *ngIf="loginForm.get('password').hasError('required') && loginForm.get('password').touched">
             <div class="error-message">
                 This field is required.
             </div>

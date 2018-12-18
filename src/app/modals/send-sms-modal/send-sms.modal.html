@@ -23,7 +23,7 @@
                             <ion-label position="floating">Phone number *</ion-label>
                             <ion-input type="number" formControlName="phoneNumber"></ion-input>
                             </ion-item>
-                            <ion-item *ngIf="smsForm.get('phoneNumber').hasError('required') && smsForm.get('phoneNumber').touched" no-lines>
+                            <ion-item lines="none" *ngIf="smsForm.get('phoneNumber').hasError('required') && smsForm.get('phoneNumber').touched">
                             <div class="error-message">
                                 This field is required.
                             </div>
@@ -32,7 +32,7 @@
                             <ion-label position="floating">Message</ion-label>
                             <ion-textarea formControlName="message"></ion-textarea>
                             </ion-item>
-                            <ion-item *ngIf="smsForm.get('message').hasError('required') && smsForm.get('message').touched" no-lines>
+                            <ion-item lines="none" *ngIf="smsForm.get('message').hasError('required') && smsForm.get('message').touched">
                             <div class="error-message">
                                 This field is required.
                             </div>
@@ -44,7 +44,7 @@
                                 <ion-select-option value="twilio">Twilio</ion-select-option>
                             </ion-select>
                             </ion-item>
-                            <ion-item *ngIf="smsForm.get('platform').hasError('required') && smsForm.get('platform').touched" no-lines>
+                            <ion-item lines="none" *ngIf="smsForm.get('platform').hasError('required') && smsForm.get('platform').touched">
                             <div class="error-message">
                                 This field is required.
                             </div>

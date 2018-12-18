@@ -1,0 +1,36 @@
+<ion-header>
+    <ion-toolbar color="tertiary">
+        <ion-buttons slot="end">
+            <ion-button (click)="dismiss()">
+                <ion-icon name="close" color="light"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+        <ion-title>
+            Add event
+        </ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+    <form [formGroup]="eventForm" novalidate (ngSubmit)="eventFormSubmit()">
+        <ion-list inset>
+            <ion-item [class.has-error]="eventForm.get('title').hasError('required') && eventForm.get('title').touched">
+                <ion-label position="floating">Title *</ion-label>
+                <ion-input type="text" formControlName="title"></ion-input>
+            </ion-item>
+            <ion-item lines="none" *ngIf="eventForm.get('title').hasError('required') && eventForm.get('title').touched">
+                <div class="error-message">
+                    This field is required.
+                </div>
+            </ion-item>
+        </ion-list>
+        <ion-row no-padding justify-content-center>
+            <ion-col col-auto text-right>
+                <ion-button [disabled]='!eventForm.valid' type="submit" fill="clear" size="small" color="primary">
+                <ion-icon name='send' slot="start"></ion-icon>
+                Send
+                </ion-button>
+            </ion-col>
+        </ion-row>
+    </form>
+</ion-content>
