@@ -29,6 +29,7 @@
     "@ionic-native/status-bar": "5.0.0-beta.21",
     "@ionic/angular": "4.0.0-beta.19",
     "@ionic/storage": "^2.2.0",
+    "@ng-select/ng-select": "^2.13.2",
     "capacitor-sms": "0.0.1-alpha.1-31",
     "core-js": "^2.6.0",
     "install": "^0.12.2",

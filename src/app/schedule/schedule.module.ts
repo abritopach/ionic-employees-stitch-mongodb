@@ -11,6 +11,8 @@ import { AgmCoreModule } from '@agm/core';
 
 import { EventModalComponent } from './../modals/event-modal/event.modal';
 
+import { NgSelectModule } from '@ng-select/ng-select';
+
 const routes: Routes = [
   {
     path: '',
@@ -27,7 +29,8 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     AgmCoreModule.forRoot({
       apiKey: 'API_KEY' // Google API key for maps
-    })
+    }),
+    NgSelectModule
   ],
   declarations: [SchedulePage, EventModalComponent],
   entryComponents: [EventModalComponent]
