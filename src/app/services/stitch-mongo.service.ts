@@ -121,6 +121,11 @@ export class StitchMongoService {
     });
   }
 
+  updateOne(collection: string, id, newEvent) {
+    return this.db.collection(collection)
+    .updateOne({user_id: id}, {$push: { events: newEvent }});
+  }
+
   populateFakeEmployees() {
     this.insertMany(config.COLLECTION_KEY, this.fakeEmployees);
   }

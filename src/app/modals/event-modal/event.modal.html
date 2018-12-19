@@ -25,7 +25,17 @@
                 </div>
             </ion-item>
             <br>
-            <ion-item-divider lines="none" color="light">Time</ion-item-divider>
+            <ion-item-divider lines="none" color="light">Date / Time</ion-item-divider>
+            <ion-item [class.has-error]="eventForm.get('date').hasError('required') && eventForm.get('date').touched">
+                <ion-label position="floating">Date *</ion-label>
+                <ion-datetime displayFormat="MM/DD/YYYY" [min]="currentYear" formControlName="date"></ion-datetime>
+            </ion-item>
+            <ion-item lines="none" *ngIf="eventForm.get('date').hasError('required') && eventForm.get('date').touched">
+                <div class="error-message">
+                    This field is required.
+                </div>
+            </ion-item>
+            <br>
             <ion-item [class.has-error]="eventForm.get('fromTime').hasError('required') && eventForm.get('fromTime').touched">
                 <ion-label position="floating">From *</ion-label>
                 <ion-datetime displayFormat="h:mm a" formControlName="fromTime"></ion-datetime>
@@ -45,32 +55,28 @@
                 </div>
             </ion-item>
             <br>
-            <ion-item [class.has-error]="eventForm.get('date').hasError('required') && eventForm.get('date').touched">
-                <ion-label position="floating">Date *</ion-label>
-                <ion-datetime displayFormat="MM/DD/YYYY" [min]="currentYear" value="2018-12-19" formControlName="date"></ion-datetime>
-            </ion-item>
-            <ion-item lines="none" *ngIf="eventForm.get('date').hasError('required') && eventForm.get('date').touched">
-                <div class="error-message">
-                    This field is required.
-                </div>
-            </ion-item>
-            <br>
             <ion-item-divider lines="none" color="light">Meeting participants</ion-item-divider>
+            <br>
             <ion-item lines="full">
-                <ng-select [multiple]="true" [items]="employees"
-                            bindLabel="name"
-                            bindValue="name"
+                <ng-select [class.has-error]="eventForm.get('participants').hasError('required') && eventForm.get('participants').touched" [multiple]="true" [items]="employees"
+                            bindLabel="employee_name"
+                            bindValue="avatar"
                             placeholder="Select"
                             formControlName="participants">
                     <ng-template ng-label-tmp let-item="item">
                         <img height="48" width="48" [src]="item.avatar"/>
-                        <b>{{item.name}}</b>
+                        <b>{{item.employee_name}}</b>
                     </ng-template>
                     <ng-template ng-option-tmp let-item="item" let-index="index">
                         <img height="48" width="48" [src]="item.avatar"/>
-                        <b> {{item.name}}</b>
+                        <b> {{item.employee_name}}</b>
                     </ng-template>
                 </ng-select>
+            </ion-item>
+            <ion-item lines="none" *ngIf="eventForm.get('participants').hasError('required') && eventForm.get('participants').touched">
+                <div class="error-message">
+                    This field is required.
+                </div>
             </ion-item>
         </ion-list>
         <ion-row no-padding justify-content-center>
