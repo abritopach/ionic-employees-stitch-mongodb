@@ -1,7 +1,7 @@
 import { FormControl, Validators, FormGroup, FormBuilder } from '@angular/forms';
 import { Component, ViewEncapsulation, OnInit } from '@angular/core';
-import { ModalController } from '@ionic/angular';
-import { StitchMongoService } from './../../services/stitch-mongo.service';
+import { ModalController, LoadingController } from '@ionic/angular';
+import { StitchMongoService, IziToastService } from './../../services';
 import config from '../../config/config';
 import { Storage } from '@ionic/storage';
 import { ObjectId } from 'bson';
@@ -19,9 +19,10 @@ export class EventModalComponent implements OnInit {
   currentYear = new Date().getFullYear();
   currentDate =  new Date();
   employees: any;
+  loading: any;
 
   constructor(private modalCtrl: ModalController, private formBuilder: FormBuilder, private stitchMongoService: StitchMongoService,
-              private storage: Storage) {
+              private storage: Storage, private iziToast: IziToastService, private loadingCtrl: LoadingController) {
     this.createForm();
   }
 
@@ -42,7 +43,16 @@ export class EventModalComponent implements OnInit {
   eventFormSubmit() {
     console.log('EventModalComponent::eventFormSubmit | method called');
     console.log(this.eventForm.value);
+
+    this.presentLoading();
     this.eventForm.value.time = this.eventForm.value.fromTime + ' - ' + this.eventForm.value.untilTime;
+
+    const meeting_participants = this.eventForm.value.participants.map(participant =>  {
+      const p = {avatar: participant};
+      return p;
+    });
+
+    this.eventForm.value.meeting_participants = meeting_participants;
 
     this.storage.get(config.TOKEN_KEY).then(res => {
       if (res) {
@@ -50,6 +60,9 @@ export class EventModalComponent implements OnInit {
         console.log('objectId', objectId);
         this.stitchMongoService.updateOne(config.COLLECTION_KEY, objectId, this.eventForm.value).then(result => {
           console.log('result', result);
+          this.dismissLoading();
+          this.dismiss();
+          this.iziToast.success('Add event', 'Event added successfully.');
         });
       }
     });
@@ -68,6 +81,19 @@ export class EventModalComponent implements OnInit {
     .then(docs => {
       this.employees = docs;
     });
+  }
+
+  async presentLoading() {
+    this.loading = await this.loadingCtrl.create({
+      message: 'Please wait, adding event...',
+    });
+
+    return await this.loading.present();
+  }
+
+  async dismissLoading() {
+    this.loading.dismiss();
+    this.loading = null;
   }
 
 }

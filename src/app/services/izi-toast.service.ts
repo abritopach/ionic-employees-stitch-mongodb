@@ -30,8 +30,8 @@ export class IziToastService {
     iziToast.show({...this.defaultIziToastSettings, ...newSettings});
   }
 
-  success() {
-    const newSettings: IziToastSettings = {title: 'Test', message: 'Test.', position: 'bottomLeft'};
+  success(title, message) {
+    const newSettings: IziToastSettings = {title: title, message: message, position: 'bottomLeft'};
     iziToast.success({...this.defaultIziToastSettings, ...newSettings});
   }
 
