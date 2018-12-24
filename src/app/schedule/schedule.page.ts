@@ -14,6 +14,8 @@ import config from '../config/config';
 
 import { EventModalComponent } from './../modals/event-modal/event.modal';
 
+import { MoreOptionsPopoverComponent } from './../popovers/more-options/more-options.popover';
+
 @Component({
   selector: 'app-schedule',
   templateUrl: './schedule.page.html',
@@ -143,6 +145,28 @@ export class SchedulePage implements OnInit {
     if (data) {
       console.log('data', data);
     }
+  }
+
+  onClickMoreOptions() {
+    console.log('SchedulePage::onClickMoreOptions() | method called');
+    this.presentOptionsPopover();
+  }
+
+  async presentOptionsPopover() {
+    // console.log('presentPopover');
+    const popover = await this.popoverCtrl.create({
+      component: MoreOptionsPopoverComponent,
+      event: event
+    });
+
+    await popover.present();
+
+    const { data } = await popover.onWillDismiss();
+
+    if (data) {
+      console.log('data popover.onWillDismiss', data);
+    }
+
   }
 
 }

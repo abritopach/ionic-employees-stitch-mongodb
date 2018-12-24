@@ -12,11 +12,13 @@ import { AppRoutingModule } from './app-routing.module';
 
 import { ShowPeoplePopoverComponent } from './popovers/show-people.popover';
 
+import { MoreOptionsPopoverComponent } from './popovers/more-options/more-options.popover';
+
 import { IonicStorageModule } from '@ionic/storage';
 
 @NgModule({
-  declarations: [AppComponent, ShowPeoplePopoverComponent],
-  entryComponents: [ShowPeoplePopoverComponent],
+  declarations: [AppComponent, ShowPeoplePopoverComponent, MoreOptionsPopoverComponent],
+  entryComponents: [ShowPeoplePopoverComponent, MoreOptionsPopoverComponent],
   imports: [BrowserModule, BrowserAnimationsModule, IonicModule.forRoot(), AppRoutingModule, IonicStorageModule.forRoot()],
   providers: [
     StatusBar,

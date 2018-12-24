@@ -1,0 +1,19 @@
+<ion-header>
+    <ion-toolbar color="tertiary">
+        <ion-title>
+          Options
+        </ion-title>
+    </ion-toolbar>
+</ion-header>
+<ion-content padding>
+  <ion-list>
+    <ion-item tappable lines="none" (click)="updateItem()">
+      <ion-icon name="create" slot="start"></ion-icon>
+      Update
+    </ion-item>
+    <ion-item tappable lines="none" (click)="deleteItem()">
+      <ion-icon name="close-circle-outline" slot="start"></ion-icon>
+      Delete
+    </ion-item>
+  </ion-list>
+</ion-content>
