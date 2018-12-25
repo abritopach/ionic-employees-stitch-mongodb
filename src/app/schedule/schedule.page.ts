@@ -147,16 +147,17 @@ export class SchedulePage implements OnInit {
     }
   }
 
-  onClickMoreOptions() {
+  onClickMoreOptions(event) {
     console.log('SchedulePage::onClickMoreOptions() | method called');
-    this.presentOptionsPopover();
+    this.presentOptionsPopover(event);
   }
 
-  async presentOptionsPopover() {
-    // console.log('presentPopover');
+  async presentOptionsPopover(event) {
+    console.log('presentPopover', event);
+    const componentProps = { popoverProps: { event: event}};
     const popover = await this.popoverCtrl.create({
       component: MoreOptionsPopoverComponent,
-      event: event
+      componentProps: componentProps
     });
 
     await popover.present();
@@ -165,6 +166,8 @@ export class SchedulePage implements OnInit {
 
     if (data) {
       console.log('data popover.onWillDismiss', data);
+
+      // TODO: Update event's list when event is deleted.
     }
 
   }
