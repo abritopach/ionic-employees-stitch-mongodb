@@ -73,7 +73,7 @@ export class EventModalComponent implements OnInit {
     // Using the injected ModalController this page
     // can "dismiss" itself and pass back data.
     // console.log('dismiss', data);
-    this.modalCtrl.dismiss();
+    this.modalCtrl.dismiss(this.eventForm.value);
   }
 
   fetchEmployees() {

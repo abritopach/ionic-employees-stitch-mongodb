@@ -143,7 +143,12 @@ export class SchedulePage implements OnInit {
 
     const {data} = await modal.onWillDismiss();
     if (data) {
-      console.log('data', data);
+      console.log('data presentModal', data);
+
+      console.log('events', this.events);
+      // TODO: Update event's list when event is added.
+      this.events = [...this.events, data];
+      console.log('events', this.events);
     }
   }
 
@@ -165,9 +170,10 @@ export class SchedulePage implements OnInit {
     const { data } = await popover.onWillDismiss();
 
     if (data) {
-      console.log('data popover.onWillDismiss', data);
+      // console.log('data popover.onWillDismiss', data);
 
       // TODO: Update event's list when event is deleted.
+      this.events = this.events.filter(e => e.title !== data.title);
     }
 
   }
