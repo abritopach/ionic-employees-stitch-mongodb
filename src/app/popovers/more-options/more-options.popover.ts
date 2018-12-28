@@ -1,5 +1,6 @@
+import { EventModalComponent } from './../../modals/event-modal/event.modal';
 import { Component, ViewEncapsulation, OnInit, OnDestroy } from '@angular/core';
-import { PopoverController, NavParams } from '@ionic/angular';
+import { PopoverController, NavParams, ModalController } from '@ionic/angular';
 
 import { StitchMongoService, IziToastService } from './../../services/';
 import config from '../../config/config';
@@ -17,7 +18,7 @@ export class MoreOptionsPopoverComponent implements OnInit, OnDestroy {
   event: any;
 
   constructor(private popoverCtrl: PopoverController, private stitchMongoService: StitchMongoService, private storage: Storage,
-              private navParams: NavParams, private iziToast: IziToastService) {
+              private navParams: NavParams, private iziToast: IziToastService, private modalCtrl: ModalController) {
   }
 
   ngOnInit() {
@@ -29,6 +30,22 @@ export class MoreOptionsPopoverComponent implements OnInit, OnDestroy {
 
   updateItem() {
     console.log('MoreOptionsPopoverComponent::updateItem | method called');
+    this.popoverCtrl.dismiss(this.event);
+    this.presentModal();
+  }
+
+  async presentModal() {
+    const componentProps = { modalProps: { title: 'Update event', event: this.event }};
+    const modal = await this.modalCtrl.create({
+      component: EventModalComponent,
+      componentProps: componentProps
+    });
+    await modal.present();
+
+    const {data} = await modal.onWillDismiss();
+    if (data) {
+      console.log('data presentModal', data);
+    }
   }
 
   deleteItem() {

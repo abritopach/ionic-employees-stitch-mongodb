@@ -1,6 +1,6 @@
 import { FormControl, Validators, FormGroup, FormBuilder } from '@angular/forms';
 import { Component, ViewEncapsulation, OnInit } from '@angular/core';
-import { ModalController, LoadingController } from '@ionic/angular';
+import { ModalController, LoadingController, NavParams } from '@ionic/angular';
 import { StitchMongoService, IziToastService } from './../../services';
 import config from '../../config/config';
 import { Storage } from '@ionic/storage';
@@ -22,12 +22,16 @@ export class EventModalComponent implements OnInit {
   loading: any;
 
   constructor(private modalCtrl: ModalController, private formBuilder: FormBuilder, private stitchMongoService: StitchMongoService,
-              private storage: Storage, private iziToast: IziToastService, private loadingCtrl: LoadingController) {
+              private storage: Storage, private iziToast: IziToastService, private loadingCtrl: LoadingController,
+              private navParams: NavParams) {
     this.createForm();
   }
 
   ngOnInit() {
     this.fetchEmployees();
+    if (typeof this.navParams.data.modalProps.event !== 'undefined') {
+      this.eventForm.patchValue(this.navParams.data.modalProps.event);
+    }
   }
 
   createForm() {
@@ -58,12 +62,18 @@ export class EventModalComponent implements OnInit {
       if (res) {
         const objectId = new ObjectId(res);
         console.log('objectId', objectId);
-        this.stitchMongoService.updateOne(config.COLLECTION_KEY, objectId, this.eventForm.value).then(result => {
-          console.log('result', result);
-          this.dismissLoading();
-          this.dismiss();
-          this.iziToast.success('Add event', 'Event added successfully.');
-        });
+        // Update event.
+        if (typeof this.navParams.data.modalProps.event !== 'undefined') {
+          console.log('Update event');
+          // TODO: Update event info.
+        } else { // Add new event.
+          this.stitchMongoService.updateOne(config.COLLECTION_KEY, objectId, this.eventForm.value).then(result => {
+            console.log('result', result);
+            this.dismissLoading();
+            this.dismiss();
+            this.iziToast.success('Add event', 'Event added successfully.');
+          });
+        }
       }
     });
 
