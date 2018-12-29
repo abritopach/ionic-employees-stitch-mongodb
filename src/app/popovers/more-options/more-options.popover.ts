@@ -30,7 +30,7 @@ export class MoreOptionsPopoverComponent implements OnInit, OnDestroy {
 
   updateItem() {
     console.log('MoreOptionsPopoverComponent::updateItem | method called');
-    this.popoverCtrl.dismiss(this.event);
+    // TODO: Add _id field to events.
     this.presentModal();
   }
 
@@ -45,6 +45,7 @@ export class MoreOptionsPopoverComponent implements OnInit, OnDestroy {
     const {data} = await modal.onWillDismiss();
     if (data) {
       console.log('data presentModal', data);
+      this.popoverCtrl.dismiss({option: 'update', event: data});
     }
   }
 
@@ -60,7 +61,7 @@ export class MoreOptionsPopoverComponent implements OnInit, OnDestroy {
         .then(docs => {
             // console.log(docs);
             this.iziToast.success('Delete event', 'Event deleted successfully.');
-            this.popoverCtrl.dismiss(this.event);
+            this.popoverCtrl.dismiss({option: 'delete', event: this.event});
         }).catch(err => {
             console.error(err);
         });

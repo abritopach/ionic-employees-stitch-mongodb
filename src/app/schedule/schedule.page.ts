@@ -169,8 +169,19 @@ export class SchedulePage implements OnInit {
     const { data } = await popover.onWillDismiss();
 
     if (data) {
-      // console.log('data popover.onWillDismiss', data);
-      this.events = this.events.filter(e => e.title !== data.title);
+      console.log('data popover.onWillDismiss', data);
+
+      if (data.option === 'delete') {
+        this.events = this.events.filter(e => e.title !== data.event.title);
+      } else {
+       const events = this.events.map(e => {
+            if (e._id === data.event._id) {
+              e = data.event;
+            }
+            return e;
+          });
+          this.events = [...events];
+      }
     }
 
   }

@@ -36,6 +36,7 @@ export class EventModalComponent implements OnInit {
 
   createForm() {
     this.eventForm = this.formBuilder.group({
+      _id: new FormControl(''),
       title: new FormControl('', Validators.required),
       fromTime: new FormControl('', Validators.required),
       untilTime: new FormControl('', Validators.required),
@@ -66,7 +67,15 @@ export class EventModalComponent implements OnInit {
         if (typeof this.navParams.data.modalProps.event !== 'undefined') {
           console.log('Update event');
           // TODO: Update event info.
+          this.stitchMongoService.updateEvent(config.COLLECTION_KEY, objectId, this.eventForm.value).then(result => {
+            console.log('result', result);
+            this.dismissLoading();
+            this.dismiss();
+            this.iziToast.success('Update event', 'Event updated successfully.');
+          });
         } else { // Add new event.
+          // Add id event.
+          this.eventForm.value._id = new ObjectId();
           this.stitchMongoService.updateOne(config.COLLECTION_KEY, objectId, this.eventForm.value).then(result => {
             console.log('result', result);
             this.dismissLoading();
