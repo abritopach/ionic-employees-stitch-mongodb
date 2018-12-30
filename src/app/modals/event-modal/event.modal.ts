@@ -66,8 +66,9 @@ export class EventModalComponent implements OnInit {
         // Update event.
         if (typeof this.navParams.data.modalProps.event !== 'undefined') {
           console.log('Update event');
-          // TODO: Update event info.
-          this.stitchMongoService.updateEvent(config.COLLECTION_KEY, objectId, this.eventForm.value).then(result => {
+          // this.stitchMongoService.updateEvent(config.COLLECTION_KEY, objectId, this.eventForm.value).then(result => {
+          this.stitchMongoService.update(config.COLLECTION_KEY, {user_id: objectId, 'events._id': this.eventForm.value._id},
+          { $set: { 'events.$' : this.eventForm.value } }).then(result => {
             console.log('result', result);
             this.dismissLoading();
             this.dismiss();
@@ -76,7 +77,9 @@ export class EventModalComponent implements OnInit {
         } else { // Add new event.
           // Add id event.
           this.eventForm.value._id = new ObjectId();
-          this.stitchMongoService.updateOne(config.COLLECTION_KEY, objectId, this.eventForm.value).then(result => {
+          // this.stitchMongoService.updateOne(config.COLLECTION_KEY, objectId, this.eventForm.value).then(result => {
+          this.stitchMongoService.update(config.COLLECTION_KEY, {user_id: objectId}, {$push: { events: this.eventForm.value }})
+          .then(result => {
             console.log('result', result);
             this.dismissLoading();
             this.dismiss();

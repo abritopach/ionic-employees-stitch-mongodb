@@ -56,8 +56,8 @@ export class MoreOptionsPopoverComponent implements OnInit, OnDestroy {
       if (res) {
         const objectId = new ObjectId(res);
         // console.log('objectId', objectId);
-
-        this.stitchMongoService.updateEvents(config.COLLECTION_KEY, objectId, this.event.title)
+        // this.stitchMongoService.updateEvents(config.COLLECTION_KEY, objectId, this.event.title)
+        this.stitchMongoService.update(config.COLLECTION_KEY, {user_id: objectId}, {$pull: { events: { title: this.event.title } }})
         .then(docs => {
             // console.log(docs);
             this.iziToast.success('Delete event', 'Event deleted successfully.');

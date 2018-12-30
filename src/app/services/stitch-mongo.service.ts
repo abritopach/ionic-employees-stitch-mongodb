@@ -121,6 +121,7 @@ export class StitchMongoService {
     });
   }
 
+  /*
   updateOne(collection: string, id, newEvent) {
     return this.db.collection(collection)
     .updateOne({user_id: id}, {$push: { events: newEvent }});
@@ -132,9 +133,14 @@ export class StitchMongoService {
   }
 
   updateEvent(collection: string, user_id, event) {
-    console.log('event in updateEvent', event);
     return this.db.collection(collection)
     .updateOne({user_id: user_id, 'events._id': event._id}, { $set: { 'events.$' : event } });
+  }
+  */
+
+  update(collection: string, filter, action) {
+    return this.db.collection(collection)
+    .updateOne(filter, action);
   }
 
   populateFakeEmployees() {
