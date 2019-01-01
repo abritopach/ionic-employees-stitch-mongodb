@@ -42,6 +42,8 @@ export class EventModalComponent implements OnInit {
       untilTime: new FormControl('', Validators.required),
       date: new FormControl('', Validators.required),
       participants: new FormControl('', Validators.required),
+      time: new FormControl(''),
+      meeting_participants: new FormControl('')
     });
   }
 

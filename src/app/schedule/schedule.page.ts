@@ -40,11 +40,7 @@ export class SchedulePage implements OnInit {
     // console.log(event.target.innerWidth);
     this.checkWidth(event.target.innerWidth);
     // this.people = this.peopleMore.slice(0, this.countPeople);
-    this.participants = [];
-    this.events.map(e => {
-      const visibleParticipants = e.meeting_participants.slice(0, this.countPeople);
-      this.participants.push(visibleParticipants);
-    });
+    this.updateParticipants();
   }
 
   constructor(private popoverCtrl: PopoverController, private stitchMongoService: StitchMongoService,
@@ -60,10 +56,7 @@ export class SchedulePage implements OnInit {
         this.stitchMongoService.find(config.COLLECTION_KEY, {user_id: objectId}).then(result => {
           if ((result.length !== 0) && (typeof result[0]['events'] !== 'undefined')) {
             this.events = result[0]['events'];
-            this.events.map(event => {
-              const visibleParticipants = event.meeting_participants.slice(0, this.countPeople);
-              this.participants.push(visibleParticipants);
-            });
+            this.updateParticipants();
           }
         });
       }
@@ -144,10 +137,14 @@ export class SchedulePage implements OnInit {
     const {data} = await modal.onWillDismiss();
     if (data) {
       console.log('data presentModal', data);
+      console.log('events', this.events);
+      // Check that the event is not empty.
+      if (data._id !== '') {
+        this.events = [...this.events, data];
+        console.log('events', this.events);
+        this.updateParticipants();
+      }
 
-      console.log('events', this.events);
-      this.events = [...this.events, data];
-      console.log('events', this.events);
     }
   }
 
@@ -181,9 +178,18 @@ export class SchedulePage implements OnInit {
             return e;
           });
           this.events = [...events];
+          this.updateParticipants();
       }
     }
 
+  }
+
+  updateParticipants() {
+    this.participants = [];
+    this.events.map(e => {
+      const visibleParticipants = e.meeting_participants.slice(0, this.countPeople);
+      this.participants.push(visibleParticipants);
+    });
   }
 
 }
