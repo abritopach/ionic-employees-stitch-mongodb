@@ -6,6 +6,8 @@ import config from '../../config/config';
 import { Storage } from '@ionic/storage';
 import { ObjectId } from 'bson';
 
+import * as moment from 'moment';
+
 
 @Component({
   selector: 'app-event-modal',
@@ -51,7 +53,6 @@ export class EventModalComponent implements OnInit {
     console.log('EventModalComponent::eventFormSubmit | method called');
     console.log(this.eventForm.value);
 
-    this.presentLoading();
     this.eventForm.value.time = this.eventForm.value.fromTime + ' - ' + this.eventForm.value.untilTime;
 
     const meeting_participants = this.eventForm.value.participants.map(participant =>  {
@@ -61,36 +62,44 @@ export class EventModalComponent implements OnInit {
 
     this.eventForm.value.meeting_participants = meeting_participants;
 
-    this.storage.get(config.TOKEN_KEY).then(res => {
-      if (res) {
-        const objectId = new ObjectId(res);
-        console.log('objectId', objectId);
-        // Update event.
-        if (typeof this.navParams.data.modalProps.event !== 'undefined') {
-          console.log('Update event');
-          // this.stitchMongoService.updateEvent(config.COLLECTION_KEY, objectId, this.eventForm.value).then(result => {
-          this.stitchMongoService.update(config.COLLECTION_KEY, {user_id: objectId, 'events._id': this.eventForm.value._id},
-          { $set: { 'events.$' : this.eventForm.value } }).then(result => {
-            console.log('result', result);
-            this.dismissLoading();
-            this.dismiss();
-            this.iziToast.success('Update event', 'Event updated successfully.');
-          });
-        } else { // Add new event.
-          // Add id event.
-          this.eventForm.value._id = new ObjectId();
-          // this.stitchMongoService.updateOne(config.COLLECTION_KEY, objectId, this.eventForm.value).then(result => {
-          this.stitchMongoService.update(config.COLLECTION_KEY, {user_id: objectId}, {$push: { events: this.eventForm.value }})
-          .then(result => {
-            console.log('result', result);
-            this.dismissLoading();
-            this.dismiss();
-            this.iziToast.success('Add event', 'Event added successfully.');
-          });
-        }
-      }
-    });
+    const from = moment(this.eventForm.value.fromTime, 'HH:mm p');
+    const until = moment(this.eventForm.value.untilTime, 'HH:mm p');
 
+    if (from.isSameOrAfter(until)) {
+      this.iziToast.show('Error', 'The start time of the event cannot be the same or later than the end time.',
+       'red', 'ico-error', 'assets/avatar.png');
+    } else {
+      this.presentLoading();
+      this.storage.get(config.TOKEN_KEY).then(res => {
+        if (res) {
+          const objectId = new ObjectId(res);
+          console.log('objectId', objectId);
+          // Update event.
+          if (typeof this.navParams.data.modalProps.event !== 'undefined') {
+            console.log('Update event');
+            // this.stitchMongoService.updateEvent(config.COLLECTION_KEY, objectId, this.eventForm.value).then(result => {
+            this.stitchMongoService.update(config.COLLECTION_KEY, {user_id: objectId, 'events._id': this.eventForm.value._id},
+            { $set: { 'events.$' : this.eventForm.value } }).then(result => {
+              console.log('result', result);
+              this.dismissLoading();
+              this.dismiss();
+              this.iziToast.success('Update event', 'Event updated successfully.');
+            });
+          } else { // Add new event.
+            // Add id event.
+            this.eventForm.value._id = new ObjectId();
+            // this.stitchMongoService.updateOne(config.COLLECTION_KEY, objectId, this.eventForm.value).then(result => {
+            this.stitchMongoService.update(config.COLLECTION_KEY, {user_id: objectId}, {$push: { events: this.eventForm.value }})
+            .then(result => {
+              console.log('result', result);
+              this.dismissLoading();
+              this.dismiss();
+              this.iziToast.success('Add event', 'Event added successfully.');
+            });
+          }
+        }
+      });
+    }
   }
 
   dismiss() {
