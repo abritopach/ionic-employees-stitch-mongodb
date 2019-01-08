@@ -78,6 +78,13 @@
                     This field is required.
                 </div>
             </ion-item>
+            <br>
+            <ion-item-divider lines="none" color="light">Location</ion-item-divider>
+            <ion-item>
+                <ion-label position="floating"><ion-icon name="pin"></ion-icon> Address</ion-label>
+                <ion-input type="text" formControlName="address"></ion-input>
+                <ion-button fill="clear" size="small" (click)="locate()">Current location</ion-button>
+            </ion-item>
         </ion-list>
         <ion-row no-padding justify-content-center>
             <ion-col col-auto text-right>

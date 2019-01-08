@@ -8,6 +8,7 @@ import { ObjectId } from 'bson';
 
 import * as moment from 'moment';
 
+declare const google: any;
 
 @Component({
   selector: 'app-event-modal',
@@ -45,7 +46,8 @@ export class EventModalComponent implements OnInit {
       date: new FormControl('', Validators.required),
       participants: new FormControl('', Validators.required),
       time: new FormControl(''),
-      meeting_participants: new FormControl('')
+      meeting_participants: new FormControl(''),
+      address: new FormControl('')
     });
   }
 
@@ -127,6 +129,43 @@ export class EventModalComponent implements OnInit {
   async dismissLoading() {
     this.loading.dismiss();
     this.loading = null;
+  }
+
+  locate() {
+    console.log('EventModalComponent::locate | method called');
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        position => {
+          const lat = position.coords.latitude; // Works fine
+          const lng = position.coords.longitude;  // Works fine
+          console.log('Coords', lat, lng);
+          this.getAddress(lat, lng);
+        },
+        error => {
+          console.log('Error code: ' + error.code + '<br /> Error message: ' + error.message);
+        }
+      );
+    }
+  }
+
+  getAddress(lat: number, lng: number) {
+    console.log('EventModalComponent::getAddress | method called');
+    if (navigator.geolocation) {
+      const geocoder = new google.maps.Geocoder();
+      const latlng = new google.maps.LatLng(lat, lng);
+      const request = { latLng: latlng };
+      geocoder.geocode(request, (results, status) => {
+        if (status === google.maps.GeocoderStatus.OK) {
+          const result = results[0];
+          if (result != null) {
+            console.log(result.formatted_address);
+            this.eventForm.value.address = result.formatted_address;
+          } else {
+            alert('No address available!');
+          }
+        }
+      });
+  }
   }
 
 }
