@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">employees-stitch-mongodb</string>
+    <string name="title_activity_main">employees-stitch-mongodb</string>
+    <string name="package_name">com.employees.app</string>
+    <string name="fileprovider_authority">com.employees.app.fileprovider</string>
+    <string name="custom_url_scheme">com.employees.app</string>
+</resources>
