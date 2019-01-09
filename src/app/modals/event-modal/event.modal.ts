@@ -1,5 +1,5 @@
 import { FormControl, Validators, FormGroup, FormBuilder } from '@angular/forms';
-import { Component, ViewEncapsulation, OnInit } from '@angular/core';
+import { Component, ViewEncapsulation, OnInit, ViewChild, ElementRef, NgZone, AfterViewInit } from '@angular/core';
 import { ModalController, LoadingController, NavParams } from '@ionic/angular';
 import { StitchMongoService, IziToastService } from './../../services';
 import config from '../../config/config';
@@ -7,6 +7,8 @@ import { Storage } from '@ionic/storage';
 import { ObjectId } from 'bson';
 
 import * as moment from 'moment';
+
+import { MapsAPILoader } from '@agm/core';
 
 declare const google: any;
 
@@ -16,17 +18,19 @@ declare const google: any;
   styleUrls: ['./event.modal.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class EventModalComponent implements OnInit {
+export class EventModalComponent implements OnInit, AfterViewInit {
 
   eventForm: FormGroup;
   currentYear = new Date().getFullYear();
   currentDate =  new Date();
   employees: any;
   loading: any;
+  // @ViewChild('address', { read: ElementRef }) addressElementRef: ElementRef;
+  @ViewChild('address') addressElementRef: ElementRef;
 
   constructor(private modalCtrl: ModalController, private formBuilder: FormBuilder, private stitchMongoService: StitchMongoService,
               private storage: Storage, private iziToast: IziToastService, private loadingCtrl: LoadingController,
-              private navParams: NavParams) {
+              private navParams: NavParams, private mapsApiLoader: MapsAPILoader, private ngZone: NgZone) {
     this.createForm();
   }
 
@@ -35,6 +39,11 @@ export class EventModalComponent implements OnInit {
     if (typeof this.navParams.data.modalProps.event !== 'undefined') {
       this.eventForm.patchValue(this.navParams.data.modalProps.event);
     }
+  }
+
+  ngAfterViewInit() {
+    console.log('EventModalComponent::ngAfterViewInit | method called');
+    this.findAdress();
   }
 
   createForm() {
@@ -178,7 +187,40 @@ export class EventModalComponent implements OnInit {
           this.dismissLoading();
       }
       });
+    }
   }
-  }
+
+  findAdress() {
+    this.mapsApiLoader.load().then(() => {
+
+        /*
+        console.log(document.getElementById('address'));
+        const _inputElement = this.addressElementRef.nativeElement as HTMLInputElement;
+        console.log(_inputElement.shadowRoot);
+        */
+
+         const inputElement = this.addressElementRef.nativeElement;
+         const autocomplete = new google.maps.places.Autocomplete(inputElement);
+         autocomplete.addListener('place_changed', () => {
+           this.ngZone.run(() => {
+             // some details
+              const place = google.maps.places.PlaceResult = autocomplete.getPlace();
+              console.log('place', place);
+
+             /*
+             this.address = place.formatted_address;
+             this.web_site = place.website;
+             this.name = place.name;
+             this.zip_code = place.address_components[place.address_components.length - 1].long_name;
+             //set latitude, longitude and zoom
+             this.latitude = place.geometry.location.lat();
+             this.longitude = place.geometry.location.lng();
+             this.zoom = 12;
+              */
+
+           });
+         });
+       });
+   }
 
 }
