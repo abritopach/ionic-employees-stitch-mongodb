@@ -47,13 +47,14 @@ export class EventModalComponent implements OnInit {
       participants: new FormControl('', Validators.required),
       time: new FormControl(''),
       meeting_participants: new FormControl(''),
-      address: new FormControl('')
+      address: new FormControl(''),
+      lat: new FormControl(''),
+      lng: new FormControl('')
     });
   }
 
   eventFormSubmit() {
     console.log('EventModalComponent::eventFormSubmit | method called');
-    console.log(this.eventForm.value);
 
     this.eventForm.value.time = this.eventForm.value.fromTime + ' - ' + this.eventForm.value.untilTime;
 
@@ -71,13 +72,14 @@ export class EventModalComponent implements OnInit {
       this.iziToast.show('Error', 'The start time of the event cannot be the same or later than the end time.',
        'red', 'ico-error', 'assets/avatar.png');
     } else {
-      this.presentLoading();
+      console.log(this.eventForm.value);
       this.storage.get(config.TOKEN_KEY).then(res => {
         if (res) {
           const objectId = new ObjectId(res);
           console.log('objectId', objectId);
           // Update event.
           if (typeof this.navParams.data.modalProps.event !== 'undefined') {
+            this.presentLoading('Please wait, updating event...');
             console.log('Update event');
             // this.stitchMongoService.updateEvent(config.COLLECTION_KEY, objectId, this.eventForm.value).then(result => {
             this.stitchMongoService.update(config.COLLECTION_KEY, {user_id: objectId, 'events._id': this.eventForm.value._id},
@@ -88,6 +90,7 @@ export class EventModalComponent implements OnInit {
               this.iziToast.success('Update event', 'Event updated successfully.');
             });
           } else { // Add new event.
+            this.presentLoading('Please wait, adding event...');
             // Add id event.
             this.eventForm.value._id = new ObjectId();
             // this.stitchMongoService.updateOne(config.COLLECTION_KEY, objectId, this.eventForm.value).then(result => {
@@ -118,9 +121,9 @@ export class EventModalComponent implements OnInit {
     });
   }
 
-  async presentLoading() {
+  async presentLoading(message) {
     this.loading = await this.loadingCtrl.create({
-      message: 'Please wait, adding event...',
+      message: message,
     });
 
     return await this.loading.present();
@@ -133,6 +136,7 @@ export class EventModalComponent implements OnInit {
 
   locate() {
     console.log('EventModalComponent::locate | method called');
+    this.presentLoading('Please wait, geolocating...');
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         position => {
@@ -159,11 +163,20 @@ export class EventModalComponent implements OnInit {
           const result = results[0];
           if (result != null) {
             console.log(result.formatted_address);
-            this.eventForm.value.address = result.formatted_address;
+            this.eventForm.patchValue({address: result.formatted_address});
+            this.eventForm.patchValue({lat: lat});
+            this.eventForm.patchValue({lng: lng});
           } else {
             alert('No address available!');
           }
-        }
+          this.dismissLoading();
+        } else if (status === google.maps.GeocoderStatus.ZERO_RESULTS) {
+          console.log('Bad destination address.');
+          this.dismissLoading();
+      } else {
+          console.log('Error calling Google Geocode API.');
+          this.dismissLoading();
+      }
       });
   }
   }

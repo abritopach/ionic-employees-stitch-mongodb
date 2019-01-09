@@ -31,9 +31,9 @@
                 <ion-item lines="none" class="spanClass">
                     <ion-icon name="calendar"></ion-icon><b>{{ event.date }}</b>
                 </ion-item>
-                <ion-card-content>
-                    <agm-map [latitude]="lat" [longitude]="lng">
-                        <agm-marker [latitude]="lat" [longitude]="lng"></agm-marker>
+                <ion-card-content *ngIf="event.lat !== undefined">
+                    <agm-map [zoom]="13" [latitude]="event.lat" [longitude]="event.lng">
+                        <agm-marker [latitude]="event.lat" [longitude]="event.lng"></agm-marker>
                     </agm-map>
                 </ion-card-content>
               </ion-card>
