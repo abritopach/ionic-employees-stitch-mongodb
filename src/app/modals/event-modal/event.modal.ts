@@ -207,6 +207,10 @@ export class EventModalComponent implements OnInit, AfterViewInit {
               const place = google.maps.places.PlaceResult = autocomplete.getPlace();
               console.log('place', place);
 
+              this.eventForm.patchValue({address: place.formatted_address});
+              this.eventForm.patchValue({lat: place.geometry.location.lat()});
+              this.eventForm.patchValue({lng: place.geometry.location.lng()});
+
              /*
              this.address = place.formatted_address;
              this.web_site = place.website;

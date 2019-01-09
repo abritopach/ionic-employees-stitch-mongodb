@@ -31,7 +31,7 @@
                 <ion-item lines="none" class="spanClass">
                     <ion-icon name="calendar"></ion-icon><b>{{ event.date }}</b>
                 </ion-item>
-                <ion-card-content *ngIf="event.lat !== undefined">
+                <ion-card-content *ngIf="event.lat !== undefined && event.lat !== ''">
                     <agm-map [zoom]="13" [latitude]="event.lat" [longitude]="event.lng">
                         <agm-marker [latitude]="event.lat" [longitude]="event.lng"></agm-marker>
                     </agm-map>
@@ -40,7 +40,7 @@
               <ion-card>
                 <ion-item class="eventClass">
                   <b>Meeting Participants</b>
-                  <ion-icon name="arrow-dropright" slot="end"></ion-icon>
+                  <!--<ion-icon name="arrow-dropright" slot="end"></ion-icon>-->
                 </ion-item>
                 <ion-item *ngIf="participants.length != 0">
                   <ion-row>
