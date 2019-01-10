@@ -57,7 +57,7 @@
             <br>
             <ion-item-divider lines="none" color="light">Meeting participants</ion-item-divider>
             <br>
-            <ion-item lines="full">
+            <ion-item lines="none">
                 <ng-select [class.has-error]="eventForm.get('participants').hasError('required') && eventForm.get('participants').touched" [multiple]="true" [items]="employees"
                             bindLabel="employee_name"
                             bindValue="avatar"
@@ -80,7 +80,7 @@
             </ion-item>
             <br>
             <ion-item-divider lines="none" color="light">Location</ion-item-divider>
-            <ion-item>
+            <ion-item lines="none">
                 <!--
                 <ion-label position="floating"><ion-icon name="pin"></ion-icon> Address</ion-label>
                 <ion-input id="address" #address type="text" formControlName="address"></ion-input>

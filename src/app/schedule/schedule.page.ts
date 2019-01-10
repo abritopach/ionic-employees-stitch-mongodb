@@ -16,6 +16,8 @@ import { EventModalComponent } from './../modals/event-modal/event.modal';
 
 import { MoreOptionsPopoverComponent } from './../popovers/more-options/more-options.popover';
 
+import * as moment from 'moment';
+
 @Component({
   selector: 'app-schedule',
   templateUrl: './schedule.page.html',
@@ -56,6 +58,8 @@ export class SchedulePage implements OnInit {
         this.stitchMongoService.find(config.COLLECTION_KEY, {user_id: objectId}).then(result => {
           if ((result.length !== 0) && (typeof result[0]['events'] !== 'undefined')) {
             this.events = result[0]['events'];
+            // SORT ascending events by date.
+            this.events.sort((a, b) => +moment(a.date).format('YYYYMMDD') - +moment(b.date).format('YYYYMMDD'));
             this.updateParticipants();
           }
         });
@@ -142,6 +146,7 @@ export class SchedulePage implements OnInit {
       if (data._id !== '') {
         this.events = [...this.events, data];
         console.log('events', this.events);
+        this.events.sort((a, b) => +moment(a.date).format('YYYYMMDD') - +moment(b.date).format('YYYYMMDD'));
         this.updateParticipants();
       }
 
@@ -178,6 +183,7 @@ export class SchedulePage implements OnInit {
             return e;
           });
           this.events = [...events];
+          this.events.sort((a, b) => +moment(a.date).format('YYYYMMDD') - +moment(b.date).format('YYYYMMDD'));
           this.updateParticipants();
       }
     }
