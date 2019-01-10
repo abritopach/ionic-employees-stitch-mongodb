@@ -27,6 +27,7 @@ export class SchedulePage implements OnInit {
 
   currentYear = new Date().getFullYear();
   events: any = null;
+  eventsCopy: any = null;
   participants: any = [];
 
   // https://www.code-sample.com/2018/07/angular-6-google-maps-agm-core.html
@@ -57,9 +58,10 @@ export class SchedulePage implements OnInit {
         const objectId = new ObjectId(res);
         this.stitchMongoService.find(config.COLLECTION_KEY, {user_id: objectId}).then(result => {
           if ((result.length !== 0) && (typeof result[0]['events'] !== 'undefined')) {
-            this.events = result[0]['events'];
+            this.events = this.eventsCopy = result[0]['events'];
+            this.filterEvents('today');
             // SORT ascending events by date.
-            this.events.sort((a, b) => +moment(a.date).format('YYYYMMDD') - +moment(b.date).format('YYYYMMDD'));
+            // this.events.sort((a, b) => +moment(a.date).format('YYYYMMDD') - +moment(b.date).format('YYYYMMDD'));
             this.updateParticipants();
           }
         });
@@ -146,7 +148,7 @@ export class SchedulePage implements OnInit {
       if (data._id !== '') {
         this.events = [...this.events, data];
         console.log('events', this.events);
-        this.events.sort((a, b) => +moment(a.date).format('YYYYMMDD') - +moment(b.date).format('YYYYMMDD'));
+        // this.events.sort((a, b) => +moment(a.date).format('YYYYMMDD') - +moment(b.date).format('YYYYMMDD'));
         this.updateParticipants();
       }
 
@@ -183,7 +185,7 @@ export class SchedulePage implements OnInit {
             return e;
           });
           this.events = [...events];
-          this.events.sort((a, b) => +moment(a.date).format('YYYYMMDD') - +moment(b.date).format('YYYYMMDD'));
+          // this.events.sort((a, b) => +moment(a.date).format('YYYYMMDD') - +moment(b.date).format('YYYYMMDD'));
           this.updateParticipants();
       }
     }
@@ -196,6 +198,24 @@ export class SchedulePage implements OnInit {
       const visibleParticipants = e.meeting_participants.slice(0, this.countPeople);
       this.participants.push(visibleParticipants);
     });
+  }
+
+  segmentChanged(event) {
+    console.log(event.detail.value);
+    this.filterEvents(event.detail.value);
+  }
+
+  filterEvents(option) {
+    if (option === 'today') {
+      const todayEvents = this.eventsCopy.filter(event => moment(event.date).isSame(moment()));
+      console.log('todayEvents', todayEvents);
+      this.events = todayEvents;
+    }
+    if (option === 'upcoming') {
+      const upcomingEvents = this.eventsCopy.filter(event => moment(event.date).isAfter(moment()));
+      console.log('upcomingEvents', upcomingEvents);
+      this.events = upcomingEvents;
+    }
   }
 
 }
