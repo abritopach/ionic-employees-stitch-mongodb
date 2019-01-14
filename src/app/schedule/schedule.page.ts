@@ -38,6 +38,8 @@ export class SchedulePage implements OnInit {
   avatarColSize = 2;
   chipColSize = 2;
 
+  option = 'today';
+
   @HostListener('window:resize', ['$event'])
   onResize(event) {
     // console.log(event.target.innerWidth);
@@ -206,16 +208,23 @@ export class SchedulePage implements OnInit {
   }
 
   filterEvents(option) {
+
+    if (option === 'previous') {
+      const previousEvents = this.eventsCopy.filter(event => moment(event.date).isBefore(moment()));
+      console.log('previousEvents', previousEvents);
+      this.events = [...previousEvents];
+    }
     if (option === 'today') {
       const todayEvents = this.eventsCopy.filter(event => moment(event.date).isSame(moment()));
       console.log('todayEvents', todayEvents);
-      this.events = todayEvents;
+      this.events = [...todayEvents];
     }
     if (option === 'upcoming') {
       const upcomingEvents = this.eventsCopy.filter(event => moment(event.date).isAfter(moment()));
       console.log('upcomingEvents', upcomingEvents);
-      this.events = upcomingEvents;
+      this.events = [...upcomingEvents];
     }
+    this.updateParticipants();
   }
 
 }

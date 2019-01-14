@@ -11,7 +11,10 @@
     </ion-buttons>
   </ion-toolbar>
   <ion-toolbar color="secondary">
-      <ion-segment (ionChange)="segmentChanged($event)">
+      <ion-segment [(ngModel)]="option" (ionChange)="segmentChanged($event)">
+          <ion-segment-button value="previous">
+            <ion-label>PREVIOUS</ion-label>
+          </ion-segment-button>
           <ion-segment-button value="today">
             <ion-label>TODAY</ion-label>
           </ion-segment-button>
