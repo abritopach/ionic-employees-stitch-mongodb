@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, OnInit, HostListener, ViewChild, TemplateRef } from '@angular/core';
 
 import { PopoverController, ModalController } from '@ionic/angular';
 
@@ -17,6 +17,8 @@ import { EventModalComponent } from './../modals/event-modal/event.modal';
 import { MoreOptionsPopoverComponent } from './../popovers/more-options/more-options.popover';
 
 import * as moment from 'moment';
+
+import { CalendarView} from 'angular-calendar';
 
 @Component({
   selector: 'app-schedule',
@@ -39,6 +41,21 @@ export class SchedulePage implements OnInit {
   chipColSize = 2;
 
   option = 'today';
+
+    // Calendar demo
+
+  view: CalendarView = CalendarView.Month;
+
+  CalendarView = CalendarView;
+
+  viewDate: Date = new Date();
+
+  activeDayIsOpen = true;
+
+  showCalendarFlag = false;
+
+  // **********
+
 
   @HostListener('window:resize', ['$event'])
   onResize(event) {
@@ -225,6 +242,10 @@ export class SchedulePage implements OnInit {
       this.events = [...upcomingEvents];
     }
     this.updateParticipants();
+  }
+
+  showCalendar() {
+    console.log('SchedulePage::showCalendar() | method called');
   }
 
 }

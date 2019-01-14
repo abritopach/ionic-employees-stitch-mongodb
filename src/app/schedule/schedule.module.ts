@@ -13,6 +13,10 @@ import { EventModalComponent } from './../modals/event-modal/event.modal';
 
 import { NgSelectModule } from '@ng-select/ng-select';
 
+// Angular Calendar
+import { CalendarModule, DateAdapter } from 'angular-calendar';
+import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
+
 const routes: Routes = [
   {
     path: '',
@@ -31,7 +35,11 @@ const routes: Routes = [
       apiKey: 'AIzaSyDB9__kjPlloGKBm6moXS9hrRbmJ4-gXXc', // Google API key for maps
       libraries: ['places']
     }),
-    NgSelectModule
+    NgSelectModule,
+    CalendarModule.forRoot({
+      provide: DateAdapter,
+      useFactory: adapterFactory
+    })
   ],
   declarations: [SchedulePage, EventModalComponent],
   entryComponents: [EventModalComponent]

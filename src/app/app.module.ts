@@ -16,10 +16,18 @@ import { MoreOptionsPopoverComponent } from './popovers/more-options/more-option
 
 import { IonicStorageModule } from '@ionic/storage';
 
+
+
 @NgModule({
   declarations: [AppComponent, ShowPeoplePopoverComponent, MoreOptionsPopoverComponent],
   entryComponents: [ShowPeoplePopoverComponent, MoreOptionsPopoverComponent],
-  imports: [BrowserModule, BrowserAnimationsModule, IonicModule.forRoot(), AppRoutingModule, IonicStorageModule.forRoot()],
+  imports: [
+    BrowserModule,
+    BrowserAnimationsModule,
+    IonicModule.forRoot(),
+    AppRoutingModule,
+    IonicStorageModule.forRoot()
+  ],
   providers: [
     StatusBar,
     SplashScreen,
