@@ -18,7 +18,33 @@ import { MoreOptionsPopoverComponent } from './../popovers/more-options/more-opt
 
 import * as moment from 'moment';
 
-import { CalendarView} from 'angular-calendar';
+import { CalendarView, CalendarEvent, CalendarEventAction } from 'angular-calendar';
+
+import {
+  startOfDay,
+  endOfDay,
+  subDays,
+  addDays,
+  endOfMonth,
+  isSameDay,
+  isSameMonth,
+  addHours
+} from 'date-fns';
+
+const colors: any = {
+  red: {
+    primary: '#ad2121',
+    secondary: '#FAE3E3'
+  },
+  blue: {
+    primary: '#1e90ff',
+    secondary: '#D1E8FF'
+  },
+  yellow: {
+    primary: '#e3bc08',
+    secondary: '#FDF1BA'
+  }
+};
 
 @Component({
   selector: 'app-schedule',
@@ -50,9 +76,11 @@ export class SchedulePage implements OnInit {
 
   viewDate: Date = new Date();
 
-  activeDayIsOpen = true;
+  activeDayIsOpen = false;
 
   showCalendarFlag = false;
+
+  eventsCalendar: CalendarEvent[] = [];
 
   // **********
 
@@ -66,7 +94,8 @@ export class SchedulePage implements OnInit {
   }
 
   constructor(private popoverCtrl: PopoverController, private stitchMongoService: StitchMongoService,
-              private storage: Storage, private modalCtrl: ModalController) { }
+              private storage: Storage, private modalCtrl: ModalController) {
+  }
 
   ngOnInit() {
     this.innerWidth = window.innerWidth;
@@ -78,6 +107,8 @@ export class SchedulePage implements OnInit {
         this.stitchMongoService.find(config.COLLECTION_KEY, {user_id: objectId}).then(result => {
           if ((result.length !== 0) && (typeof result[0]['events'] !== 'undefined')) {
             this.events = this.eventsCopy = result[0]['events'];
+            console.log('events', this.events);
+            this.formatEventsCalendar();
             this.filterEvents('today');
             // SORT ascending events by date.
             // this.events.sort((a, b) => +moment(a.date).format('YYYYMMDD') - +moment(b.date).format('YYYYMMDD'));
@@ -244,8 +275,44 @@ export class SchedulePage implements OnInit {
     this.updateParticipants();
   }
 
+  formatEventsCalendar() {
+    this.events.map(event => {
+      console.log(moment(event.date).toDate());
+      const formattedEvent = {
+        start: moment(event.date).toDate(),
+        title: event.title,
+        color: colors.red
+      };
+      this.eventsCalendar.push(formattedEvent);
+    });
+  }
+
   showCalendar() {
     console.log('SchedulePage::showCalendar() | method called');
+    this.showCalendarFlag = !this.showCalendarFlag;
   }
+
+  dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
+    console.log('SchedulePage::dayClicked() | method called');
+
+    // if (isSameMonth(date, this.viewDate)) {
+    if (moment(date).isSame(this.viewDate, 'month')) {
+      this.viewDate = date;
+      if (
+        // (isSameDay(this.viewDate, date) && this.activeDayIsOpen === true) ||
+        (moment(date).isSame(this.viewDate, 'day') && this.activeDayIsOpen === true) ||
+        events.length === 0
+      ) {
+        this.activeDayIsOpen = false;
+      } else {
+        this.activeDayIsOpen = true;
+      }
+    }
+  }
+
+  handleEvent(event: CalendarEvent): void {
+    // this.onClickMoreOptions(event);
+  }
+
 
 }

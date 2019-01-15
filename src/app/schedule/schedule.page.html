@@ -13,7 +13,7 @@
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
-  <ion-toolbar color="secondary">
+  <ion-toolbar color="secondary" *ngIf="!showCalendarFlag">
       <ion-segment [(ngModel)]="option" (ionChange)="segmentChanged($event)">
           <ion-segment-button value="previous">
             <ion-label>PREVIOUS</ion-label>
@@ -29,7 +29,7 @@
 </ion-header>
 
 <ion-content padding>
-    <ion-list>
+    <ion-list *ngIf="!showCalendarFlag">
         <ion-grid fixed>
           <ion-row *ngFor="let event of events; let i = index" align-items-stretch >
           <ion-col col-12 align-self-stretch align-self-center>
@@ -132,28 +132,25 @@
                 <mwl-calendar-month-view
                   *ngSwitchCase="CalendarView.Month"
                   [viewDate]="viewDate"
-                  [events]="events"
+                  [events]="eventsCalendar"
                   [refresh]="refresh"
                   [activeDayIsOpen]="activeDayIsOpen"
                   (dayClicked)="dayClicked($event.day)"
-                  (eventClicked)="handleEvent('Clicked', $event.event)"
-                  (eventTimesChanged)="eventTimesChanged($event)">
+                  (eventClicked)="handleEvent('Clicked', $event.event)">
                 </mwl-calendar-month-view>
                 <mwl-calendar-week-view
                   *ngSwitchCase="CalendarView.Week"
                   [viewDate]="viewDate"
-                  [events]="events"
+                  [events]="eventsCalendar"
                   [refresh]="refresh"
-                  (eventClicked)="handleEvent('Clicked', $event.event)"
-                  (eventTimesChanged)="eventTimesChanged($event)">
+                  (eventClicked)="handleEvent('Clicked', $event.event)">
                 </mwl-calendar-week-view>
                 <mwl-calendar-day-view
                   *ngSwitchCase="CalendarView.Day"
                   [viewDate]="viewDate"
-                  [events]="events"
+                  [events]="eventsCalendar"
                   [refresh]="refresh"
-                  (eventClicked)="handleEvent('Clicked', $event.event)"
-                  (eventTimesChanged)="eventTimesChanged($event)">
+                  (eventClicked)="handleEvent('Clicked', $event.event)">
                 </mwl-calendar-day-view>
               </div>
           </ion-grid>
