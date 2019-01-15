@@ -82,6 +82,7 @@ export class SchedulePage implements OnInit {
 
   eventsCalendar: CalendarEvent[] = [];
 
+
   // **********
 
 
@@ -198,6 +199,7 @@ export class SchedulePage implements OnInit {
       if (data._id !== '') {
         this.events = [...this.events, data];
         console.log('events', this.events);
+        this.formatEventsCalendar();
         // this.events.sort((a, b) => +moment(a.date).format('YYYYMMDD') - +moment(b.date).format('YYYYMMDD'));
         this.updateParticipants();
       }
@@ -207,6 +209,7 @@ export class SchedulePage implements OnInit {
 
   onClickMoreOptions(event) {
     console.log('SchedulePage::onClickMoreOptions() | method called');
+    console.log(event);
     this.presentOptionsPopover(event);
   }
 
@@ -227,6 +230,10 @@ export class SchedulePage implements OnInit {
 
       if (data.option === 'delete') {
         this.events = this.events.filter(e => e.title !== data.event.title);
+        if (this.showCalendarFlag) {
+          this.eventsCalendar = this.eventsCalendar.filter(e => e.title !== data.event.title);
+        }
+
       } else {
        const events = this.events.map(e => {
             if (e._id === data.event._id) {
@@ -278,10 +285,9 @@ export class SchedulePage implements OnInit {
   formatEventsCalendar() {
     this.events.map(event => {
       console.log(moment(event.date).toDate());
-      const formattedEvent = {
+      const formattedEvent = { ...event,
         start: moment(event.date).toDate(),
-        title: event.title,
-        color: colors.red
+        color: colors.red,
       };
       this.eventsCalendar.push(formattedEvent);
     });
@@ -310,8 +316,8 @@ export class SchedulePage implements OnInit {
     }
   }
 
-  handleEvent(event: CalendarEvent): void {
-    // this.onClickMoreOptions(event);
+  handleEvent(action: string, event: CalendarEvent): void {
+    this.onClickMoreOptions(event);
   }
 
 
