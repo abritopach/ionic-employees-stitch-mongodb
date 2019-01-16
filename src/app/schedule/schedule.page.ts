@@ -290,7 +290,9 @@ export class SchedulePage implements OnInit {
     this.eventsCopy.map(event => {
       console.log(moment(event.date).toDate());
       const formattedEvent = { ...event,
-        start: moment(event.date).toDate(),
+        // start: moment(event.date).toDate(),
+        start: new Date(event.date + ' ' + event.fromTime),
+        end: new Date(event.date + ' ' + event.untilTime),
         color: colors.red,
       };
       this.eventsCalendar.push(formattedEvent);
