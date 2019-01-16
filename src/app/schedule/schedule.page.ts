@@ -229,29 +229,31 @@ export class SchedulePage implements OnInit {
       console.log('data popover.onWillDismiss', data);
 
       if (data.option === 'delete') {
-        this.events = this.events.filter(e => e.title !== data.event.title);
+        this.eventsCopy = this.eventsCopy.filter(e => e.title !== data.event.title);
         if (this.showCalendarFlag) {
           this.eventsCalendar = this.eventsCalendar.filter(e => e.title !== data.event.title);
         }
 
       } else {
-       const events = this.events.map(e => {
+       const events = this.eventsCopy.map(e => {
             if (e._id === data.event._id) {
               e = data.event;
             }
             return e;
           });
-          this.events = [...events];
+          this.eventsCopy = [...events];
+          this.formatEventsCalendar();
           // this.events.sort((a, b) => +moment(a.date).format('YYYYMMDD') - +moment(b.date).format('YYYYMMDD'));
           this.updateParticipants();
       }
+      this.filterEvents(this.option);
     }
 
   }
 
   updateParticipants() {
     this.participants = [];
-    this.events.map(e => {
+    this.eventsCopy.map(e => {
       const visibleParticipants = e.meeting_participants.slice(0, this.countPeople);
       this.participants.push(visibleParticipants);
     });
@@ -283,7 +285,9 @@ export class SchedulePage implements OnInit {
   }
 
   formatEventsCalendar() {
-    this.events.map(event => {
+    this.eventsCalendar = [];
+    console.log('events in formatEventsCalendar', this.eventsCopy);
+    this.eventsCopy.map(event => {
       console.log(moment(event.date).toDate());
       const formattedEvent = { ...event,
         start: moment(event.date).toDate(),
@@ -296,6 +300,12 @@ export class SchedulePage implements OnInit {
   showCalendar() {
     console.log('SchedulePage::showCalendar() | method called');
     this.showCalendarFlag = !this.showCalendarFlag;
+    if (this.showCalendarFlag) {
+      this.events = this.eventsCopy;
+    }
+    else {
+      this.filterEvents(this.option);
+    }
   }
 
   dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
