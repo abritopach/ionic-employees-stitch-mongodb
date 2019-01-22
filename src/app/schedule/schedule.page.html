@@ -81,80 +81,74 @@
       </ion-grid>
       </ion-list>
 
-          <ion-grid *ngIf="showCalendarFlag">
-            <ion-row>
-              <ion-col>
-                  <div
-                  mwlCalendarPreviousView
-                  [view]="view"
-                  [(viewDate)]="viewDate"
-                  (viewDateChange)="activeDayIsOpen = false">
-                  Previous
+      <ion-grid *ngIf="showCalendarFlag">
+          <ion-row align-items-center>
+              <ion-col size-md="4" size-xs="12" align-self-center>
+          <ion-toolbar>
+            <ion-buttons slot="start">
+              <ion-button size="small" shape="round" fill="outline">
+                <div mwlCalendarPreviousView [view]="view" [(viewDate)]="viewDate" (viewDateChange)="activeDayIsOpen = false">
+                  Prev
                 </div>
-              </ion-col>
-              <ion-col>
-                  <div
-                  mwlCalendarToday
-                  [(viewDate)]="viewDate">
+              </ion-button>
+              <ion-button size="small" shape="round" fill="outline">
+                <div mwlCalendarToday [(viewDate)]="viewDate">
                   Today
                 </div>
-              </ion-col>
-              <ion-col>
-                  <div
-                  mwlCalendarNextView
-                  [view]="view"
-                  [(viewDate)]="viewDate"
-                  (viewDateChange)="activeDayIsOpen = false">
+              </ion-button>
+              <ion-button size="small" shape="round" fill="outline">
+                <div mwlCalendarNextView [view]="view" [(viewDate)]="viewDate" (viewDateChange)="activeDayIsOpen = false">
                   Next
                 </div>
-              </ion-col>
-            </ion-row>
-            <ion-row>
-              <h3>{{ viewDate | calendarDate:(view + 'ViewTitle'):'en' }}</h3>
-            </ion-row>
-            <ion-row>
-              <ion-col>
-                  <ion-button fill="clear" size="small" (click)="view = CalendarView.Month"
-                  [class.active]="view === CalendarView.Month">Month</ion-button>
-              </ion-col>
-              <ion-col>
-                  <ion-button fill="clear" size="small" (click)="view = CalendarView.Week"
-                  [class.active]="view === CalendarView.Week">Week</ion-button>
-              </ion-col>
-              <ion-col>
-                  <ion-button fill="clear" size="small" (click)="view = CalendarView.Day"
-                  [class.active]="view === CalendarView.Day">Day</ion-button>
-              </ion-col>
-            </ion-row>
-
-
-            <div [ngSwitch]="view">
-                <mwl-calendar-month-view
-                  *ngSwitchCase="CalendarView.Month"
-                  [viewDate]="viewDate"
-                  [events]="eventsCalendar"
-                  [refresh]="refresh"
-                  [activeDayIsOpen]="activeDayIsOpen"
-                  (dayClicked)="dayClicked($event.day)"
-                  (eventClicked)="handleEvent('Clicked', $event.event)">
-                </mwl-calendar-month-view>
-                <mwl-calendar-week-view
-                  *ngSwitchCase="CalendarView.Week"
-                  [viewDate]="viewDate"
-                  [events]="eventsCalendar"
-                  [refresh]="refresh"
-                  (eventClicked)="handleEvent('Clicked', $event.event)">
-                </mwl-calendar-week-view>
-                <mwl-calendar-day-view
-                  *ngSwitchCase="CalendarView.Day"
-                  [viewDate]="viewDate"
-                  [events]="eventsCalendar"
-                  [refresh]="refresh"
-                  (eventClicked)="handleEvent('Clicked', $event.event)">
-                </mwl-calendar-day-view>
-              </div>
-          </ion-grid>
-
+              </ion-button>
+            </ion-buttons>
+          </ion-toolbar>
+          </ion-col>
+          <ion-col size-md="4" size-xs="12" align-self-center>
+            <h3 text-center>{{ viewDate | calendarDate:(view + 'ViewTitle'):'en' }}</h3>
+          </ion-col>
+          <ion-col size-md="4" size-xs="12" align-self-center>
+          <ion-toolbar>
+            <ion-buttons slot="start">
+              <ion-button color="primary" fill="solid" size="small" (click)="view = CalendarView.Month" [class.active]="view === CalendarView.Month">
+                  Month
+              </ion-button>
+              <ion-button color="primary" fill="solid" size="small" (click)="view = CalendarView.Week" [class.active]="view === CalendarView.Week">
+                Week
+              </ion-button>
+              <ion-button color="primary" fill="solid" size="small" (click)="view = CalendarView.Day" [class.active]="view === CalendarView.Day">
+                Day
+              </ion-button>
+            </ion-buttons>
+          </ion-toolbar>
+        </ion-col>
+        </ion-row>
+        <div [ngSwitch]="view">
+            <mwl-calendar-month-view
+              *ngSwitchCase="CalendarView.Month"
+              [viewDate]="viewDate"
+              [events]="eventsCalendar"
+              [refresh]="refresh"
+              [activeDayIsOpen]="activeDayIsOpen"
+              (dayClicked)="dayClicked($event.day)"
+              (eventClicked)="handleEvent('Clicked', $event.event)">
+            </mwl-calendar-month-view>
+            <mwl-calendar-week-view
+              *ngSwitchCase="CalendarView.Week"
+              [viewDate]="viewDate"
+              [events]="eventsCalendar"
+              [refresh]="refresh"
+              (eventClicked)="handleEvent('Clicked', $event.event)">
+            </mwl-calendar-week-view>
+            <mwl-calendar-day-view
+              *ngSwitchCase="CalendarView.Day"
+              [viewDate]="viewDate"
+              [events]="eventsCalendar"
+              [refresh]="refresh"
+              (eventClicked)="handleEvent('Clicked', $event.event)">
+            </mwl-calendar-day-view>
+          </div>
+      </ion-grid>
 </ion-content>
 
 <ion-footer>
