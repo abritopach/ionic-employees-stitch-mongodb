@@ -9,6 +9,8 @@ import { OrganizationPage } from './organization.page';
 
 import { OrganizationChartComponent } from '../components/organization-chart/organization-chart.component';
 
+import { SharedComponentsModule } from '../components/shared-components.module';
+
 const routes: Routes = [
   {
     path: '',
@@ -21,7 +23,8 @@ const routes: Routes = [
     CommonModule,
     FormsModule,
     IonicModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+    SharedComponentsModule
   ],
   declarations: [OrganizationPage, OrganizationChartComponent],
   entryComponents: [OrganizationChartComponent]

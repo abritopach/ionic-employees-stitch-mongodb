@@ -17,6 +17,8 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 
+import { SharedComponentsModule } from '../components/shared-components.module';
+
 const routes: Routes = [
   {
     path: '',
@@ -39,7 +41,8 @@ const routes: Routes = [
     CalendarModule.forRoot({
       provide: DateAdapter,
       useFactory: adapterFactory
-    })
+    }),
+    SharedComponentsModule
   ],
   declarations: [SchedulePage, EventModalComponent],
   entryComponents: [EventModalComponent]

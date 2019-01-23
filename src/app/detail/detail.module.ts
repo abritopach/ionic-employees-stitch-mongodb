@@ -11,6 +11,8 @@ import { EmployeesPerDepartmentComponent } from '../components/employees-per-dep
 import { ProjectsModalComponent } from '../modals/projects-modal/projects.modal';
 import { SendSMSModalComponent } from './../modals/send-sms-modal/send-sms.modal';
 
+import { SharedComponentsModule } from '../components/shared-components.module';
+
 const routes: Routes = [
   {
     path: '',
@@ -24,7 +26,8 @@ const routes: Routes = [
     FormsModule,
     ReactiveFormsModule,
     IonicModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+    SharedComponentsModule
   ],
   declarations: [DetailPage, EmployeesPerDepartmentComponent, ProjectsModalComponent, SendSMSModalComponent],
   entryComponents: [EmployeesPerDepartmentComponent, ProjectsModalComponent, SendSMSModalComponent]

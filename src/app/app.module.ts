@@ -17,7 +17,6 @@ import { MoreOptionsPopoverComponent } from './popovers/more-options/more-option
 import { IonicStorageModule } from '@ionic/storage';
 
 
-
 @NgModule({
   declarations: [AppComponent, ShowPeoplePopoverComponent, MoreOptionsPopoverComponent],
   entryComponents: [ShowPeoplePopoverComponent, MoreOptionsPopoverComponent],

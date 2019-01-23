@@ -52,8 +52,7 @@ const colors: any = {
   styleUrls: ['./schedule.page.scss']
 })
 export class SchedulePage implements OnInit {
-
-  currentYear = new Date().getFullYear();
+  
   events: any = null;
   eventsCopy: any = null;
   participants: any = [];

@@ -17,7 +17,6 @@ import config from '../config/config';
 })
 export class HomePage implements OnInit {
 
-  currentYear = new Date().getFullYear();
   employees: any;
   searchControl: FormControl;
   loading: any;
