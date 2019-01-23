@@ -1,3 +1,4 @@
+<!--
 <ion-header>
   <ion-toolbar color='primary'>
     <ion-buttons slot="start">
@@ -15,13 +16,30 @@
         </ion-button>
       </ion-buttons>
   </ion-toolbar>
-  <ion-toolbar color="primary">
+</ion-header>
+-->
+
+<app-header title="Employee List">
+  <ion-buttons buttons-start slot="start">
+    <ion-menu-button></ion-menu-button>
+  </ion-buttons>
+  <ion-buttons buttons-end slot='end'>
+    <ion-button *ngIf="!authenticationService.isAuthenticated()" routerLink="/login">
+      <ion-icon slot="icon-only" name="log-in"></ion-icon>
+    </ion-button>
+    <ion-button  *ngIf="authenticationService.isAuthenticated()" (click)="logout()">
+      <ion-icon slot="icon-only" name="log-out"></ion-icon>
+    </ion-button>
+  </ion-buttons>
+</app-header>
+
+<ion-content padding>
+
+  <ion-toolbar>
     <ion-searchbar [formControl]="searchControl" animated="true" show-cancel-button (ionInput)="searchEmployees($event)" (ionCancel)="cancelSearch($event)" placeholder="Search">
     </ion-searchbar>
   </ion-toolbar>
-</ion-header>
 
-<ion-content padding>
   <!--<p *ngIf="!authGuard.canActivate()" class="note"><b>NOTE: Login to be able to use all the functionality.</b></p>-->
   <ion-list>
     <ion-item-group *ngFor="let item of result">

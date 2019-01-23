@@ -1,3 +1,4 @@
+<!--
 <ion-header>
   <ion-toolbar color="primary">
       <ion-buttons slot="start">
@@ -13,22 +14,39 @@
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
-  <ion-toolbar color="secondary" *ngIf="!showCalendarFlag">
-      <ion-segment [(ngModel)]="option" (ionChange)="segmentChanged($event)">
-          <ion-segment-button value="previous">
-            <ion-label>PREVIOUS</ion-label>
-          </ion-segment-button>
-          <ion-segment-button value="today">
-            <ion-label>TODAY</ion-label>
-          </ion-segment-button>
-          <ion-segment-button value="upcoming">
-            <ion-label>UPCOMING</ion-label>
-          </ion-segment-button>
-        </ion-segment>
-  </ion-toolbar>
 </ion-header>
+-->
+
+<app-header title="My Schedule">
+  <ion-buttons buttons-start slot="start">
+    <ion-menu-button></ion-menu-button>
+  </ion-buttons>
+  <ion-buttons buttons-end slot='end'>
+    <ion-button (click)="showCalendar()">
+        <ion-icon slot="icon-only" name="grid"></ion-icon>
+    </ion-button>
+    <ion-button (click)="addEvent()">
+      <ion-icon slot="icon-only" name="add-circle-outline"></ion-icon>
+    </ion-button>
+  </ion-buttons>
+</app-header>
 
 <ion-content padding>
+
+    <ion-toolbar color="secondary" *ngIf="!showCalendarFlag">
+        <ion-segment [(ngModel)]="option" (ionChange)="segmentChanged($event)">
+            <ion-segment-button fill="outline" value="previous">
+              <ion-label>PREVIOUS</ion-label>
+            </ion-segment-button>
+            <ion-segment-button value="today">
+              <ion-label>TODAY</ion-label>
+            </ion-segment-button>
+            <ion-segment-button value="upcoming">
+              <ion-label>UPCOMING</ion-label>
+            </ion-segment-button>
+          </ion-segment>
+    </ion-toolbar>
+
     <ion-list *ngIf="!showCalendarFlag">
         <ion-grid fixed>
           <ion-row *ngFor="let event of events; let i = index" align-items-stretch >

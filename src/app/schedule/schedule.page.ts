@@ -52,7 +52,7 @@ const colors: any = {
   styleUrls: ['./schedule.page.scss']
 })
 export class SchedulePage implements OnInit {
-  
+
   events: any = null;
   eventsCopy: any = null;
   participants: any = [];
@@ -303,8 +303,7 @@ export class SchedulePage implements OnInit {
     this.showCalendarFlag = !this.showCalendarFlag;
     if (this.showCalendarFlag) {
       this.events = this.eventsCopy;
-    }
-    else {
+    } else {
       this.filterEvents(this.option);
     }
   }
