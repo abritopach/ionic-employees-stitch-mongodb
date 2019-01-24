@@ -40,12 +40,28 @@
             <ion-card-content>
               <ion-item>
                 <p><ion-icon name="information-circle-outline"></ion-icon> {{ employee.description}}</p>
+                <ion-badge tappable (click)="presentModal()" slot="end" color="primary"><ion-icon name="eye"></ion-icon> {{ employee.projects.length}} Projects</ion-badge>
               </ion-item>
+              <!--
               <ion-item tappable (click)="presentModal()">
                 <ion-badge slot="start" color="primary"><ion-icon name="eye"></ion-icon> {{ employee.projects.length}} Projects</ion-badge>
               </ion-item>
+              -->
             </ion-card-content>
-            <ion-row no-padding justify-content-center>
+            <ion-item href="#" class="activated">
+                <ion-icon name="pie" slot="start"></ion-icon>
+                <ion-label>View in Org Chart</ion-label>
+              </ion-item>
+              <ion-item href="#">
+                <ion-icon name="people" slot="start"></ion-icon>
+                <ion-label>Add to my Team</ion-label>
+              </ion-item>
+              <ion-item class="activated">
+                <ion-icon name="star" slot="start"></ion-icon>
+                <ion-label>Add to Favorites</ion-label>
+              </ion-item>
+              <br/>
+            <ion-row justify-content-center>
                 <ion-col col-auto text-center>
                   <ion-button fill="clear" size="small" color="primary" (click)="onClickEmail(employee)">
                     <ion-icon name="mail" slot="start"></ion-icon>
@@ -64,7 +80,7 @@
                       message
                     </ion-button>
                 </ion-col>
-              </ion-row>
+            </ion-row>
           </ion-card>
         </ion-col>
     </ion-row>
