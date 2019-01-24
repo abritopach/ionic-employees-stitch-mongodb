@@ -11,6 +11,7 @@ const routes: Routes = [
   { path: 'organization', canActivate: [AuthGuardService], loadChildren: './organization/organization.module#OrganizationPageModule' },
   { path: 'schedule', canActivate: [AuthGuardService], loadChildren: './schedule/schedule.module#SchedulePageModule' },
   { path: 'login', loadChildren: './public/login/login.module#LoginPageModule' },
+  { path: 'products', loadChildren: './products/products.module#ProductsPageModule' },
 ];
 
 @NgModule({

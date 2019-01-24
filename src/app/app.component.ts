@@ -21,6 +21,11 @@ export class AppComponent implements OnInit {
       icon: 'home'
     },
     {
+      title: 'Products',
+      url: '/products',
+      icon: 'cube'
+    },
+    {
       title: 'Organization',
       url: '/organization',
       icon: 'people'
@@ -29,6 +34,11 @@ export class AppComponent implements OnInit {
       title: 'Schedule',
       url: '/schedule',
       icon: 'calendar'
+    },
+    {
+      title: 'To Do',
+      url: '/todo',
+      icon: 'list-box'
     }
   ];
 
