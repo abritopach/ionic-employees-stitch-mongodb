@@ -65,6 +65,21 @@ export class StitchMongoService {
     {name: 'Project Technical 3', description: 'Description 3', technologies: 'Ionic, Angular, MongoDB', thumbnail: ''}]}
   ];
 
+  fakeProducts = [
+    {product_name: 'Bitbucket', company: 'Atlassian',
+    image: 'https://marketplace-cdn.atlassian.com/files/images/e985b232-8f32-42a3-867b-39432debf22f.png',
+    description: 'Bitbucket is more than just Git code management. Bitbucket gives teams one place to plan projects,' +
+    'collaborate on code, test, and deploy.',
+     url: ''
+    },
+    {product_name: 'GitHub', company: 'Microsoft Corporation',
+    image: 'https://cdn-images-1.medium.com/max/1600/1*_St3BrB36V05JAuFIC3utQ.png',
+    description: 'GitHub is a development platform inspired by the way you work. From open source to business, you can' +
+    'host and review code, manage projects, and build software alongside 31 million developers.',
+     url: ''
+    }
+  ];
+
   constructor(private authService: AuthenticationService) { }
 
   initializeAppClient(appID: string) {
