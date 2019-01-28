@@ -23,10 +23,12 @@ export class TodoListComponent implements OnInit {
   }
 
   onToggleTodoComplete(todo: Todo) {
+    console.log('TodoListComponent::onToggleTodoComplete() | method called', todo);
     this.toggleComplete.emit(todo);
   }
 
   onRemoveTodo(todo: Todo) {
+    console.log('TodoListComponent::onRemoveTodo() | method called', todo);
     this.remove.emit(todo);
   }
 

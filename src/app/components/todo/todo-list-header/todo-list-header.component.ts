@@ -24,6 +24,11 @@ export class TodoListHeaderComponent implements OnInit {
 
   addTodo() {
     this.add.emit(this.newTodo);
+    this.newTodo = {
+      id: 0,
+      title: '',
+      complete: false
+    };
   }
 
 }
