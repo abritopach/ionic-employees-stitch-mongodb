@@ -5,5 +5,7 @@
 </app-header>
 
 <ion-content padding>
-  <app-todo-list-header></app-todo-list-header>
+  <app-todo-list-header (add)="onAddTodo($event)"></app-todo-list-header>
+  <app-todo-list [todos]="todos" (toggleComplete)="onToggleTodoComplete($event)"
+                 (remove)="onRemoveTodo($event)"></app-todo-list>
 </ion-content>

@@ -1,0 +1,8 @@
+<ion-list *ngIf="todos.length > 0">
+    <div *ngFor="let todo of todos">
+        <app-todo-list-item
+        [todo]="todo"
+        (toggleComplete)="onToggleTodoComplete($event)"
+        (remove)="onRemoveTodo($event)"></app-todo-list-item>
+    </div>
+</ion-list>

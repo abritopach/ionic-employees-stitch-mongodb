@@ -8,6 +8,8 @@ import { IonicModule } from '@ionic/angular';
 import { TodoPage } from './todo.page';
 
 import { TodoListHeaderComponent } from '../components/todo/todo-list-header/todo-list-header.component';
+import { TodoListComponent } from '../components/todo/todo-list/todo-list.component';
+import { TodoListItemComponent } from '../components/todo/todo-list-item/todo-list-item.component';
 
 import { SharedComponentsModule } from '../components/shared-components.module';
 
@@ -26,6 +28,6 @@ CommonModule,
     RouterModule.forChild(routes),
     SharedComponentsModule
   ],
-  declarations: [TodoPage, TodoListHeaderComponent]
+  declarations: [TodoPage, TodoListHeaderComponent, TodoListComponent, TodoListItemComponent]
 })
 export class TodoPageModule {}
