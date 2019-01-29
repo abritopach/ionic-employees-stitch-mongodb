@@ -1,6 +1,6 @@
 <ion-item tappable>
     <ion-col size="2">
-        <ion-checkbox color="primary" (click)="toggleTodoComplete(todo)"></ion-checkbox>
+        <ion-checkbox [checked]="todo.complete" color="primary" (click)="toggleTodoComplete(todo)"></ion-checkbox>
     </ion-col>
   <!--<input class="toggle" type="checkbox" (click)="toggleTodoComplete(todo)" [checked]="todo.complete">-->
   <ion-label>
