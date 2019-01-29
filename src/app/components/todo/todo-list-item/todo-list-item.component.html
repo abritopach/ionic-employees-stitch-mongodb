@@ -1,12 +1,13 @@
 <ion-item tappable>
-    <ion-col>
+    <ion-col size="2">
         <ion-checkbox color="primary" (click)="toggleTodoComplete(todo)"></ion-checkbox>
     </ion-col>
   <!--<input class="toggle" type="checkbox" (click)="toggleTodoComplete(todo)" [checked]="todo.complete">-->
   <ion-label>
-    <h2>{{todo.title}}</h2>
+    <h2><b>{{todo.title}}</b></h2>
+    <p>{{todo.dateTime}}</p>
   </ion-label>
-  <ion-button slot="end" color="danger" (click)="removeTodo(todo)">
+  <ion-button slot="end" color="danger" fill="clear" (click)="removeTodo(todo)">
       <ion-icon slot="icon-only" name="close-circle"></ion-icon>
   </ion-button>
 </ion-item>
