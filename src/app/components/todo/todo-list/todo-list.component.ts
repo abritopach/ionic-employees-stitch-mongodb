@@ -32,4 +32,13 @@ export class TodoListComponent implements OnInit {
     this.remove.emit(todo);
   }
 
+  reorderItems(event) {
+    console.log('TodoListComponent::reorderItems() | method called', event);
+    // const itemToMove =  this.todos.splice(event.detail.from, 1)[0];
+    // consol e.log('itemToMove', itemToMove);
+    // this.todos.splice(event.detail.to, 0, itemToMove);
+    // event.detail.complete();
+    this.todos = event.detail.complete(this.todos);
+  }
+
 }

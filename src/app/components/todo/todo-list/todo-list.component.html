@@ -1,6 +1,17 @@
 <ion-list *ngIf="todos.length > 0">
-    <app-todo-list-item *ngFor="let todo of todos"
-    [todo]="todo"
-    (toggleComplete)="onToggleTodoComplete($event)"
-    (remove)="onRemoveTodo($event)"></app-todo-list-item>
+    <ion-reorder-group (ionItemReorder)="reorderItems($event)" disabled="false">
+        <app-todo-list-item *ngFor="let todo of todos"
+            [todo]="todo"
+            (toggleComplete)="onToggleTodoComplete($event)"
+            (remove)="onRemoveTodo($event)">
+        </app-todo-list-item>
+        <!--
+        <ion-item *ngFor="let todo of todos">
+            <ion-label>
+                {{todo.title}}
+            </ion-label>
+            <ion-reorder></ion-reorder>
+        </ion-item>
+        -->
+    </ion-reorder-group>
 </ion-list>

@@ -14,6 +14,7 @@ import config from '../config/config';
 export class TodoPage implements OnInit {
 
   todos: Todo[] = [];
+  items = ['Item1', 'Item2', 'Item3'];
 
   constructor(private stitchMongoService: StitchMongoService, private storage: Storage, private iziToast: IziToastService) { }
 
@@ -59,7 +60,9 @@ export class TodoPage implements OnInit {
         this.stitchMongoService.update(config.COLLECTION_KEY, {user_id: objectId, 'todo.id': todo.id},
         { $set: { 'todo.$' : todo } }).then(result => {
           console.log('result', result);
-          this.iziToast.success('Update task', 'Task complete.');
+          if (todo.complete) {
+            this.iziToast.success('Update task', 'Task complete.');
+          }
         });
       }
     });
@@ -83,10 +86,12 @@ export class TodoPage implements OnInit {
     });
   }
 
-  /*
-  get todos() {
-    return this.stitchMongoService.getAllTodos();
+  reorderItems(event) {
+    console.log('TodoPage::reorderItems() | method called', event);
+    const itemToMove =  this.items.splice(event.detail.from, 1)[0];
+    console.log('itemToMove', itemToMove);
+    this.items.splice(event.detail.to, 0, itemToMove);
+    event.detail.complete();
   }
-  */
 
 }

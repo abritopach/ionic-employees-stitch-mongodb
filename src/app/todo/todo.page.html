@@ -6,7 +6,27 @@
 
 <ion-content padding>
   <app-todo-list-header (add)="onAddTodo($event)"></app-todo-list-header>
+  <!-- TODO's pending. -->
   <app-todo-list [todos]="todos" (toggleComplete)="onToggleTodoComplete($event)"
                  (remove)="onRemoveTodo($event)"></app-todo-list>
   <app-todo-list-footer [todos]="todos"></app-todo-list-footer>
+  <!-- TODO's completed. -->
+  <!--
+  <ion-item-divider>
+  </ion-item-divider>
+  <app-todo-list [todos]="todosCompleted" (toggleComplete)="onToggleTodoComplete($event)"
+                 (remove)="onRemoveTodo($event)"></app-todo-list>
+  -->
+  <!--
+  <ion-list>
+      <ion-reorder-group (ionItemReorder)="reorderItems($event)" disabled="false">
+        <ion-item *ngFor="let item of items">
+          <ion-label>
+            {{item}}
+          </ion-label>
+          <ion-reorder></ion-reorder>
+        </ion-item>
+      </ion-reorder-group>
+    </ion-list>
+    -->
 </ion-content>
