@@ -5,18 +5,30 @@
 </app-header>
 
 <ion-content padding>
+
+  <ion-card>
+    <ion-avatar>
+      <img src="data:image/png;base64,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">
+    </ion-avatar>
+    <ion-card-header>
+      <ion-card-subtitle>Hello {{name}}!</ion-card-subtitle>
+    </ion-card-header>
+  </ion-card>
+
   <app-todo-list-header (add)="onAddTodo($event)"></app-todo-list-header>
   <!-- TODO's pending. -->
   <app-todo-list [todos]="todos" (toggleComplete)="onToggleTodoComplete($event)"
                  (remove)="onRemoveTodo($event)"></app-todo-list>
   <app-todo-list-footer [todos]="todos"></app-todo-list-footer>
   <!-- TODO's completed. -->
-  <!--
   <ion-item-divider>
+      <ion-icon [name]="showCompletedTodos ? 'arrow-dropup' : 'arrow-dropdown'" (click)="showCompletedTodos = !showCompletedTodos"></ion-icon>
+      <ion-label>
+          {{todosCompleted.length}} marked items
+      </ion-label>
   </ion-item-divider>
-  <app-todo-list [todos]="todosCompleted" (toggleComplete)="onToggleTodoComplete($event)"
+  <app-todo-list *ngIf="showCompletedTodos" [todos]="todosCompleted" (toggleComplete)="onToggleTodoComplete($event)"
                  (remove)="onRemoveTodo($event)"></app-todo-list>
-  -->
   <!--
   <ion-list>
       <ion-reorder-group (ionItemReorder)="reorderItems($event)" disabled="false">

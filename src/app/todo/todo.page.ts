@@ -15,6 +15,9 @@ export class TodoPage implements OnInit {
 
   todos: Todo[] = [];
   items = ['Item1', 'Item2', 'Item3'];
+  name = '';
+  todosCompleted: Todo[] = [];
+  showCompletedTodos = false;
 
   constructor(private stitchMongoService: StitchMongoService, private storage: Storage, private iziToast: IziToastService) { }
 
@@ -23,9 +26,12 @@ export class TodoPage implements OnInit {
       if (res) {
         const objectId = new ObjectId(res);
         this.stitchMongoService.find(config.COLLECTION_KEY, {user_id: objectId}).then(result => {
+          this.name = result[0]['employee_name'];
           if ((result.length !== 0) && (typeof result[0]['todo'] !== 'undefined')) {
             console.log(result);
-            this.todos = result[0]['todo'];
+            this.todosCompleted = result[0]['todo'].filter(todo => todo.complete === true);
+            // this.todos = result[0]['todo'];
+            this.todos = result[0]['todo'].filter(todo => todo.complete === false);
           }
         });
       }
@@ -61,7 +67,17 @@ export class TodoPage implements OnInit {
         { $set: { 'todo.$' : todo } }).then(result => {
           console.log('result', result);
           if (todo.complete) {
+            // Delete task from the pending todo list.
+            this.todos = this.todos.filter(t => t.id !== todo.id);
+            // Add task to the completed todo list.
+            this.todosCompleted.push(todo);
             this.iziToast.success('Update task', 'Task complete.');
+          } else {
+            // Delete task from the completed todo list.
+            this.todosCompleted = this.todosCompleted.filter(t => t.id !== todo.id);
+            // Add task to the pending todo list.
+            this.todos.push(todo);
+            this.iziToast.success('Update task', 'Task incomplete.');
           }
         });
       }
@@ -77,7 +93,11 @@ export class TodoPage implements OnInit {
         this.stitchMongoService.update(config.COLLECTION_KEY, {user_id: objectId}, {$pull: { todo: { title: todo.title } }})
         .then(result => {
             console.log(result);
-            this.todos = this.todos.filter(t => t.id !== todo.id);
+            if (!todo.complete) {
+              this.todos = this.todos.filter(t => t.id !== todo.id);
+            } else {
+              this.todosCompleted = this.todosCompleted.filter(t => t.id !== todo.id);
+            }
             this.iziToast.success('Delete task', 'Task deleted successfully.');
         }).catch(err => {
             console.error(err);
