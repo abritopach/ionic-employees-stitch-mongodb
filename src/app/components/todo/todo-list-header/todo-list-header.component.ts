@@ -1,7 +1,10 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { PopoverController } from '@ionic/angular';
 import { Todo } from '../../../models/todo.model';
 
 import * as moment from 'moment';
+
+import { TodoOptionsPopoverComponent } from '../../../popovers/todo-options/todo-options.popover';
 
 @Component({
   selector: 'app-todo-list-header',
@@ -10,6 +13,10 @@ import * as moment from 'moment';
 })
 export class TodoListHeaderComponent implements OnInit {
 
+  list = {
+    title: 'My list'
+  };
+  editTitle = false;
   newTodo: Todo = {
     id: 0,
     title: '',
@@ -20,7 +27,7 @@ export class TodoListHeaderComponent implements OnInit {
   @Output()
   add: EventEmitter<Todo> = new EventEmitter();
 
-  constructor() { }
+  constructor(private popoverCtrl: PopoverController) { }
 
   ngOnInit() {
   }
@@ -33,6 +40,22 @@ export class TodoListHeaderComponent implements OnInit {
       complete: false,
       dateTime: moment().format('DD-MM-YYYY HH:mm:ss')
     };
+  }
+
+  async presentPopover() {
+    const popover = await this.popoverCtrl.create({
+      component: TodoOptionsPopoverComponent,
+      // componentProps: componentProps
+    });
+
+    await popover.present();
+
+    const { data } = await popover.onWillDismiss();
+
+    if (data) {
+      console.log('data popover.onWillDismiss', data);
+    }
+
   }
 
 }

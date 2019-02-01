@@ -1,3 +1,19 @@
+<ion-item lines="none">
+  <!--
+  <ion-label text-wrap>
+    <ion-text>
+      <h2 tappable><b>My List </b><ion-icon name="create"></ion-icon></h2>
+    </ion-text>
+  </ion-label>
+  -->
+  <ion-button (click)="editTitle = !editTitle" slot="start" fill="clear">
+      <ion-icon name="create"></ion-icon>
+  </ion-button>
+  <ion-input [(ngModel)]="list.title" style="width: 100%" autofocus="" [disabled]="!editTitle"></ion-input>
+  <ion-button slot="end" fill="clear" (click)="presentPopover()">
+    <ion-icon name="more"></ion-icon>
+  </ion-button>
+</ion-item>
 <ion-item>
   <ion-input [(ngModel)]="newTodo.title" (keyup.enter)="addTodo()" style="width: 100%" placeholder="What needs to be done?" autofocus=""></ion-input>
 </ion-item>
