@@ -17,7 +17,12 @@ This project shows you how to:
         * Send message.
     * Show project participants.
     * Show organization.
-    * Show employee events.
+    * Employee can manage his events.
+        * Employee can add, update and delete his own events.
+    * Show company products.
+    * Employee can manage his tasks.
+        * Employee can add, update and delete his own tasks.
+
 
 Technologies: Angular, Ionic, Stitch MongoDB, TypeScript.
 
