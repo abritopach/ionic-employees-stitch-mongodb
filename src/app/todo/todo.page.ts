@@ -133,7 +133,16 @@ export class TodoPage implements OnInit {
             console.log(data);
             this.todosCompleted.map(todo => this.todos.push(todo));
             this.todosCompleted = [];
-            this.iziToast.success('Deselect tasks', 'Unselect all tasks successfully.');
+            this.iziToast.success('Deselect all tasks', 'Unselect all tasks successfully.');
+          });
+        } else if (result.option === 'delete') {
+          const promises = this.todosCompleted.map(todo => {
+            return this.stitchMongoService.update(config.COLLECTION_KEY, {user_id: objectId}, {$pull: { todo: { title: todo.title } }});
+          });
+          forkJoin(promises).subscribe(data => {
+            console.log(data);
+            this.todosCompleted = [];
+            this.iziToast.success('Delete selected items', 'Deleted all selected tasks successfully.');
           });
         }
       }
