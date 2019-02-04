@@ -48,7 +48,9 @@ export class LoginPage implements OnInit {
       this.authService.login(authedId.id).then(result => {
         this.stitchMongoService.find(config.COLLECTION_KEY, {user_id: new ObjectId(authedId.id)}).then(employee => {
           // console.log(employee);
-          this.avatar = employee[0]['avatar'];
+          if ((typeof employee[0]['avatar'] !== 'undefined') && (employee[0]['avatar'] !== null)) {
+            this.avatar = employee[0]['avatar'];
+          }
           if (this.loading !== null) {
             this.dismissLoading();
           }

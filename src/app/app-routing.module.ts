@@ -11,8 +11,8 @@ const routes: Routes = [
   { path: 'organization', canActivate: [AuthGuardService], loadChildren: './organization/organization.module#OrganizationPageModule' },
   { path: 'schedule', canActivate: [AuthGuardService], loadChildren: './schedule/schedule.module#SchedulePageModule' },
   { path: 'login', loadChildren: './public/login/login.module#LoginPageModule' },
-  { path: 'products', loadChildren: './products/products.module#ProductsPageModule' },
-  { path: 'todo', loadChildren: './todo/todo.module#TodoPageModule' }
+  { path: 'products', canActivate: [AuthGuardService], loadChildren: './products/products.module#ProductsPageModule' },
+  { path: 'todo', canActivate: [AuthGuardService], loadChildren: './todo/todo.module#TodoPageModule' }
 ];
 
 @NgModule({

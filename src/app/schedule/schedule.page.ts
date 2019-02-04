@@ -53,8 +53,8 @@ const colors: any = {
 })
 export class SchedulePage implements OnInit {
 
-  events: any = null;
-  eventsCopy: any = null;
+  events: any = [];
+  eventsCopy: any = [];
   participants: any = [];
 
   // https://www.code-sample.com/2018/07/angular-6-google-maps-agm-core.html
@@ -105,6 +105,7 @@ export class SchedulePage implements OnInit {
       if (res) {
         const objectId = new ObjectId(res);
         this.stitchMongoService.find(config.COLLECTION_KEY, {user_id: objectId}).then(result => {
+          console.log(result);
           if ((result.length !== 0) && (typeof result[0]['events'] !== 'undefined')) {
             this.events = this.eventsCopy = result[0]['events'];
             console.log('events', this.events);
