@@ -18,4 +18,14 @@ export class TodoOptionsPopoverComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
   }
 
+  deselectAll() {
+    console.log('TodoOptionsPopoverComponent::deselectAll | method called');
+    this.popoverCtrl.dismiss({option: 'deselect'});
+  }
+
+  deleteSelected() {
+    console.log('TodoOptionsPopoverComponent::deleteSelected | method called');
+    this.popoverCtrl.dismiss({option: 'delete'});
+  }
+
 }

@@ -31,7 +31,7 @@
     "@ionic/angular": "4.0.0",
     "@ionic/storage": "^2.2.0",
     "@ng-select/ng-select": "^2.15.2",
-    "angular-calendar": "^0.26.4",
+    "angular-calendar": "^0.26.5",
     "capacitor-sms": "0.0.1-alpha.1-31",
     "core-js": "^2.6.3",
     "date-fns": "^1.30.1",

@@ -6,6 +6,8 @@ import { Storage } from '@ionic/storage';
 import { ObjectId } from 'bson';
 import config from '../config/config';
 
+import {forkJoin} from 'rxjs';
+
 @Component({
   selector: 'app-todo',
   templateUrl: './todo.page.html',
@@ -114,4 +116,27 @@ export class TodoPage implements OnInit {
     event.detail.complete();
   }
 
+  onSelectedOption(result) {
+    console.log('TodoPage::onSelectedOption() | method called', result);
+
+    this.storage.get(config.TOKEN_KEY).then(res => {
+      if (res) {
+        const objectId = new ObjectId(res);
+
+        if (result.option === 'deselect') {
+          const promises = this.todosCompleted.map(todo => {
+            todo.complete = !todo.complete;
+            return this.stitchMongoService.update(config.COLLECTION_KEY, {user_id: objectId, 'todo.id': todo.id},
+            { $set: { 'todo.$' : todo } });
+          });
+          forkJoin(promises).subscribe(data => {
+            console.log(data);
+            this.todosCompleted.map(todo => this.todos.push(todo));
+            this.todosCompleted = [];
+            this.iziToast.success('Deselect tasks', 'Unselect all tasks successfully.');
+          });
+        }
+      }
+    });
+  }
 }

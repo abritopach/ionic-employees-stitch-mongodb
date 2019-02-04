@@ -27,6 +27,9 @@ export class TodoListHeaderComponent implements OnInit {
   @Output()
   add: EventEmitter<Todo> = new EventEmitter();
 
+  @Output()
+  option: EventEmitter<any> = new EventEmitter();
+
   constructor(private popoverCtrl: PopoverController) { }
 
   ngOnInit() {
@@ -54,6 +57,7 @@ export class TodoListHeaderComponent implements OnInit {
 
     if (data) {
       console.log('data popover.onWillDismiss', data);
+      this.option.emit(data);
     }
 
   }
