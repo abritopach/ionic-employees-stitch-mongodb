@@ -1,0 +1,29 @@
+<app-header title="Notes">
+    <ion-buttons buttons-start slot="start">
+        <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+  </app-header>
+
+<ion-content padding>
+
+   <!-- Notes List Grid view. -->
+   <ion-grid>
+      <ion-row>
+        <ion-col align-self-center size-lg="4" size-md="6" size-xs="6" *ngFor="let note of notes">
+          <ion-card (click)="viewNoteDetails(note)">
+              <ion-card-header>
+                <ion-card-title>{{ note?.title }}</ion-card-title>
+              </ion-card-header>
+              <ion-card-content>
+                <ion-item lines="none">
+                  <p></p>
+                </ion-item>
+              </ion-card-content>
+            </ion-card>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+</ion-content>
+
+<app-footer></app-footer>
