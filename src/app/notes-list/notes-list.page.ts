@@ -4,7 +4,10 @@ import { Storage } from '@ionic/storage';
 import { ObjectId } from 'bson';
 import config from '../config/config';
 
+import { Note } from '../models/note.model';
+
 import { StitchMongoService } from '../services';
+
 
 @Component({
   selector: 'app-notes-list',
@@ -13,17 +16,7 @@ import { StitchMongoService } from '../services';
 })
 export class NotesListPage implements OnInit {
 
-  /*
-  notes = [
-    {title: 'List1', description: 'Description 1'},
-    {title: 'List2', description: 'Description 2'},
-    {title: 'List3', description: 'Description 3'},
-    {title: 'List4', description: 'Description 4'},
-    {title: 'List5', description: 'Description 5'}
-  ];
-  */
-
-  notes: any = [];
+  notes: Note[] = [];
 
   constructor(private storage: Storage, private stitchMongoService: StitchMongoService) { }
 
@@ -39,6 +32,11 @@ export class NotesListPage implements OnInit {
         });
       }
     });
+  }
+
+  viewNoteDetails(note) {
+    console.log('NotesListPage::viewNoteDetails() | method called', note);
+    // this.router.navigateByUrl('/detail');
   }
 
 }

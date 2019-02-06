@@ -1,4 +1,4 @@
-<ion-item>
+<ion-item *ngIf="!readOnly">
     <ion-col size="2">
         <ion-checkbox [checked]="todo.complete" color="primary" (click)="toggleTodoComplete(todo)"></ion-checkbox>
     </ion-col>
@@ -11,4 +11,11 @@
       <ion-icon slot="icon-only" name="close-circle"></ion-icon>
   </ion-button>
   <ion-reorder *ngIf="!todo.complete" slot="end"></ion-reorder>
+</ion-item>
+
+<ion-item *ngIf="readOnly">
+    <ion-label text-wrap>
+        <h2><b>{{todo.title}}</b></h2>
+        <p>{{todo.dateTime}}</p>
+    </ion-label>
 </ion-item>

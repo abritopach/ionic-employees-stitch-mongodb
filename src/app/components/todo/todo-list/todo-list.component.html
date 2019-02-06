@@ -2,6 +2,7 @@
     <ion-reorder-group (ionItemReorder)="reorderItems($event)" disabled="false">
         <app-todo-list-item *ngFor="let todo of todos"
             [todo]="todo"
+            [readOnly]="readOnly"
             (toggleComplete)="onToggleTodoComplete($event)"
             (remove)="onRemoveTodo($event)">
         </app-todo-list-item>

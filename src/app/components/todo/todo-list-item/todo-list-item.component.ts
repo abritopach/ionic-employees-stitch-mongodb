@@ -10,6 +10,8 @@ export class TodoListItemComponent implements OnInit {
 
   @Input() todo: Todo;
 
+  @Input() readOnly: Boolean;
+
   @Output()
   remove: EventEmitter<Todo> = new EventEmitter();
 

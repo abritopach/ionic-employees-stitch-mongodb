@@ -15,9 +15,8 @@
                 <ion-card-title>{{ note?.title }}</ion-card-title>
               </ion-card-header>
               <ion-card-content>
-                <ion-item lines="none">
-                  <p></p>
-                </ion-item>
+                  <app-todo-list [todos]="note?.todos" (toggleComplete)="onToggleTodoComplete($event)"
+                  (remove)="onRemoveTodo($event)" [readOnly]="true"></app-todo-list>
               </ion-card-content>
             </ion-card>
         </ion-col>

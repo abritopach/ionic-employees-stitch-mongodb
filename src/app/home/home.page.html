@@ -45,8 +45,11 @@
     <ion-item-group *ngFor="let item of result">
       <ion-item-divider color="light">{{item._id}}</ion-item-divider>
       <ion-item *ngFor="let employee of item.employees" tappable routerLink="/detail/{{ employee.employee_name }}">
-        <ion-avatar slot="start">
+        <ion-avatar *ngIf="employee.avatar !== null && employee.avatar !== ''" slot="start">
           <img [src]="employee.avatar" alt="Avatar" />
+        </ion-avatar>
+        <ion-avatar *ngIf="employee.avatar === null || employee.avatar === ''" slot="start">
+            <img src="assets/images/login-avatar.png">
         </ion-avatar>
         <ion-label>
           <h2>{{ employee.employee_name }}</h2>

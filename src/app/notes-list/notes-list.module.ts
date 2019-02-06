@@ -9,6 +9,8 @@ import { NotesListPage } from './notes-list.page';
 
 import { SharedComponentsModule } from '../components/shared-components.module';
 
+import { TodoListComponent, TodoListItemComponent } from '../components/todo/';
+
 const routes: Routes = [
   {
     path: '',
@@ -24,6 +26,6 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     SharedComponentsModule
   ],
-  declarations: [NotesListPage]
+  declarations: [NotesListPage, TodoListComponent, TodoListItemComponent]
 })
 export class NotesListPageModule {}

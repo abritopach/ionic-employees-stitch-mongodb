@@ -18,7 +18,7 @@
   <app-todo-list-header (add)="onAddTodo($event)" (option)="onSelectedOption($event)"></app-todo-list-header>
   <!-- TODO's pending. -->
   <app-todo-list [todos]="todos" (toggleComplete)="onToggleTodoComplete($event)"
-                 (remove)="onRemoveTodo($event)"></app-todo-list>
+                 (remove)="onRemoveTodo($event)" [readOnly]="false"></app-todo-list>
   <app-todo-list-footer [todos]="todos"></app-todo-list-footer>
   <!-- TODO's completed. -->
   <ion-item-divider>

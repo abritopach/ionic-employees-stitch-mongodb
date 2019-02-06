@@ -11,6 +11,9 @@ export class TodoListComponent implements OnInit {
   @Input()
   todos: Todo[];
 
+  @Input()
+  readOnly: boolean;
+
   @Output()
   remove: EventEmitter<Todo> = new EventEmitter();
 
