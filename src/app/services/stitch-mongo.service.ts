@@ -153,9 +153,9 @@ export class StitchMongoService {
   }
   */
 
-  update(collection: string, filter, action) {
+  update(collection: string, filter, action, options?) {
     return this.db.collection(collection)
-    .updateOne(filter, action);
+    .updateOne(filter, action, options);
   }
 
   populateFakeEmployees() {

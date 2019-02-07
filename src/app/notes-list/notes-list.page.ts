@@ -8,6 +8,8 @@ import { Note } from '../models/note.model';
 
 import { StitchMongoService } from '../services';
 
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-notes-list',
@@ -18,7 +20,7 @@ export class NotesListPage implements OnInit {
 
   notes: Note[] = [];
 
-  constructor(private storage: Storage, private stitchMongoService: StitchMongoService) { }
+  constructor(private storage: Storage, private stitchMongoService: StitchMongoService, private router: Router) { }
 
   ngOnInit() {
     this.storage.get(config.TOKEN_KEY).then(res => {
@@ -26,17 +28,11 @@ export class NotesListPage implements OnInit {
         const objectId = new ObjectId(res);
         this.stitchMongoService.find(config.COLLECTION_KEY, {user_id: objectId}).then(result => {
           if ((result.length !== 0) && (typeof result[0]['notes'] !== 'undefined')) {
-            console.log(result);
             this.notes = result[0]['notes'];
           }
         });
       }
     });
-  }
-
-  viewNoteDetails(note) {
-    console.log('NotesListPage::viewNoteDetails() | method called', note);
-    // this.router.navigateByUrl('/detail');
   }
 
 }

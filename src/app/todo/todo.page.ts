@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Todo } from '../models/todo.model';
+import { Note } from '../models/note.model';
 import { StitchMongoService, IziToastService } from '../services/';
 
 import { Storage } from '@ionic/storage';
@@ -7,6 +8,9 @@ import { ObjectId } from 'bson';
 import config from '../config/config';
 
 import {forkJoin} from 'rxjs';
+
+import { ActivatedRoute } from '@angular/router';
+
 
 @Component({
   selector: 'app-todo',
@@ -21,9 +25,15 @@ export class TodoPage implements OnInit {
   todosCompleted: Todo[] = [];
   showCompletedTodos = false;
 
-  constructor(private stitchMongoService: StitchMongoService, private storage: Storage, private iziToast: IziToastService) { }
+  constructor(private stitchMongoService: StitchMongoService, private storage: Storage, private iziToast: IziToastService,
+              private route: ActivatedRoute) { }
 
   ngOnInit() {
+    console.log('TodoPage::ngOnInit() | method called');
+    const noteId = this.route.snapshot.paramMap.get('id');
+    this.getNote(noteId);
+
+    /*
     this.storage.get(config.TOKEN_KEY).then(res => {
       if (res) {
         const objectId = new ObjectId(res);
@@ -38,6 +48,31 @@ export class TodoPage implements OnInit {
         });
       }
     });
+    */
+  }
+
+  getNote(noteId) {
+
+    const noteObjectId = new ObjectId(noteId);
+
+    this.storage.get(config.TOKEN_KEY).then(res => {
+      if (res) {
+        const objectId = new ObjectId(res);
+        this.stitchMongoService.find(config.COLLECTION_KEY, {user_id: objectId}).then(result => {
+          this.name = result[0]['employee_name'];
+          if ((result.length !== 0) && (typeof result[0]['notes'] !== 'undefined')) {
+            const note = result[0]['notes'].filter((n: Note) => n.id.toString() === noteObjectId.toString() );
+            // TODO: FIX problem updating nested array.
+            note[0].todos = note[0].todos.map((todo, index) => {
+              todo.index = index;
+              return todo;
+            });
+            this.todosCompleted = note[0].todos.filter(todo => todo.complete === true);
+            this.todos = note[0].todos.filter(todo => todo.complete === false);
+          }
+        });
+      }
+    });
   }
 
   // Add new method to handle event emitted by TodoListHeaderComponent
@@ -47,8 +82,10 @@ export class TodoPage implements OnInit {
     this.storage.get(config.TOKEN_KEY).then(res => {
       if (res) {
         const objectId = new ObjectId(res);
+        const noteObjectId = new ObjectId(this.route.snapshot.paramMap.get('id'));
         todo.id = new ObjectId();
-        this.stitchMongoService.update(config.COLLECTION_KEY, {user_id: objectId}, {$push: { todo: todo }})
+        this.stitchMongoService.update(config.COLLECTION_KEY, {user_id: objectId, 'notes.id': noteObjectId},
+        {$push: { 'notes.$.todos': todo }})
         .then(result => {
           console.log('result', result);
           this.todos.push(todo);
@@ -65,8 +102,17 @@ export class TodoPage implements OnInit {
       if (res) {
         const objectId = new ObjectId(res);
         todo.complete = !todo.complete;
-        this.stitchMongoService.update(config.COLLECTION_KEY, {user_id: objectId, 'todo.id': todo.id},
-        { $set: { 'todo.$' : todo } }).then(result => {
+        const obj = {};
+        obj['notes.$.todos.' + todo['index']] = todo;
+        this.stitchMongoService.update(config.COLLECTION_KEY, {user_id: objectId, 'notes.todos.id': todo.id},
+        { $set: obj }
+        // TODO: Refactor code to use arrayFilters.
+        // { $set: { 'notes.$.todos.$[t]' : todo } }).then(result => {
+        /*
+        { $set: { 'notes.$.todos.$[todo]' : todo } },
+        {
+          arrayFilters: [ { 'todo.id': todo.id } ]
+        }*/).then(result => {
           console.log('result', result);
           if (todo.complete) {
             // Delete task from the pending todo list.
@@ -92,7 +138,9 @@ export class TodoPage implements OnInit {
     this.storage.get(config.TOKEN_KEY).then(res => {
       if (res) {
         const objectId = new ObjectId(res);
-        this.stitchMongoService.update(config.COLLECTION_KEY, {user_id: objectId}, {$pull: { todo: { title: todo.title } }})
+        const noteObjectId = new ObjectId(this.route.snapshot.paramMap.get('id'));
+        this.stitchMongoService.update(config.COLLECTION_KEY, {user_id: objectId, 'notes.id': noteObjectId},
+        {$pull: { 'notes.$.todos': { title: todo.title } }})
         .then(result => {
             console.log(result);
             if (!todo.complete) {
