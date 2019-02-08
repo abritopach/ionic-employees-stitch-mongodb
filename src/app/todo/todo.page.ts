@@ -24,6 +24,7 @@ export class TodoPage implements OnInit {
   name = '';
   todosCompleted: Todo[] = [];
   showCompletedTodos = false;
+  noteTitle = '';
 
   constructor(private stitchMongoService: StitchMongoService, private storage: Storage, private iziToast: IziToastService,
               private route: ActivatedRoute) { }
@@ -62,6 +63,8 @@ export class TodoPage implements OnInit {
           this.name = result[0]['employee_name'];
           if ((result.length !== 0) && (typeof result[0]['notes'] !== 'undefined')) {
             const note = result[0]['notes'].filter((n: Note) => n.id.toString() === noteObjectId.toString() );
+            this.noteTitle = note[0].title;
+            console.log('this.noteTitle in getNote', this.noteTitle);
             // TODO: FIX problem updating nested array.
             note[0].todos = note[0].todos.map((todo, index) => {
               todo.index = index;
@@ -88,6 +91,8 @@ export class TodoPage implements OnInit {
         {$push: { 'notes.$.todos': todo }})
         .then(result => {
           console.log('result', result);
+          // TODO: FIX problem updating nested array.
+          todo['index'] = this.todos.length;
           this.todos.push(todo);
           this.iziToast.success('Add task', 'Task added successfully.');
         });
@@ -170,12 +175,14 @@ export class TodoPage implements OnInit {
     this.storage.get(config.TOKEN_KEY).then(res => {
       if (res) {
         const objectId = new ObjectId(res);
-
+        const noteObjectId = new ObjectId(this.route.snapshot.paramMap.get('id'));
         if (result.option === 'deselect') {
           const promises = this.todosCompleted.map(todo => {
             todo.complete = !todo.complete;
-            return this.stitchMongoService.update(config.COLLECTION_KEY, {user_id: objectId, 'todo.id': todo.id},
-            { $set: { 'todo.$' : todo } });
+            const obj = {};
+            obj['notes.$.todos.' + todo['index']] = todo;
+            return this.stitchMongoService.update(config.COLLECTION_KEY, {user_id: objectId, 'notes.todos.id': todo.id},
+            { $set: obj });
           });
           forkJoin(promises).subscribe(data => {
             console.log(data);
@@ -185,7 +192,8 @@ export class TodoPage implements OnInit {
           });
         } else if (result.option === 'delete') {
           const promises = this.todosCompleted.map(todo => {
-            return this.stitchMongoService.update(config.COLLECTION_KEY, {user_id: objectId}, {$pull: { todo: { title: todo.title } }});
+            return this.stitchMongoService.update(config.COLLECTION_KEY, {user_id: objectId, 'notes.id': noteObjectId},
+             {$pull: { 'notes.$.todos': { title: todo.title } }});
           });
           forkJoin(promises).subscribe(data => {
             console.log(data);

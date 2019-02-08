@@ -44,4 +44,25 @@ export class NotesListPage implements OnInit {
     console.log('NotesListPage::ngOnInit() | method called');
   }
 
+  addNewNote() {
+    console.log('NotesListPage::addNewNote() | method called');
+    const newNote: Note = {
+      id: new ObjectId(),
+      title: 'My new note',
+      todos: []
+    };
+    this.storage.get(config.TOKEN_KEY).then(res => {
+      if (res) {
+        const objectId = new ObjectId(res);
+        // TODO: Add new note.
+        this.stitchMongoService.update(config.COLLECTION_KEY, {user_id: objectId},
+          {$push: { 'notes': newNote }})
+          .then(result => {
+            console.log('result', result);
+            this.notes.push(newNote);
+          });
+        }
+    });
+  }
+
 }

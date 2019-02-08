@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { PopoverController } from '@ionic/angular';
 import { Todo } from '../../../models/todo.model';
 
@@ -23,6 +23,9 @@ export class TodoListHeaderComponent implements OnInit {
     complete: false,
     dateTime: moment().format('DD-MM-YYYY HH:mm:ss')
   };
+
+  @Input()
+  noteTitle;
 
   @Output()
   add: EventEmitter<Todo> = new EventEmitter();
