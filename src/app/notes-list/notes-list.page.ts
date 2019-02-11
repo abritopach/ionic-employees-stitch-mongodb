@@ -11,6 +11,10 @@ import { StitchMongoService } from '../services';
 import { Router } from '@angular/router';
 import { Todo } from '../models/todo.model';
 
+import { PopoverController } from '@ionic/angular';
+
+import { NotesOptionsPopoverComponent } from '../popovers/notes-options/notes-options.popover';
+
 
 @Component({
   selector: 'app-notes-list',
@@ -21,7 +25,8 @@ export class NotesListPage implements OnInit {
 
   notes: Note[] = [];
 
-  constructor(private storage: Storage, private stitchMongoService: StitchMongoService, private router: Router) { }
+  constructor(private storage: Storage, private stitchMongoService: StitchMongoService, private router: Router,
+              private popoverCtrl: PopoverController) { }
 
   ionViewWillEnter() {
     console.log('NotesListPage::ionViewWillEnter() | method called');
@@ -63,6 +68,22 @@ export class NotesListPage implements OnInit {
           });
         }
     });
+  }
+
+  async presentPopover() {
+    const popover = await this.popoverCtrl.create({
+      component: NotesOptionsPopoverComponent,
+      // componentProps: componentProps
+    });
+
+    await popover.present();
+
+    const { data } = await popover.onWillDismiss();
+
+    if (data) {
+      console.log('data popover.onWillDismiss', data);
+    }
+
   }
 
 }

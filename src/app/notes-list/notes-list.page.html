@@ -3,13 +3,19 @@
         <ion-menu-button></ion-menu-button>
     </ion-buttons>
     <ion-buttons buttons-end slot='end'>
-        <ion-button (click)="addNewNote()">
-            <ion-icon slot="icon-only" name="add-circle-outline"></ion-icon>
+        <ion-button (click)="presentPopover()">
+            <ion-icon slot="icon-only" name="more"></ion-icon>
         </ion-button>
       </ion-buttons>
   </app-header>
 
 <ion-content padding>
+
+    <ion-fab vertical="top" horizontal="end" slot="fixed">
+        <ion-fab-button size="small" (click)="addNewNote()">
+            <ion-icon name="add"></ion-icon>
+        </ion-fab-button>
+    </ion-fab>
 
    <!-- Notes List Grid view. -->
    <ion-grid>

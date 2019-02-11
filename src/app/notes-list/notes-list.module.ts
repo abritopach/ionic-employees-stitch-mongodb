@@ -9,6 +9,8 @@ import { NotesListPage } from './notes-list.page';
 
 import { SharedComponentsModule } from '../components/shared-components.module';
 
+import { NotesOptionsPopoverComponent } from '../popovers/notes-options/notes-options.popover';
+
 const routes: Routes = [
   {
     path: '',
@@ -18,12 +20,13 @@ const routes: Routes = [
 
 @NgModule({
   imports: [
-    CommonModule,
+  CommonModule,
     FormsModule,
     IonicModule,
     RouterModule.forChild(routes),
     SharedComponentsModule
   ],
-  declarations: [NotesListPage]
+  declarations: [NotesListPage, NotesOptionsPopoverComponent],
+  entryComponents: [NotesOptionsPopoverComponent]
 })
 export class NotesListPageModule {}
