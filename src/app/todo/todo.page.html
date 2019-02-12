@@ -8,6 +8,9 @@
       <ion-back-button defaultHref="/notes-list"></ion-back-button>
   </ion-buttons>
   <ion-buttons buttons-end slot='end'>
+      <ion-button (click)="createNoteCopy()">
+          <ion-icon slot="icon-only" name="copy"></ion-icon>
+      </ion-button>
     <ion-button (click)="deleteNote()">
         <ion-icon slot="icon-only" name="remove-circle-outline"></ion-icon>
     </ion-button>

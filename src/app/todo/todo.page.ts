@@ -224,4 +224,21 @@ export class TodoPage implements OnInit {
       }
     });
   }
+
+  createNoteCopy() {
+    console.log('TodoPage::createNoteCopy() | method called', this.note);
+    const copyNote = {...this.note, ...{id: new ObjectId(), title: 'Copy ' + this.note.title}};
+    console.log('copyNote', copyNote);
+    this.storage.get(config.TOKEN_KEY).then(res => {
+      if (res) {
+        const objectId = new ObjectId(res);
+        this.stitchMongoService.update(config.COLLECTION_KEY, {user_id: objectId},
+          {$push: { 'notes': copyNote }})
+          .then(result => {
+            console.log('result', result);
+            this.iziToast.success('Copy note', 'Created copy note successfully.');
+          });
+        }
+    });
+  }
 }
