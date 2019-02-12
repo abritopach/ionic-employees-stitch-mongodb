@@ -21,6 +21,13 @@
    <ion-grid>
       <ion-row>
         <ion-col align-self-center size-lg="4" size-md="6" size-xs="6" *ngFor="let note of notes">
+          <!--
+          <ion-item>
+            <ion-button slot='end' (click)="presentPopover1()">
+                <ion-icon slot="icon-only" name="more"></ion-icon>
+            </ion-button>
+          </ion-item>
+          -->
           <ion-card tappable routerLink="/todo/{{ note.id }}">
               <ion-card-header>
                 <ion-card-title>{{ note?.title }}</ion-card-title>

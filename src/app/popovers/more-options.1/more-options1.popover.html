@@ -1,0 +1,15 @@
+<ion-header>
+    <ion-toolbar color="tertiary">
+        <ion-title>
+          Options
+        </ion-title>
+    </ion-toolbar>
+</ion-header>
+<ion-content padding>
+  <ion-list>
+      <ion-item tappable lines="none" *ngFor="let option of options" (click)="this[option.function]()">
+          <ion-icon [name]="option.icon" slot="start"></ion-icon>
+          {{option.name}}
+      </ion-item>
+  </ion-list>
+</ion-content>
