@@ -1,3 +1,4 @@
+import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Todo } from '../models/todo.model';
 import { Note } from '../models/note.model';
@@ -25,9 +26,10 @@ export class TodoPage implements OnInit {
   todosCompleted: Todo[] = [];
   showCompletedTodos = false;
   noteTitle = '';
+  note: Note;
 
   constructor(private stitchMongoService: StitchMongoService, private storage: Storage, private iziToast: IziToastService,
-              private route: ActivatedRoute) { }
+              private route: ActivatedRoute, private location: Location) { }
 
   ngOnInit() {
     console.log('TodoPage::ngOnInit() | method called');
@@ -63,8 +65,8 @@ export class TodoPage implements OnInit {
           this.name = result[0]['employee_name'];
           if ((result.length !== 0) && (typeof result[0]['notes'] !== 'undefined')) {
             const note = result[0]['notes'].filter((n: Note) => n.id.toString() === noteObjectId.toString() );
-            this.noteTitle = note[0].title;
-            console.log('this.noteTitle in getNote', this.noteTitle);
+            console.log(note[0]);
+            this.note = note[0];
             // TODO: FIX problem updating nested array.
             note[0].todos = note[0].todos.map((todo, index) => {
               todo.index = index;
@@ -201,6 +203,24 @@ export class TodoPage implements OnInit {
             this.iziToast.success('Delete selected items', 'Deleted all selected tasks successfully.');
           });
         }
+      }
+    });
+  }
+
+  deleteNote() {
+    console.log('TodoPage::deleteNote() | method called');
+    this.storage.get(config.TOKEN_KEY).then(res => {
+      if (res) {
+        const objectId = new ObjectId(res);
+        this.stitchMongoService.update(config.COLLECTION_KEY, {user_id: objectId},
+        { $pull: { 'notes': { id: this.note.id } } })
+        .then(result => {
+            console.log(result);
+            this.iziToast.success('Delete note', 'Note deleted successfully.');
+            this.location.back();
+        }).catch(err => {
+            console.error(err);
+        });
       }
     });
   }

@@ -7,6 +7,11 @@
   <ion-buttons buttons-start slot="start">
       <ion-back-button defaultHref="/notes-list"></ion-back-button>
   </ion-buttons>
+  <ion-buttons buttons-end slot='end'>
+    <ion-button (click)="deleteNote()">
+        <ion-icon slot="icon-only" name="remove-circle-outline"></ion-icon>
+    </ion-button>
+  </ion-buttons>
 </app-header>
 
 <ion-content padding>
@@ -20,7 +25,7 @@
     </ion-card-header>
   </ion-card>
 
-  <app-todo-list-header [noteTitle]="noteTitle" (add)="onAddTodo($event)" (option)="onSelectedOption($event)"></app-todo-list-header>
+  <app-todo-list-header [noteTitle]="note?.title" (add)="onAddTodo($event)" (option)="onSelectedOption($event)"></app-todo-list-header>
   <!-- TODO's pending. -->
   <app-todo-list [todos]="todos" (toggleComplete)="onToggleTodoComplete($event)"
                  (remove)="onRemoveTodo($event)" [readOnly]="false"></app-todo-list>
