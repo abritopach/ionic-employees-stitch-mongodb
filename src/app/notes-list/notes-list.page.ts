@@ -70,37 +70,25 @@ export class NotesListPage implements OnInit {
     });
   }
 
-  async presentPopover() {
-
-    const componentProps = { popoverProps: { title: 'Options',
-      options: [
-        {name: 'Delete all notes', icon: 'close-circle-outline', function: 'deleteAllNotes'},
-        {name: 'Archive all notes', icon: 'clipboard', function: 'archiveAllNotes'}
-      ]
-    }};
-
-    const popover = await this.popoverCtrl.create({
-      component: MoreOptionsPopoverComponent,
-      componentProps: componentProps
-    });
-
-    await popover.present();
-
-    const { data } = await popover.onWillDismiss();
-
-    if (data) {
-      console.log('data popover.onWillDismiss', data);
-    }
-
-  }
-
-  async presentPopover1() {
-    const componentProps = { popoverProps: { title: 'Options',
+  async presentPopover(options, note?) {
+    console.log('NotesListPage::presentPopover() | method called', options);
+    let componentProps;
+    if (options === 'optionsAllNotes') {
+      componentProps = { popoverProps: { title: 'Options',
+        options: [
+          {name: 'Delete all notes', icon: 'close-circle-outline', function: 'deleteAllNotes'},
+          {name: 'Archive all notes', icon: 'clipboard', function: 'archiveAllNotes'}
+        ]
+      }};
+    } else {
+      componentProps = { popoverProps: { title: 'Options',
       options: [
         {name: 'Delete', icon: 'close-circle-outline', function: 'deleteNote'},
         {name: 'Archive', icon: 'clipboard', function: 'archiveNote'}
       ]
     }};
+    }
+
     const popover = await this.popoverCtrl.create({
       component: MoreOptionsPopoverComponent,
       componentProps: componentProps
@@ -112,8 +100,28 @@ export class NotesListPage implements OnInit {
 
     if (data) {
       console.log('data popover.onWillDismiss', data);
+      if (data.option === 'deleteNote') {
+        this.deleteNote(note);
+      }
     }
 
+  }
+
+  deleteNote(note) {
+    console.log('NotesListPage::deleteNote() | method called');
+    this.storage.get(config.TOKEN_KEY).then(res => {
+      if (res) {
+        const objectId = new ObjectId(res);
+        this.stitchMongoService.update(config.COLLECTION_KEY, {user_id: objectId},
+        { $pull: { 'notes': { id: note.id } } })
+        .then(result => {
+            console.log(result);
+            this.notes = this.notes.filter(n => n.id !== note.id);
+        }).catch(err => {
+            console.error(err);
+        });
+      }
+    });
   }
 
 }

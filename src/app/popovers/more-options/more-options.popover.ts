@@ -39,6 +39,7 @@ export class MoreOptionsPopoverComponent implements OnInit, OnDestroy {
   /*****/
   deleteNote() {
     console.log('MoreOptionsPopoverComponent::deleteNote | method called');
+    this.popoverCtrl.dismiss({option: 'deleteNote'});
   }
 
   archiveNote() {

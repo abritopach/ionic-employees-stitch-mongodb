@@ -3,7 +3,7 @@
         <ion-menu-button></ion-menu-button>
     </ion-buttons>
     <ion-buttons buttons-end slot='end'>
-        <ion-button (click)="presentPopover()">
+        <ion-button (click)="presentPopover('optionsAllNotes')">
             <ion-icon slot="icon-only" name="more"></ion-icon>
         </ion-button>
       </ion-buttons>
@@ -21,18 +21,26 @@
    <ion-grid>
       <ion-row>
         <ion-col align-self-center size-lg="4" size-md="6" size-xs="6" *ngFor="let note of notes">
-          <!--
-          <ion-item>
-            <ion-button slot='end' (click)="presentPopover1()">
-                <ion-icon slot="icon-only" name="more"></ion-icon>
-            </ion-button>
-          </ion-item>
-          -->
-          <ion-card tappable routerLink="/todo/{{ note.id }}">
+          <ion-card>
+              <!--
+              <ion-item lines="none">
+                <ion-button slot='end' (click)="presentPopover1()" fill="clear">
+                    <ion-icon slot="icon-only" name="more"></ion-icon>
+                </ion-button>
+              </ion-item>
+              -->
+              <ion-item>
+                <ion-label text-wrap>{{ note?.title }}</ion-label>
+                <ion-button slot='end' (click)="presentPopover('optionsNote', note)" fill="clear">
+                    <ion-icon slot="icon-only" name="more"></ion-icon>
+                </ion-button>
+              </ion-item>
+              <!--
               <ion-card-header>
                 <ion-card-title>{{ note?.title }}</ion-card-title>
               </ion-card-header>
-              <ion-card-content>
+              -->
+              <ion-card-content tappable routerLink="/todo/{{ note.id }}">
                   <app-todo-list [todos]="note?.todos" [readOnly]="true"></app-todo-list>
               </ion-card-content>
             </ion-card>
