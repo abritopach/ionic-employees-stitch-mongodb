@@ -30,4 +30,22 @@ export class MoreOptions1PopoverComponent implements OnInit, OnDestroy {
     console.log('MoreOptions1PopoverComponent::archiveNote | method called');
   }
 
+  deleteAllNotes() {
+    console.log('MoreOptions1PopoverComponent::deleteAllNotes | method called');
+  }
+
+  archiveAllNotes() {
+    console.log('MoreOptions1PopoverComponent::archiveAllNotes | method called');
+  }
+
+  deselectAll() {
+    console.log('MoreOptions1PopoverComponent::deselectAll | method called');
+    this.popoverCtrl.dismiss({option: 'deselect'});
+  }
+
+  deleteSelected() {
+    console.log('MoreOptions1PopoverComponent::deleteSelected | method called');
+    this.popoverCtrl.dismiss({option: 'delete'});
+  }
+
 }

@@ -7,10 +7,6 @@ import { IonicModule } from '@ionic/angular';
 
 import { TodoPage } from './todo.page';
 
-// import { TodoListHeaderComponent, TodoListComponent, TodoListItemComponent, TodoListFooterComponent } from '../components/todo/';
-
-import { TodoOptionsPopoverComponent } from '../popovers/todo-options/todo-options.popover';
-
 import { SharedComponentsModule } from '../components/shared-components.module';
 
 const routes: Routes = [
@@ -28,7 +24,7 @@ CommonModule,
     RouterModule.forChild(routes),
     SharedComponentsModule
   ],
-  declarations: [TodoPage, TodoOptionsPopoverComponent],
-  entryComponents: [TodoOptionsPopoverComponent]
+  declarations: [TodoPage],
+  entryComponents: []
 })
 export class TodoPageModule {}

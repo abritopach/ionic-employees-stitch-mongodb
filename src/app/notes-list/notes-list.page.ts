@@ -13,7 +13,6 @@ import { Todo } from '../models/todo.model';
 
 import { PopoverController } from '@ionic/angular';
 
-import { NotesOptionsPopoverComponent } from '../popovers/notes-options/notes-options.popover';
 import { MoreOptions1PopoverComponent } from '../popovers/more-options.1/more-options1.popover';
 
 
@@ -72,9 +71,17 @@ export class NotesListPage implements OnInit {
   }
 
   async presentPopover() {
+
+    const componentProps = { popoverProps: { title: 'Options',
+      options: [
+        {name: 'Delete all notes', icon: 'close-circle-outline', function: 'deleteAllNotes'},
+        {name: 'Archive all notes', icon: 'clipboard', function: 'archiveAllNotes'}
+      ]
+    }};
+
     const popover = await this.popoverCtrl.create({
-      component: NotesOptionsPopoverComponent,
-      // componentProps: componentProps
+      component: MoreOptions1PopoverComponent,
+      componentProps: componentProps
     });
 
     await popover.present();

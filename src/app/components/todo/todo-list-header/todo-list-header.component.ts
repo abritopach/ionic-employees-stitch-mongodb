@@ -4,7 +4,7 @@ import { Todo } from '../../../models/todo.model';
 
 import * as moment from 'moment';
 
-import { TodoOptionsPopoverComponent } from '../../../popovers/todo-options/todo-options.popover';
+import { MoreOptions1PopoverComponent } from '../../../popovers/more-options.1/more-options1.popover';
 
 @Component({
   selector: 'app-todo-list-header',
@@ -49,9 +49,15 @@ export class TodoListHeaderComponent implements OnInit {
   }
 
   async presentPopover() {
+    const componentProps = { popoverProps: { title: 'Options',
+      options: [
+        {name: 'Deselect all elements', icon: 'checkbox-outline', function: 'deselectAll'},
+        {name: 'Delete selected items', icon: 'close-circle-outline', function: 'deleteSelected'}
+      ]
+    }};
     const popover = await this.popoverCtrl.create({
-      component: TodoOptionsPopoverComponent,
-      // componentProps: componentProps
+      component: MoreOptions1PopoverComponent,
+      componentProps: componentProps
     });
 
     await popover.present();
