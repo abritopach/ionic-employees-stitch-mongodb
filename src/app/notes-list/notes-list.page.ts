@@ -13,7 +13,7 @@ import { Todo } from '../models/todo.model';
 
 import { PopoverController } from '@ionic/angular';
 
-import { MoreOptions1PopoverComponent } from '../popovers/more-options.1/more-options1.popover';
+import { MoreOptionsPopoverComponent } from '../popovers/more-options/more-options.popover';
 
 
 @Component({
@@ -80,7 +80,7 @@ export class NotesListPage implements OnInit {
     }};
 
     const popover = await this.popoverCtrl.create({
-      component: MoreOptions1PopoverComponent,
+      component: MoreOptionsPopoverComponent,
       componentProps: componentProps
     });
 
@@ -102,7 +102,7 @@ export class NotesListPage implements OnInit {
       ]
     }};
     const popover = await this.popoverCtrl.create({
-      component: MoreOptions1PopoverComponent,
+      component: MoreOptionsPopoverComponent,
       componentProps: componentProps
     });
 

@@ -7,13 +7,9 @@
 </ion-header>
 <ion-content padding>
   <ion-list>
-    <ion-item tappable lines="none" (click)="updateItem()">
-      <ion-icon name="create" slot="start"></ion-icon>
-      Update
-    </ion-item>
-    <ion-item tappable lines="none" (click)="deleteItem()">
-      <ion-icon name="close-circle-outline" slot="start"></ion-icon>
-      Delete
-    </ion-item>
+      <ion-item tappable lines="none" *ngFor="let option of options" (click)="this[option.function]()">
+          <ion-icon [name]="option.icon" slot="start"></ion-icon>
+          {{option.name}}
+      </ion-item>
   </ion-list>
 </ion-content>

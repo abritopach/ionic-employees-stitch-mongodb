@@ -4,7 +4,7 @@ import { Todo } from '../../../models/todo.model';
 
 import * as moment from 'moment';
 
-import { MoreOptions1PopoverComponent } from '../../../popovers/more-options.1/more-options1.popover';
+import { MoreOptionsPopoverComponent } from '../../../popovers/more-options/more-options.popover';
 
 @Component({
   selector: 'app-todo-list-header',
@@ -56,7 +56,7 @@ export class TodoListHeaderComponent implements OnInit {
       ]
     }};
     const popover = await this.popoverCtrl.create({
-      component: MoreOptions1PopoverComponent,
+      component: MoreOptionsPopoverComponent,
       componentProps: componentProps
     });
 

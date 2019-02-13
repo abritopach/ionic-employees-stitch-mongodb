@@ -14,7 +14,7 @@ import config from '../config/config';
 
 import { EventModalComponent } from './../modals/event-modal/event.modal';
 
-import { MoreOptionsPopoverComponent } from './../popovers/more-options/more-options.popover';
+import { MoreOptionsPopoverComponent } from '../popovers/more-options/more-options.popover';
 
 import * as moment from 'moment';
 
@@ -215,7 +215,15 @@ export class SchedulePage implements OnInit {
 
   async presentOptionsPopover(event) {
     console.log('presentPopover', event);
-    const componentProps = { popoverProps: { event: event}};
+
+    const componentProps = { popoverProps: { title: 'Options',
+      options: [
+        {name: 'Update', icon: 'create', function: 'updateItem'},
+        {name: 'Delete', icon: 'close-circle-outline', function: 'deleteItem'}
+      ],
+      event: event
+    }};
+
     const popover = await this.popoverCtrl.create({
       component: MoreOptionsPopoverComponent,
       componentProps: componentProps

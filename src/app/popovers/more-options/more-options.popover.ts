@@ -1,11 +1,12 @@
-import { EventModalComponent } from './../../modals/event-modal/event.modal';
 import { Component, ViewEncapsulation, OnInit, OnDestroy } from '@angular/core';
-import { PopoverController, NavParams, ModalController } from '@ionic/angular';
+import { PopoverController, NavParams, ModalController} from '@ionic/angular';
 
-import { StitchMongoService, IziToastService } from './../../services/';
+import { StitchMongoService, IziToastService } from '../../services';
 import config from '../../config/config';
 import { Storage } from '@ionic/storage';
 import { ObjectId } from 'bson';
+
+import { EventModalComponent } from '../../modals/event-modal/event.modal';
 
 @Component({
   selector: 'app-more-options-popover',
@@ -15,19 +16,64 @@ import { ObjectId } from 'bson';
 })
 export class MoreOptionsPopoverComponent implements OnInit, OnDestroy {
 
+  options: any;
   event: any;
 
-  constructor(private popoverCtrl: PopoverController, private stitchMongoService: StitchMongoService, private storage: Storage,
-              private navParams: NavParams, private iziToast: IziToastService, private modalCtrl: ModalController) {
+  constructor(private popoverCtrl: PopoverController, private navParams: NavParams, private modalCtrl: ModalController,
+              private stitchMongoService: StitchMongoService, private iziToast: IziToastService, private storage: Storage) {
   }
 
   ngOnInit() {
-    this.event = this.navParams.data.popoverProps.event;
+    this.options = this.navParams.data.popoverProps.options;
+    console.log(this.options);
+    if (typeof this.navParams.data.popoverProps.event !== 'undefined') {
+      this.event = this.navParams.data.popoverProps.event;
+    }
   }
 
   ngOnDestroy() {
   }
 
+  // Note list page options.
+
+  /*****/
+  deleteNote() {
+    console.log('MoreOptionsPopoverComponent::deleteNote | method called');
+  }
+
+  archiveNote() {
+    console.log('MoreOptionsPopoverComponent::archiveNote | method called');
+  }
+
+  deleteAllNotes() {
+    console.log('MoreOptionsPopoverComponent::deleteAllNotes | method called');
+  }
+
+  archiveAllNotes() {
+    console.log('MoreOptionsPopoverComponent::archiveAllNotes | method called');
+  }
+  /*****/
+
+  // Todo page options.
+
+  /*****/
+
+  deselectAll() {
+    console.log('MoreOptionsPopoverComponent::deselectAll | method called');
+    this.popoverCtrl.dismiss({option: 'deselect'});
+  }
+
+  deleteSelected() {
+    console.log('MoreOptionsPopoverComponent::deleteSelected | method called');
+    this.popoverCtrl.dismiss({option: 'delete'});
+  }
+
+  /*****/
+
+
+  // Schedule page options.
+
+  /*****/
   updateItem() {
     console.log('MoreOptionsPopoverComponent::updateItem | method called');
     // TODO: Add _id field to events.
@@ -68,5 +114,6 @@ export class MoreOptionsPopoverComponent implements OnInit, OnDestroy {
       }
     });
   }
+  /*****/
 
 }
