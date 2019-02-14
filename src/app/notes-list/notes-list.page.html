@@ -22,24 +22,12 @@
       <ion-row>
         <ion-col align-self-center size-lg="4" size-md="6" size-xs="6" *ngFor="let note of notes">
           <ion-card>
-              <!--
-              <ion-item lines="none">
-                <ion-button slot='end' (click)="presentPopover1()" fill="clear">
-                    <ion-icon slot="icon-only" name="more"></ion-icon>
-                </ion-button>
-              </ion-item>
-              -->
               <ion-item>
                 <ion-label text-wrap>{{ note?.title }}</ion-label>
                 <ion-button slot='end' (click)="presentPopover('optionsNote', note)" fill="clear">
                     <ion-icon slot="icon-only" name="more"></ion-icon>
                 </ion-button>
               </ion-item>
-              <!--
-              <ion-card-header>
-                <ion-card-title>{{ note?.title }}</ion-card-title>
-              </ion-card-header>
-              -->
               <ion-card-content tappable routerLink="/todo/{{ note.id }}">
                   <app-todo-list [todos]="note?.todos" [readOnly]="true"></app-todo-list>
               </ion-card-content>
@@ -47,6 +35,32 @@
         </ion-col>
       </ion-row>
     </ion-grid>
+
+    <!-- Archived notes. -->
+    <ion-item-divider>
+      <ion-icon [name]="showArchivedNotes ? 'arrow-dropup' : 'arrow-dropdown'" (click)="showArchivedNotes = !showArchivedNotes"></ion-icon>
+      <ion-label>
+          {{archivedNotes.length}} archived notes
+      </ion-label>
+    </ion-item-divider>
+    <!-- Archived Notes List Grid view. -->
+   <ion-grid *ngIf="showArchivedNotes">
+    <ion-row>
+      <ion-col align-self-center size-lg="4" size-md="6" size-xs="6" *ngFor="let note of archivedNotes">
+        <ion-card>
+            <ion-item>
+              <ion-label text-wrap>{{ note?.title }}</ion-label>
+              <ion-button slot='end' (click)="presentPopover('optionsArchivedNote', note)" fill="clear">
+                  <ion-icon slot="icon-only" name="more"></ion-icon>
+              </ion-button>
+            </ion-item>
+            <ion-card-content tappable routerLink="/todo/{{ note.id }}">
+                <app-todo-list [todos]="note?.todos" [readOnly]="true"></app-todo-list>
+            </ion-card-content>
+          </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 
 </ion-content>
 

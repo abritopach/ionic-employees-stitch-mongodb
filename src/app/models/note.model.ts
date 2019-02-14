@@ -4,4 +4,5 @@ export interface Note {
     id: number;
     title: string | '';
     todos: Todo[];
+    archived: boolean;
 }

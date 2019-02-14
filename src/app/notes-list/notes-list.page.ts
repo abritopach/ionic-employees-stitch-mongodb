@@ -24,6 +24,7 @@ import { MoreOptionsPopoverComponent } from '../popovers/more-options/more-optio
 export class NotesListPage implements OnInit {
 
   notes: Note[] = [];
+  archivedNotes: Note[] = [];
 
   constructor(private storage: Storage, private stitchMongoService: StitchMongoService, private router: Router,
               private popoverCtrl: PopoverController) { }
@@ -39,6 +40,8 @@ export class NotesListPage implements OnInit {
             this.notes = this.notes.map(note => {
               return { ...note, todos: note.todos.filter(todo => !todo.complete) };
             });
+            this.notes = this.notes.filter(note => !note.archived);
+            this.archivedNotes = result[0]['notes'].filter(note => note.archived);
           }
         });
       }
@@ -54,7 +57,8 @@ export class NotesListPage implements OnInit {
     const newNote: Note = {
       id: new ObjectId(),
       title: 'My new note',
-      todos: []
+      todos: [],
+      archived: false
     };
     this.storage.get(config.TOKEN_KEY).then(res => {
       if (res) {
@@ -77,14 +81,21 @@ export class NotesListPage implements OnInit {
       componentProps = { popoverProps: { title: 'Options',
         options: [
           {name: 'Delete all notes', icon: 'close-circle-outline', function: 'deleteAllNotes'},
-          {name: 'Archive all notes', icon: 'clipboard', function: 'archiveAllNotes'}
+          {name: 'Archive all notes', icon: 'archive', function: 'archiveAllNotes'}
         ]
       }};
-    } else {
+    } else if (options === 'optionsNote') {
       componentProps = { popoverProps: { title: 'Options',
       options: [
         {name: 'Delete', icon: 'close-circle-outline', function: 'deleteNote'},
-        {name: 'Archive', icon: 'clipboard', function: 'archiveNote'}
+        {name: 'Archive', icon: 'archive', function: 'archiveNote'}
+      ]
+    }};
+    } else if (options === 'optionsArchivedNote') {
+      componentProps = { popoverProps: { title: 'Options',
+      options: [
+        {name: 'Delete', icon: 'close-circle-outline', function: 'deleteNote'},
+        {name: 'Unarchive', icon: 'clipboard', function: 'unarchiveNote'}
       ]
     }};
     }
