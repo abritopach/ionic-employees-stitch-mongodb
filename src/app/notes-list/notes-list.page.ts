@@ -24,6 +24,7 @@ import { MoreOptionsPopoverComponent } from '../popovers/more-options/more-optio
 export class NotesListPage implements OnInit {
 
   notes: Note[] = [];
+  copyNotes: Note[] = [];
   archivedNotes: Note[] = [];
 
   constructor(private storage: Storage, private stitchMongoService: StitchMongoService, private router: Router,
@@ -37,11 +38,11 @@ export class NotesListPage implements OnInit {
         this.stitchMongoService.find(config.COLLECTION_KEY, {user_id: objectId}).then(result => {
           if ((result.length !== 0) && (typeof result[0]['notes'] !== 'undefined')) {
             this.notes = result[0]['notes'];
-            this.notes = this.notes.map(note => {
+            this.notes = this.copyNotes = this.notes.map(note => {
               return { ...note, todos: note.todos.filter(todo => !todo.complete) };
             });
-            this.notes = this.notes.filter(note => !note.archived);
-            this.archivedNotes = result[0]['notes'].filter(note => note.archived);
+            this.notes = this.copyNotes.filter(note => !note.archived);
+            this.archivedNotes = this.copyNotes.filter(note => note.archived);
           }
         });
       }
@@ -114,6 +115,9 @@ export class NotesListPage implements OnInit {
       if (data.option === 'deleteNote') {
         this.deleteNote(note);
       }
+      if ((data.option === 'archiveNote') || (data.option === 'unarchiveNote')) {
+        this.archiveNote(note);
+      }
     }
 
   }
@@ -128,6 +132,30 @@ export class NotesListPage implements OnInit {
         .then(result => {
             console.log(result);
             this.notes = this.notes.filter(n => n.id !== note.id);
+        }).catch(err => {
+            console.error(err);
+        });
+      }
+    });
+  }
+
+  archiveNote(note) {
+    console.log('NotesListPage::archiveNote() | method called', note);
+    this.storage.get(config.TOKEN_KEY).then(res => {
+      if (res) {
+        const objectId = new ObjectId(res);
+        note.archived = !note.archived;
+        this.stitchMongoService.update(config.COLLECTION_KEY, {user_id: objectId, 'notes.id': note.id},
+        { $set: { 'notes.$.archived' : note.archived, } })
+        .then(result => {
+            console.log(result);
+            if (note.archived) {
+              this.notes = this.notes.filter(n => n.id !== note.id);
+              this.archivedNotes.push(note);
+            } else {
+              this.notes.push(note);
+              this.archivedNotes = this.archivedNotes.filter(n => n.id !== note.id);
+            }
         }).catch(err => {
             console.error(err);
         });

@@ -44,6 +44,7 @@ export class MoreOptionsPopoverComponent implements OnInit, OnDestroy {
 
   archiveNote() {
     console.log('MoreOptionsPopoverComponent::archiveNote | method called');
+    this.popoverCtrl.dismiss({option: 'archiveNote'});
   }
 
   deleteAllNotes() {
@@ -53,6 +54,12 @@ export class MoreOptionsPopoverComponent implements OnInit, OnDestroy {
   archiveAllNotes() {
     console.log('MoreOptionsPopoverComponent::archiveAllNotes | method called');
   }
+
+  unarchiveNote() {
+    console.log('MoreOptionsPopoverComponent::unarchiveNote | method called');
+    this.popoverCtrl.dismiss({option: 'unarchiveNote'});
+  }
+
   /*****/
 
   // Todo page options.
