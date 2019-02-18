@@ -49,10 +49,12 @@ export class MoreOptionsPopoverComponent implements OnInit, OnDestroy {
 
   deleteAllNotes() {
     console.log('MoreOptionsPopoverComponent::deleteAllNotes | method called');
+    this.popoverCtrl.dismiss({option: 'deleteAllNotes'});
   }
 
   archiveAllNotes() {
     console.log('MoreOptionsPopoverComponent::archiveAllNotes | method called');
+    this.popoverCtrl.dismiss({option: 'archiveAllNotes'});
   }
 
   unarchiveNote() {

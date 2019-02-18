@@ -15,6 +15,7 @@ import { PopoverController } from '@ionic/angular';
 
 import { MoreOptionsPopoverComponent } from '../popovers/more-options/more-options.popover';
 
+import {forkJoin} from 'rxjs';
 
 @Component({
   selector: 'app-notes-list',
@@ -118,6 +119,9 @@ export class NotesListPage implements OnInit {
       if ((data.option === 'archiveNote') || (data.option === 'unarchiveNote')) {
         this.archiveNote(note);
       }
+      if (data.option === 'archiveAllNotes') {
+        this.archiveAllNotes();
+      }
     }
 
   }
@@ -158,6 +162,27 @@ export class NotesListPage implements OnInit {
             }
         }).catch(err => {
             console.error(err);
+        });
+      }
+    });
+  }
+
+  archiveAllNotes() {
+    console.log('NotesListPage::archiveAllNotes() | method called');
+
+    this.storage.get(config.TOKEN_KEY).then(res => {
+      if (res) {
+        const objectId = new ObjectId(res);
+        const promises = this.notes.map(note => {
+          note.archived = !note.archived;
+          return  this.stitchMongoService.update(config.COLLECTION_KEY, {user_id: objectId, 'notes.id': note.id},
+          { $set: { 'notes.$.archived' : note.archived, } });
+        });
+        console.log(promises);
+        forkJoin(promises).subscribe(data => {
+          console.log(data);
+          this.copyNotes.map(note => this.archivedNotes.push(note));
+          this.notes = [];
         });
       }
     });
