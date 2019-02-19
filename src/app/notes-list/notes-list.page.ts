@@ -122,6 +122,9 @@ export class NotesListPage implements OnInit {
       if (data.option === 'archiveAllNotes') {
         this.archiveAllNotes();
       }
+      if (data.option === 'deleteAllNotes') {
+        this.deleteAllNotes();
+      }
     }
 
   }
@@ -188,4 +191,21 @@ export class NotesListPage implements OnInit {
     });
   }
 
+  deleteAllNotes() {
+    console.log('NotesListPage::deleteAllNotes() | method called');
+
+    this.storage.get(config.TOKEN_KEY).then(res => {
+      if (res) {
+        const objectId = new ObjectId(res);
+        const promises = this.copyNotes.map(note => {
+          return this.stitchMongoService.update(config.COLLECTION_KEY, {user_id: objectId},
+            {$pull: { 'notes': { id: note.id } }});
+        });
+        forkJoin(promises).subscribe(data => {
+          console.log(data);
+          this.notes = this.archivedNotes = [];
+        });
+      }
+    });
+  }
 }
