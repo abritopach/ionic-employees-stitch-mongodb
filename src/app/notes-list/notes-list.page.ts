@@ -11,7 +11,7 @@ import { StitchMongoService } from '../services';
 import { Router } from '@angular/router';
 import { Todo } from '../models/todo.model';
 
-import { PopoverController } from '@ionic/angular';
+import { PopoverController, AlertController } from '@ionic/angular';
 
 import { MoreOptionsPopoverComponent } from '../popovers/more-options/more-options.popover';
 
@@ -29,7 +29,7 @@ export class NotesListPage implements OnInit {
   archivedNotes: Note[] = [];
 
   constructor(private storage: Storage, private stitchMongoService: StitchMongoService, private router: Router,
-              private popoverCtrl: PopoverController) { }
+              private popoverCtrl: PopoverController, private alertCtrl: AlertController) { }
 
   ionViewWillEnter() {
     console.log('NotesListPage::ionViewWillEnter() | method called');
@@ -114,7 +114,8 @@ export class NotesListPage implements OnInit {
     if (data) {
       console.log('data popover.onWillDismiss', data);
       if (data.option === 'deleteNote') {
-        this.deleteNote(note);
+        this.presentAlertConfirm({header: 'Delete note', message: 'Are you sure that you want to delete the note?',
+         option: 'deleteNote', note: note});
       }
       if ((data.option === 'archiveNote') || (data.option === 'unarchiveNote')) {
         this.archiveNote(note);
@@ -123,7 +124,8 @@ export class NotesListPage implements OnInit {
         this.archiveAllNotes();
       }
       if (data.option === 'deleteAllNotes') {
-        this.deleteAllNotes();
+        this.presentAlertConfirm({header: 'Delete all notes', message: 'Are you sure that you want to delete all the notes?',
+         option: 'deleteAllNotes', note: null});
       }
     }
 
@@ -207,5 +209,34 @@ export class NotesListPage implements OnInit {
         });
       }
     });
+  }
+
+  async presentAlertConfirm(options = {header: 'Header', message: 'message', option: 'option', note: null}) {
+    const {header, message, option, note} = options;
+    const alert = await this.alertCtrl.create({
+      header: header,
+      message: message,
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: () => {
+          }
+        }, {
+          text: 'Ok',
+          handler: () => {
+            if (option === 'deleteAllNotes') {
+              this.deleteAllNotes();
+            }
+            if (option === 'deleteNote') {
+              this.deleteNote(note);
+            }
+          }
+        }
+      ]
+    });
+
+    await alert.present();
   }
 }
