@@ -28,7 +28,7 @@
     </ion-card-header>
   </ion-card>
 
-  <app-todo-list-header [noteTitle]="note?.title" (add)="onAddTodo($event)" (option)="onSelectedOption($event)"></app-todo-list-header>
+  <app-todo-list-header [noteTitle]="note?.title" (newNoteTitle)="onTitleChanged($event)" (add)="onAddTodo($event)" (option)="onSelectedOption($event)"></app-todo-list-header>
   <!-- TODO's pending. -->
   <app-todo-list [todos]="todos" (toggleComplete)="onToggleTodoComplete($event)"
                  (remove)="onRemoveTodo($event)" [readOnly]="false"></app-todo-list>

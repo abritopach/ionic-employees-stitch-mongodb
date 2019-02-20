@@ -33,6 +33,9 @@ export class TodoListHeaderComponent implements OnInit {
   @Output()
   option: EventEmitter<any> = new EventEmitter();
 
+  @Output()
+  newNoteTitle: EventEmitter<any> = new EventEmitter();
+
   constructor(private popoverCtrl: PopoverController) { }
 
   ngOnInit() {
@@ -69,6 +72,11 @@ export class TodoListHeaderComponent implements OnInit {
       this.option.emit(data);
     }
 
+  }
+
+  noteTitleChanged() {
+    console.log('TodoListHeaderComponent::noteTitleChanged() | method called', this.noteTitle);
+    this.newNoteTitle.emit(this.noteTitle);
   }
 
 }

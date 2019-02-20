@@ -241,4 +241,19 @@ export class TodoPage implements OnInit {
         }
     });
   }
+
+  onTitleChanged(newNoteTitle) {
+    console.log('TodoPage::onTitleChanged() | method called', newNoteTitle);
+    this.storage.get(config.TOKEN_KEY).then(res => {
+      if (res) {
+        const objectId = new ObjectId(res);
+        const noteObjectId = new ObjectId(this.route.snapshot.paramMap.get('id'));
+        this.stitchMongoService.update(config.COLLECTION_KEY, {user_id: objectId, 'notes.id': noteObjectId},
+        {$set: { 'notes.$.title': newNoteTitle }})
+        .then(result => {
+          console.log('result', result);
+        });
+      }
+    });
+  }
 }
