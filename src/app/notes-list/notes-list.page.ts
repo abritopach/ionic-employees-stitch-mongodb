@@ -90,7 +90,8 @@ export class NotesListPage implements OnInit {
       componentProps = { popoverProps: { title: 'Options',
       options: [
         {name: 'Delete', icon: 'close-circle-outline', function: 'deleteNote'},
-        {name: 'Archive', icon: 'archive', function: 'archiveNote'}
+        {name: 'Archive', icon: 'archive', function: 'archiveNote'},
+        {name: 'Add tags', icon: 'pricetags', function: 'tagNote'}
       ]
     }};
     } else if (options === 'optionsArchivedNote') {

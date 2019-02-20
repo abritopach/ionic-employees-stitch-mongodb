@@ -28,9 +28,19 @@
                     <ion-icon slot="icon-only" name="more"></ion-icon>
                 </ion-button>
               </ion-item>
+              <!--
+              <ion-card-header>
+                <ion-card-title>{{ note?.title }}</ion-card-title>
+              </ion-card-header>
+              -->
               <ion-card-content tappable routerLink="/todo/{{ note.id }}">
                   <app-todo-list [todos]="note?.todos" [readOnly]="true"></app-todo-list>
               </ion-card-content>
+              <ion-item lines="none">
+                <ion-chip color="secondary" *ngFor="let tag of note.tags">
+                  <ion-label>{{ tag }}</ion-label>
+                </ion-chip>
+              </ion-item>
             </ion-card>
         </ion-col>
       </ion-row>
