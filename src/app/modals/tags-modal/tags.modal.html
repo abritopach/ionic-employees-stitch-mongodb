@@ -1,0 +1,48 @@
+<ion-header>
+    <ion-toolbar color="tertiary">
+        <ion-buttons slot="end">
+            <ion-button (click)="dismiss()">
+                <ion-icon name="close" color="light"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+        <ion-title>
+            Add new tags
+        </ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+    <form [formGroup]="tagsForm" novalidate (ngSubmit)="tagsFormSubmit()">
+        <ion-list inset>
+            <ion-item lines="none">
+                <ng-select [class.has-error]="tagsForm.get('newTags').hasError('required') && tagsForm.get('newTags').touched" [multiple]="true" [items]="tags"
+                            bindLabel="name"
+                            bindValue="name"
+                            placeholder="Select"
+                            formControlName="newTags">
+                    <ng-template ng-label-tmp let-item="item">
+                        <img height="48" width="48" [src]="item.icon"/>
+                        <b>{{item.name}}</b>
+                    </ng-template>
+                    <ng-template ng-option-tmp let-item="item" let-index="index">
+                        <img height="48" width="48" [src]="item.icon"/>
+                        <b> {{item.name}}</b>
+                    </ng-template>
+                </ng-select>
+            </ion-item>
+            <ion-item lines="none" *ngIf="tagsForm.get('newTags').hasError('required') && tagsForm.get('newTags').touched">
+                <div class="error-message">
+                    This field is required.
+                </div>
+            </ion-item>
+        </ion-list>
+        <ion-row no-padding justify-content-center>
+            <ion-col col-auto text-right>
+                <ion-button [disabled]='!tagsForm.valid' type="submit" fill="clear" size="small" color="primary">
+                <ion-icon name='send' slot="start"></ion-icon>
+                Accept
+                </ion-button>
+            </ion-col>
+        </ion-row>
+    </form>
+</ion-content>

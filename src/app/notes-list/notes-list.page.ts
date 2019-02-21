@@ -11,11 +11,13 @@ import { StitchMongoService } from '../services';
 import { Router } from '@angular/router';
 import { Todo } from '../models/todo.model';
 
-import { PopoverController, AlertController } from '@ionic/angular';
+import { PopoverController, AlertController, ModalController } from '@ionic/angular';
 
 import { MoreOptionsPopoverComponent } from '../popovers/more-options/more-options.popover';
+import { TagsModalComponent } from '../modals/tags-modal/tags.modal';
 
 import {forkJoin} from 'rxjs';
+import { not } from '@angular/compiler/src/output/output_ast';
 
 @Component({
   selector: 'app-notes-list',
@@ -29,7 +31,8 @@ export class NotesListPage implements OnInit {
   archivedNotes: Note[] = [];
 
   constructor(private storage: Storage, private stitchMongoService: StitchMongoService, private router: Router,
-              private popoverCtrl: PopoverController, private alertCtrl: AlertController) { }
+              private popoverCtrl: PopoverController, private alertCtrl: AlertController,
+              private modalCtrl: ModalController) { }
 
   ionViewWillEnter() {
     console.log('NotesListPage::ionViewWillEnter() | method called');
@@ -60,7 +63,8 @@ export class NotesListPage implements OnInit {
       id: new ObjectId(),
       title: 'My new note',
       todos: [],
-      archived: false
+      archived: false,
+      tags: []
     };
     this.storage.get(config.TOKEN_KEY).then(res => {
       if (res) {
@@ -127,6 +131,9 @@ export class NotesListPage implements OnInit {
       if (data.option === 'deleteAllNotes') {
         this.presentAlertConfirm({header: 'Delete all notes', message: 'Are you sure that you want to delete all the notes?',
          option: 'deleteAllNotes', note: null});
+      }
+      if (data.option === 'tagNote') {
+        this.presentModal(note);
       }
     }
 
@@ -240,4 +247,36 @@ export class NotesListPage implements OnInit {
 
     await alert.present();
   }
+
+  async presentModal(note) {
+    const componentProps = { modalProps: { title: 'New tags'}};
+    const modal = await this.modalCtrl.create({
+      component: TagsModalComponent,
+      componentProps: componentProps
+    });
+    await modal.present();
+
+    const {data} = await modal.onWillDismiss();
+    if (data) {
+      console.log('data', data);
+      this.addNewTags(note, data.newTags);
+    }
+  }
+
+  addNewTags(note, newTags) {
+    const tags = [...note.tags, ...newTags];
+    console.log('tags', tags);
+    this.storage.get(config.TOKEN_KEY).then(res => {
+      if (res) {
+        const objectId = new ObjectId(res);
+        this.stitchMongoService.update(config.COLLECTION_KEY, {user_id: objectId, 'notes.id': note.id},
+        {$set: { 'notes.$.tags': tags }})
+        .then(result => {
+          console.log('result', result);
+          note.tags = tags;
+        });
+      }
+    });
+  }
+
 }

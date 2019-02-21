@@ -5,4 +5,5 @@ export interface Note {
     title: string | '';
     todos: Todo[];
     archived: boolean;
+    tags: string[] | [];
 }
