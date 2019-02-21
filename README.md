@@ -20,8 +20,16 @@ This project shows you how to:
     * Employee can manage his events.
         * Employee can add, update and delete his own events.
     * Show company products.
-    * Employee can manage his tasks.
-        * Employee can add, update and delete his own tasks.
+    * Employee can manage his notes.
+        * Employee can:
+            * Add note.
+            * Update note.
+            * Delete note.
+            * Archive note.
+            * Delete all notes.
+            * Archive all notes.
+            * Create note copy.
+            * Tag note.
 
 
 Technologies: Angular, Ionic, Stitch MongoDB, TypeScript.
