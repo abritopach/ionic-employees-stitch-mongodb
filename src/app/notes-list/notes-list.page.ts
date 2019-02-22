@@ -95,7 +95,7 @@ export class NotesListPage implements OnInit {
       options: [
         {name: 'Delete', icon: 'close-circle-outline', function: 'deleteNote'},
         {name: 'Archive', icon: 'archive', function: 'archiveNote'},
-        {name: 'Add tags', icon: 'pricetags', function: 'tagNote'}
+        {name: 'Tags', icon: 'pricetags', function: 'tagNote'}
       ]
     }};
     } else if (options === 'optionsArchivedNote') {
@@ -249,7 +249,7 @@ export class NotesListPage implements OnInit {
   }
 
   async presentModal(note) {
-    const componentProps = { modalProps: { title: 'New tags'}};
+    const componentProps = { modalProps: { title: 'New tags', note: note}};
     const modal = await this.modalCtrl.create({
       component: TagsModalComponent,
       componentProps: componentProps
@@ -264,16 +264,16 @@ export class NotesListPage implements OnInit {
   }
 
   addNewTags(note, newTags) {
-    const tags = [...note.tags, ...newTags];
-    console.log('tags', tags);
+    // const tags = [...note.tags, ...newTags];
+    // console.log('tags', tags);
     this.storage.get(config.TOKEN_KEY).then(res => {
       if (res) {
         const objectId = new ObjectId(res);
         this.stitchMongoService.update(config.COLLECTION_KEY, {user_id: objectId, 'notes.id': note.id},
-        {$set: { 'notes.$.tags': tags }})
+        {$set: { 'notes.$.tags': newTags }})
         .then(result => {
           console.log('result', result);
-          note.tags = tags;
+          note.tags = newTags;
         });
       }
     });

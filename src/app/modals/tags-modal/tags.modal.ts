@@ -1,6 +1,6 @@
 import { FormControl, Validators, FormGroup, FormBuilder } from '@angular/forms';
 import { Component, ViewEncapsulation, OnInit } from '@angular/core';
-import { ModalController } from '@ionic/angular';
+import { ModalController, NavParams } from '@ionic/angular';
 
 
 @Component({
@@ -19,11 +19,16 @@ export class TagsModalComponent implements OnInit {
     {name: 'Inspiration', icon: 'assets/images/inspiration.png'},
   ];
 
-  constructor(private modalCtrl: ModalController, private formBuilder: FormBuilder) {
+  constructor(private modalCtrl: ModalController, private formBuilder: FormBuilder, private navParams: NavParams) {
     this.createForm();
   }
 
   ngOnInit() {
+    console.log(this.navParams.data.modalProps.note);
+    const tags = this.navParams.data.modalProps.note.tags;
+    if ((typeof tags !== 'undefined') && (tags.length !== 0)) {
+      this.tagsForm.patchValue({newTags: tags});
+    }
   }
 
   createForm() {
@@ -41,7 +46,7 @@ export class TagsModalComponent implements OnInit {
     // Using the injected ModalController this page
     // can "dismiss" itself and pass back data.
     // console.log('dismiss', data);
-    this.modalCtrl.dismiss(this.tagsForm.value);
+    this.modalCtrl.dismiss();
   }
 
 }

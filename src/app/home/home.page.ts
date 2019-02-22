@@ -75,7 +75,7 @@ export class HomePage implements OnInit {
   }
 
   searchEmployees(ev: any) {
-    console.log('HomePage::searchMovies() | method called', ev.target.value);
+    console.log('HomePage::searchEmployees() | method called', ev.target.value);
   }
 
   cancelSearch(ev: any) {
