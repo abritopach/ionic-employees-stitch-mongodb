@@ -108,7 +108,11 @@ export class NotesListPage implements OnInit {
         { $pull: { 'notes': { id: note.id } } })
         .then(result => {
             console.log(result);
-            this.notes = this.notes.filter(n => n.id !== note.id);
+            if (note.archived) {
+              this.archivedNotes = this.archivedNotes.filter(n => n.id !== note.id);
+            } else {
+              this.notes = this.notes.filter(n => n.id !== note.id);
+            }
         }).catch(err => {
             console.error(err);
         });
