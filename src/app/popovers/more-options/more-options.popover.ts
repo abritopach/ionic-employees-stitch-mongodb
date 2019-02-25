@@ -67,6 +67,11 @@ export class MoreOptionsPopoverComponent implements OnInit, OnDestroy {
     this.popoverCtrl.dismiss({option: 'tagNote'});
   }
 
+  createCopyNote() {
+    console.log('MoreOptionsPopoverComponent::createCopyNote | method called');
+    this.popoverCtrl.dismiss({option: 'createCopyNote'});
+  }
+
   /*****/
 
   // Todo page options.

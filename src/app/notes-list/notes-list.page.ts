@@ -95,6 +95,7 @@ export class NotesListPage implements OnInit {
       options: [
         {name: 'Delete', icon: 'close-circle-outline', function: 'deleteNote'},
         {name: 'Archive', icon: 'archive', function: 'archiveNote'},
+        {name: 'Create copy', icon: 'copy', function: 'createCopyNote'},
         {name: 'Tags', icon: 'pricetags', function: 'tagNote'}
       ]
     }};
@@ -134,6 +135,10 @@ export class NotesListPage implements OnInit {
       }
       if (data.option === 'tagNote') {
         this.presentModal(note);
+      }
+
+      if (data.option === 'createCopyNote') {
+        this.createNoteCopy(note);
       }
     }
 
@@ -276,6 +281,22 @@ export class NotesListPage implements OnInit {
           note.tags = newTags;
         });
       }
+    });
+  }
+
+  createNoteCopy(note) {
+    console.log('NotesListPage::createNoteCopy() | method called');
+    const copyNote = {...note, ...{id: new ObjectId(), title: 'Copy ' + note.title}};
+    this.storage.get(config.TOKEN_KEY).then(res => {
+      if (res) {
+        const objectId = new ObjectId(res);
+        this.stitchMongoService.update(config.COLLECTION_KEY, {user_id: objectId},
+          {$push: { 'notes': copyNote }})
+          .then(result => {
+            console.log('result', result);
+            this.notes.push(copyNote);
+          });
+        }
     });
   }
 
