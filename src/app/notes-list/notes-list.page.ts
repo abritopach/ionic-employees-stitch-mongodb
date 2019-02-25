@@ -82,31 +82,7 @@ export class NotesListPage implements OnInit {
 
   async presentPopover(options, note?) {
     console.log('NotesListPage::presentPopover() | method called', options);
-    let componentProps;
-    if (options === 'optionsAllNotes') {
-      componentProps = { popoverProps: { title: 'Options',
-        options: [
-          {name: 'Delete all notes', icon: 'close-circle-outline', function: 'deleteAllNotes'},
-          {name: 'Archive all notes', icon: 'archive', function: 'archiveAllNotes'}
-        ]
-      }};
-    } else if (options === 'optionsNote') {
-      componentProps = { popoverProps: { title: 'Options',
-      options: [
-        {name: 'Delete', icon: 'close-circle-outline', function: 'deleteNote'},
-        {name: 'Archive', icon: 'archive', function: 'archiveNote'},
-        {name: 'Create copy', icon: 'copy', function: 'createCopyNote'},
-        {name: 'Tags', icon: 'pricetags', function: 'tagNote'}
-      ]
-    }};
-    } else if (options === 'optionsArchivedNote') {
-      componentProps = { popoverProps: { title: 'Options',
-      options: [
-        {name: 'Delete', icon: 'close-circle-outline', function: 'deleteNote'},
-        {name: 'Unarchive', icon: 'clipboard', function: 'unarchiveNote'}
-      ]
-    }};
-    }
+    const componentProps = this.builtComponentProps(options);
 
     const popover = await this.popoverCtrl.create({
       component: MoreOptionsPopoverComponent,
@@ -118,28 +94,7 @@ export class NotesListPage implements OnInit {
     const { data } = await popover.onWillDismiss();
 
     if (data) {
-      console.log('data popover.onWillDismiss', data);
-      if (data.option === 'deleteNote') {
-        this.presentAlertConfirm({header: 'Delete note', message: 'Are you sure that you want to delete the note?',
-         option: 'deleteNote', note: note});
-      }
-      if ((data.option === 'archiveNote') || (data.option === 'unarchiveNote')) {
-        this.archiveNote(note);
-      }
-      if (data.option === 'archiveAllNotes') {
-        this.archiveAllNotes();
-      }
-      if (data.option === 'deleteAllNotes') {
-        this.presentAlertConfirm({header: 'Delete all notes', message: 'Are you sure that you want to delete all the notes?',
-         option: 'deleteAllNotes', note: null});
-      }
-      if (data.option === 'tagNote') {
-        this.presentModal(note);
-      }
-
-      if (data.option === 'createCopyNote') {
-        this.createNoteCopy(note);
-      }
+      this.processData(data, note);
     }
 
   }
@@ -298,6 +253,67 @@ export class NotesListPage implements OnInit {
           });
         }
     });
+  }
+
+  builtComponentProps(options) {
+    let componentProps;
+    switch (options) {
+      case 'optionsAllNotes':
+        componentProps = { popoverProps: { title: 'Options',
+          options: [
+            {name: 'Delete all notes', icon: 'close-circle-outline', function: 'deleteAllNotes'},
+            {name: 'Archive all notes', icon: 'archive', function: 'archiveAllNotes'}
+          ]
+        }};
+        break;
+      case 'optionsNote':
+        componentProps = { popoverProps: { title: 'Options',
+          options: [
+            {name: 'Delete', icon: 'close-circle-outline', function: 'deleteNote'},
+            {name: 'Archive', icon: 'archive', function: 'archiveNote'},
+            {name: 'Create copy', icon: 'copy', function: 'createCopyNote'},
+            {name: 'Tags', icon: 'pricetags', function: 'tagNote'}
+          ]
+        }};
+        break;
+      case 'optionsArchivedNote':
+        componentProps = { popoverProps: { title: 'Options',
+          options: [
+            {name: 'Delete', icon: 'close-circle-outline', function: 'deleteNote'},
+            {name: 'Unarchive', icon: 'clipboard', function: 'unarchiveNote'}
+          ]
+        }};
+        break;
+    }
+    return componentProps;
+  }
+
+  processData(data, note) {
+    switch (data.option) {
+      case 'deleteNote':
+        this.presentAlertConfirm({header: 'Delete note', message: 'Are you sure that you want to delete the note?',
+        option: 'deleteNote', note: note});
+        break;
+      case 'archiveNote':
+        this.archiveNote(note);
+        break;
+      case 'unarchiveNote':
+        this.archiveNote(note);
+        break;
+      case 'archiveAllNotes':
+        this.archiveAllNotes();
+        break;
+      case 'deleteAllNotes':
+        this.presentAlertConfirm({header: 'Delete all notes', message: 'Are you sure that you want to delete all the notes?',
+        option: 'deleteAllNotes', note: null});
+        break;
+      case 'tagNote':
+        this.presentModal(note);
+        break;
+      case 'createCopyNote':
+        this.createNoteCopy(note);
+        break;
+    }
   }
 
 }
