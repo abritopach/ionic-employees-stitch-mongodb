@@ -6,4 +6,5 @@ export interface Note {
     todos: Todo[];
     archived: boolean;
     tags: string[] | [];
+    pinned: boolean;
 }

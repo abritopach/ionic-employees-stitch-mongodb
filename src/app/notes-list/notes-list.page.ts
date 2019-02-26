@@ -46,6 +46,8 @@ export class NotesListPage implements OnInit {
               return { ...note, todos: note.todos.filter(todo => !todo.complete) };
             });
             this.notes = this.copyNotes.filter(note => !note.archived);
+            // Sort notes to show first the pinned ones.
+            this.notes.sort((n1, n2) => Number(n2.pinned) - Number(n1.pinned));
             this.archivedNotes = this.copyNotes.filter(note => note.archived);
           }
         });
@@ -64,7 +66,8 @@ export class NotesListPage implements OnInit {
       title: 'My new note',
       todos: [],
       archived: false,
-      tags: []
+      tags: [],
+      pinned: false
     };
     this.storage.get(config.TOKEN_KEY).then(res => {
       if (res) {
@@ -259,6 +262,24 @@ export class NotesListPage implements OnInit {
     });
   }
 
+  pinnedNote(note) {
+    console.log('NotesListPage::pinnedNote() | method called', note);
+    this.storage.get(config.TOKEN_KEY).then(res => {
+      if (res) {
+        const objectId = new ObjectId(res);
+        note.pinned = !note.pinned;
+        this.stitchMongoService.update(config.COLLECTION_KEY, {user_id: objectId, 'notes.id': note.id},
+        { $set: { 'notes.$.pinned' : note.pinned, } })
+        .then(result => {
+            console.log(result);
+            this.notes.sort((n1, n2) => Number(n2.pinned) - Number(n1.pinned));
+        }).catch(err => {
+            console.error(err);
+        });
+      }
+    });
+  }
+
   builtComponentProps(options) {
     let componentProps;
     switch (options) {
@@ -276,7 +297,8 @@ export class NotesListPage implements OnInit {
             {name: 'Delete', icon: 'close-circle-outline', function: 'deleteNote'},
             {name: 'Archive', icon: 'archive', function: 'archiveNote'},
             {name: 'Create copy', icon: 'copy', function: 'createCopyNote'},
-            {name: 'Tags', icon: 'pricetags', function: 'tagNote'}
+            {name: 'Tags', icon: 'pricetags', function: 'tagNote'},
+            {name: 'Pinned', icon: 'pin', function: 'pinnedNote'}
           ]
         }};
         break;
@@ -316,6 +338,9 @@ export class NotesListPage implements OnInit {
         break;
       case 'createCopyNote':
         this.createNoteCopy(note);
+        break;
+      case 'pinnedNote':
+        this.pinnedNote(note);
         break;
     }
   }

@@ -67,6 +67,11 @@ export class MoreOptionsPopoverComponent implements OnInit, OnDestroy {
     this.popoverCtrl.dismiss({option: 'tagNote'});
   }
 
+  pinnedNote() {
+    console.log('MoreOptionsPopoverComponent::pinnedNote | method called');
+    this.popoverCtrl.dismiss({option: 'pinnedNote'});
+  }
+
   createCopyNote() {
     console.log('MoreOptionsPopoverComponent::createCopyNote | method called');
     this.popoverCtrl.dismiss({option: 'createCopyNote'});

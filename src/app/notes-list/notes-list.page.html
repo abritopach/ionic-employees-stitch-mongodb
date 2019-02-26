@@ -24,9 +24,19 @@
           <ion-card>
               <ion-item>
                 <ion-label text-wrap>{{ note?.title }}</ion-label>
+                <!--
                 <ion-button slot='end' (click)="presentPopover('optionsNote', note)" fill="clear">
                     <ion-icon slot="icon-only" name="more"></ion-icon>
                 </ion-button>
+                -->
+                <ion-buttons slot='end'>
+                  <ion-button *ngIf="note.pinned" (click)="pinnedNote(note)">
+                    <img class="pinnedImg" src="assets/images/pinned.png">
+                  </ion-button>
+                  <ion-button (click)="presentPopover('optionsNote', note)" fill="clear">
+                    <ion-icon slot="icon-only" name="more"></ion-icon>
+                  </ion-button>
+                </ion-buttons>
               </ion-item>
               <!--
               <ion-card-header>
