@@ -90,7 +90,7 @@ export class TodoPage implements OnInit {
         const noteObjectId = new ObjectId(this.route.snapshot.paramMap.get('id'));
         todo.id = new ObjectId();
         this.stitchMongoService.update(config.COLLECTION_KEY, {user_id: objectId, 'notes.id': noteObjectId},
-        {$push: { 'notes.$.todos': todo }})
+        {$set: {'notes.$.updated_at': new Date()}, $push: { 'notes.$.todos': todo }})
         .then(result => {
           console.log('result', result);
           // TODO: FIX problem updating nested array.
@@ -111,6 +111,7 @@ export class TodoPage implements OnInit {
         todo.complete = !todo.complete;
         const obj = {};
         obj['notes.$.todos.' + todo['index']] = todo;
+        obj['notes.$.updated_at'] = new Date();
         this.stitchMongoService.update(config.COLLECTION_KEY, {user_id: objectId, 'notes.todos.id': todo.id},
         { $set: obj }
         // TODO: Refactor code to use arrayFilters.
@@ -147,7 +148,7 @@ export class TodoPage implements OnInit {
         const objectId = new ObjectId(res);
         const noteObjectId = new ObjectId(this.route.snapshot.paramMap.get('id'));
         this.stitchMongoService.update(config.COLLECTION_KEY, {user_id: objectId, 'notes.id': noteObjectId},
-        {$pull: { 'notes.$.todos': { title: todo.title } }})
+        {$set: {'notes.$.updated_at': new Date()}, $pull: { 'notes.$.todos': { title: todo.title } }})
         .then(result => {
             console.log(result);
             if (!todo.complete) {
@@ -183,6 +184,7 @@ export class TodoPage implements OnInit {
             todo.complete = !todo.complete;
             const obj = {};
             obj['notes.$.todos.' + todo['index']] = todo;
+            obj['notes.$.updated_at'] = new Date();
             return this.stitchMongoService.update(config.COLLECTION_KEY, {user_id: objectId, 'notes.todos.id': todo.id},
             { $set: obj });
           });
@@ -195,7 +197,7 @@ export class TodoPage implements OnInit {
         } else if (result.option === 'delete') {
           const promises = this.todosCompleted.map(todo => {
             return this.stitchMongoService.update(config.COLLECTION_KEY, {user_id: objectId, 'notes.id': noteObjectId},
-             {$pull: { 'notes.$.todos': { title: todo.title } }});
+             {$set: {'notes.$.updated_at': new Date()}, $pull: { 'notes.$.todos': { title: todo.title } }});
           });
           forkJoin(promises).subscribe(data => {
             console.log(data);
@@ -249,7 +251,7 @@ export class TodoPage implements OnInit {
         const objectId = new ObjectId(res);
         const noteObjectId = new ObjectId(this.route.snapshot.paramMap.get('id'));
         this.stitchMongoService.update(config.COLLECTION_KEY, {user_id: objectId, 'notes.id': noteObjectId},
-        {$set: { 'notes.$.title': newNoteTitle }})
+        {$set: { 'notes.$.title': newNoteTitle , 'notes.$.updated_at': new Date()}})
         .then(result => {
           console.log('result', result);
         });

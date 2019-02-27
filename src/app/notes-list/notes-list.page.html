@@ -51,6 +51,9 @@
                   <ion-label>{{ tag }}</ion-label>
                 </ion-chip>
               </ion-item>
+              <ion-item lines="none">
+                <ion-badge slot="end" color="tertiary">{{ note?.updated_at }}</ion-badge>
+              </ion-item>
             </ion-card>
         </ion-col>
       </ion-row>

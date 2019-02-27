@@ -67,7 +67,8 @@ export class NotesListPage implements OnInit {
       todos: [],
       archived: false,
       tags: [],
-      pinned: false
+      pinned: false,
+      updated_at: new Date()
     };
     this.storage.get(config.TOKEN_KEY).then(res => {
       if (res) {

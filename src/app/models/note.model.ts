@@ -7,4 +7,5 @@ export interface Note {
     archived: boolean;
     tags: string[] | [];
     pinned: boolean;
+    updated_at: Date;
 }
