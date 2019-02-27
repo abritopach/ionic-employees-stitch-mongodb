@@ -130,8 +130,9 @@ export class NotesListPage implements OnInit {
       if (res) {
         const objectId = new ObjectId(res);
         note.archived = !note.archived;
+        note.updated_at = new Date();
         this.stitchMongoService.update(config.COLLECTION_KEY, {user_id: objectId, 'notes.id': note.id},
-        { $set: { 'notes.$.archived' : note.archived, } })
+        { $set: { 'notes.$.archived' : note.archived, 'notes.$.updated_at': note.updated_at} })
         .then(result => {
             console.log(result);
             if (note.archived) {
@@ -156,8 +157,9 @@ export class NotesListPage implements OnInit {
         const objectId = new ObjectId(res);
         const promises = this.notes.map(note => {
           note.archived = !note.archived;
+          note.updated_at = new Date();
           return  this.stitchMongoService.update(config.COLLECTION_KEY, {user_id: objectId, 'notes.id': note.id},
-          { $set: { 'notes.$.archived' : note.archived, } });
+          { $set: { 'notes.$.archived' : note.archived, 'notes.$.updated_at': note.updated_at} });
         });
         console.log(promises);
         forkJoin(promises).subscribe(data => {
@@ -237,8 +239,9 @@ export class NotesListPage implements OnInit {
     this.storage.get(config.TOKEN_KEY).then(res => {
       if (res) {
         const objectId = new ObjectId(res);
+        note.updated_at = new Date();
         this.stitchMongoService.update(config.COLLECTION_KEY, {user_id: objectId, 'notes.id': note.id},
-        {$set: { 'notes.$.tags': newTags }})
+        {$set: { 'notes.$.tags': newTags, 'notes.$.updated_at': note.updated_at }})
         .then(result => {
           console.log('result', result);
           note.tags = newTags;
@@ -269,8 +272,9 @@ export class NotesListPage implements OnInit {
       if (res) {
         const objectId = new ObjectId(res);
         note.pinned = !note.pinned;
+        note.updated_at = new Date();
         this.stitchMongoService.update(config.COLLECTION_KEY, {user_id: objectId, 'notes.id': note.id},
-        { $set: { 'notes.$.pinned' : note.pinned, } })
+        { $set: { 'notes.$.pinned' : note.pinned, 'notes.$.updated_at': note.updated_at} })
         .then(result => {
             console.log(result);
             this.notes.sort((n1, n2) => Number(n2.pinned) - Number(n1.pinned));
