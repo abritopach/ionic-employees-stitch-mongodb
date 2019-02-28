@@ -52,8 +52,9 @@ export class NgSelectModalComponent implements OnInit {
     if (action === 'collaborator') {
       this.items = [];
       this.fetchEmployees();
-      const collaborators = this.navParams.data.modalProps.note.collaborators;
+      let collaborators = this.navParams.data.modalProps.note.collaborators;
       if ((typeof collaborators !== 'undefined') && (collaborators.length !== 0)) {
+        collaborators = collaborators.map(collaborator => collaborator.toString());
         this.ngselectForm.patchValue({newData: collaborators});
       }
     }
@@ -91,9 +92,8 @@ export class NgSelectModalComponent implements OnInit {
 
   fetchEmployees() {
     this.stitchMongoService.find(config.COLLECTION_KEY, {}).then(docs => {
-      console.log(docs);
       this.items = docs.map(doc => {
-        const item = {name: doc['employee_name'], icon: doc['avatar'], _id: doc['_id']};
+        const item = {name: doc['employee_name'], icon: doc['avatar'], _id: doc['_id'].toString()};
         return item;
       });
     }).catch(err => {

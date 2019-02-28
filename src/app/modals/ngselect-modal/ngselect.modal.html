@@ -15,7 +15,7 @@
     <form [formGroup]="ngselectForm" novalidate (ngSubmit)="ngselectFormSubmit()">
         <ion-list inset>
             <ion-item lines="none">
-                <ng-select [class.has-error]="ngselectForm.get('newData').hasError('required') && ngselectForm.get('newData').touched" [multiple]="true" [items]="items"
+                <ng-select *ngIf="items.length !== 0" [class.has-error]="ngselectForm.get('newData').hasError('required') && ngselectForm.get('newData').touched" [multiple]="true" [items]="items"
                             bindLabel="name"
                             bindValue="_id"
                             placeholder="Select"

@@ -234,6 +234,7 @@ export class NotesListPage implements OnInit {
         this.addNewTags(options.note, data.newData);
       }
       if (data.option === 'collaborator') {
+        this.addNewCollaborators(options.note, data.newData);
       }
     }
   }
@@ -250,6 +251,22 @@ export class NotesListPage implements OnInit {
         .then(result => {
           console.log('result', result);
           note.tags = newTags;
+        });
+      }
+    });
+  }
+
+  addNewCollaborators(note, newCollaborators) {
+    this.storage.get(config.TOKEN_KEY).then(res => {
+      if (res) {
+        const objectId = new ObjectId(res);
+        const collaborators = newCollaborators.map(c => new ObjectId(c));
+        note.updated_at = new Date();
+        this.stitchMongoService.update(config.COLLECTION_KEY, {user_id: objectId, 'notes.id': note.id},
+        {$set: { 'notes.$.collaborators': collaborators, 'notes.$.updated_at': note.updated_at }})
+        .then(result => {
+          console.log('result', result);
+          note.collaborators = newCollaborators;
         });
       }
     });
