@@ -14,10 +14,11 @@ import { Todo } from '../models/todo.model';
 import { PopoverController, AlertController, ModalController } from '@ionic/angular';
 
 import { MoreOptionsPopoverComponent } from '../popovers/more-options/more-options.popover';
-import { TagsModalComponent } from '../modals/tags-modal/tags.modal';
+import { NgSelectModalComponent } from '../modals/ngselect-modal/ngselect.modal';
 
 import {forkJoin} from 'rxjs';
 import { not } from '@angular/compiler/src/output/output_ast';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-notes-list',
@@ -218,10 +219,10 @@ export class NotesListPage implements OnInit {
     await alert.present();
   }
 
-  async presentModal(note) {
-    const componentProps = { modalProps: { title: 'New tags', note: note}};
+  async presentModal(options: {title: string, note: Note, action: string}) {
+    const componentProps = { modalProps: { title: options.title, note: options.note, action: options.action}};
     const modal = await this.modalCtrl.create({
-      component: TagsModalComponent,
+      component: NgSelectModalComponent,
       componentProps: componentProps
     });
     await modal.present();
@@ -229,7 +230,11 @@ export class NotesListPage implements OnInit {
     const {data} = await modal.onWillDismiss();
     if (data) {
       console.log('data', data);
-      this.addNewTags(note, data.newTags);
+      if (data.option === 'tag') {
+        this.addNewTags(options.note, data.newData);
+      }
+      if (data.option === 'collaborator') {
+      }
     }
   }
 
@@ -303,7 +308,8 @@ export class NotesListPage implements OnInit {
             {name: 'Archive', icon: 'archive', function: 'archiveNote'},
             {name: 'Create copy', icon: 'copy', function: 'createCopyNote'},
             {name: 'Tags', icon: 'pricetags', function: 'tagNote'},
-            {name: 'Pinned', icon: 'pin', function: 'pinnedNote'}
+            {name: 'Pinned', icon: 'pin', function: 'pinnedNote'},
+            {name: 'Collaborator', icon: 'person-add', function: 'collaboratorNote'}
           ]
         }};
         break;
@@ -339,13 +345,16 @@ export class NotesListPage implements OnInit {
         option: 'deleteAllNotes', note: null});
         break;
       case 'tagNote':
-        this.presentModal(note);
+        this.presentModal({title: 'Add new tags', note: note, action: 'tag'});
         break;
       case 'createCopyNote':
         this.createNoteCopy(note);
         break;
       case 'pinnedNote':
         this.pinnedNote(note);
+        break;
+      case 'collaboratorNote':
+        this.presentModal({title: 'Add new collaborators', note: note, action: 'collaborator'});
         break;
     }
   }

@@ -6,20 +6,20 @@
             </ion-button>
         </ion-buttons>
         <ion-title>
-            Add new tags
+            {{modalTitle}}
         </ion-title>
     </ion-toolbar>
 </ion-header>
 
 <ion-content padding>
-    <form [formGroup]="tagsForm" novalidate (ngSubmit)="tagsFormSubmit()">
+    <form [formGroup]="ngselectForm" novalidate (ngSubmit)="ngselectFormSubmit()">
         <ion-list inset>
             <ion-item lines="none">
-                <ng-select [class.has-error]="tagsForm.get('newTags').hasError('required') && tagsForm.get('newTags').touched" [multiple]="true" [items]="tags"
+                <ng-select [class.has-error]="ngselectForm.get('newData').hasError('required') && ngselectForm.get('newData').touched" [multiple]="true" [items]="items"
                             bindLabel="name"
                             bindValue="name"
                             placeholder="Select"
-                            formControlName="newTags">
+                            formControlName="newData">
                     <ng-template ng-label-tmp let-item="item">
                         <img height="48" width="48" [src]="item.icon"/>
                         <b>{{item.name}}</b>
@@ -30,7 +30,7 @@
                     </ng-template>
                 </ng-select>
             </ion-item>
-            <ion-item lines="none" *ngIf="tagsForm.get('newTags').hasError('required') && tagsForm.get('newTags').touched">
+            <ion-item lines="none" *ngIf="ngselectForm.get('newData').hasError('required') && ngselectForm.get('newData').touched">
                 <div class="error-message">
                     This field is required.
                 </div>
@@ -38,7 +38,7 @@
         </ion-list>
         <ion-row no-padding justify-content-center>
             <ion-col col-auto text-right>
-                <ion-button [disabled]='!tagsForm.valid' type="submit" fill="clear" size="small" color="primary">
+                <ion-button [disabled]='!ngselectForm.valid' type="submit" fill="clear" size="small" color="primary">
                 <ion-icon name='send' slot="start"></ion-icon>
                 Accept
                 </ion-button>

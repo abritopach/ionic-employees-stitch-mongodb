@@ -8,7 +8,7 @@ import { IonicModule } from '@ionic/angular';
 import { NotesListPage } from './notes-list.page';
 
 import { SharedComponentsModule } from '../components/shared-components.module';
-import { TagsModalComponent } from '../modals/tags-modal/tags.modal';
+import { NgSelectModalComponent } from '../modals/ngselect-modal/ngselect.modal';
 
 import { NgSelectModule } from '@ng-select/ng-select';
 
@@ -29,7 +29,7 @@ const routes: Routes = [
     SharedComponentsModule,
     NgSelectModule
   ],
-  declarations: [NotesListPage, TagsModalComponent],
-  entryComponents: [TagsModalComponent]
+  declarations: [NotesListPage, NgSelectModalComponent],
+  entryComponents: [NgSelectModalComponent]
 })
 export class NotesListPageModule {}
