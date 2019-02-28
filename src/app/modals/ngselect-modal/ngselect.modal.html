@@ -17,7 +17,7 @@
             <ion-item lines="none">
                 <ng-select [class.has-error]="ngselectForm.get('newData').hasError('required') && ngselectForm.get('newData').touched" [multiple]="true" [items]="items"
                             bindLabel="name"
-                            bindValue="name"
+                            bindValue="_id"
                             placeholder="Select"
                             formControlName="newData">
                     <ng-template ng-label-tmp let-item="item">

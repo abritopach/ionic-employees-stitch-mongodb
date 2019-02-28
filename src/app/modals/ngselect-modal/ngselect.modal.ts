@@ -19,9 +19,9 @@ export class NgSelectModalComponent implements OnInit {
   items = [];
 
   tags = [
-    {name: 'Work', icon: 'assets/images/work.png'},
-    {name: 'Personal', icon: 'assets/images/personal.png'},
-    {name: 'Inspiration', icon: 'assets/images/inspiration.png'},
+    {_id: 1, name: 'Work', icon: 'assets/images/work.png'},
+    {_id: 2, name: 'Personal', icon: 'assets/images/personal.png'},
+    {_id: 3, name: 'Inspiration', icon: 'assets/images/inspiration.png'},
   ];
 
   modalTitle = '';
@@ -38,7 +38,15 @@ export class NgSelectModalComponent implements OnInit {
       this.items = this.tags;
       const tags = this.navParams.data.modalProps.note.tags;
       if ((typeof tags !== 'undefined') && (tags.length !== 0)) {
-        this.ngselectForm.patchValue({newData: tags});
+        const tagsIds = [];
+        for (let i = 0; i < this.tags.length; i++) {
+          for (let j = 0; j < tags.length; j++) {
+            if (this.tags[i].name === tags[j]) {
+              tagsIds.push(this.tags[i]._id);
+            }
+          }
+        }
+        this.ngselectForm.patchValue({newData: tagsIds});
       }
     }
     if (action === 'collaborator') {
@@ -46,7 +54,7 @@ export class NgSelectModalComponent implements OnInit {
       this.fetchEmployees();
       const collaborators = this.navParams.data.modalProps.note.collaborators;
       if ((typeof collaborators !== 'undefined') && (collaborators.length !== 0)) {
-        // this.ngselectForm.patchValue({newData: tags});
+        this.ngselectForm.patchValue({newData: collaborators});
       }
     }
   }
@@ -59,7 +67,19 @@ export class NgSelectModalComponent implements OnInit {
 
   ngselectFormSubmit() {
     console.log('NgSelectModalComponent::ngselectFormSubmit | method called', this.ngselectForm.value);
-    this.modalCtrl.dismiss({option: this.navParams.data.modalProps.action, ...this.ngselectForm.value});
+    let value = this.ngselectForm.value;
+    if (this.navParams.data.modalProps.action === 'tag') {
+      const tagsNames = [];
+        for (let i = 0; i < this.tags.length; i++) {
+          for (let j = 0; j < this.ngselectForm.value.newData.length; j++) {
+            if (this.tags[i]._id === this.ngselectForm.value.newData[j]) {
+              tagsNames.push(this.tags[i].name);
+            }
+          }
+        }
+      value = {newData: tagsNames};
+    }
+    this.modalCtrl.dismiss({option: this.navParams.data.modalProps.action, ...value});
   }
 
   dismiss() {
@@ -71,8 +91,9 @@ export class NgSelectModalComponent implements OnInit {
 
   fetchEmployees() {
     this.stitchMongoService.find(config.COLLECTION_KEY, {}).then(docs => {
+      console.log(docs);
       this.items = docs.map(doc => {
-        const item = {name: doc['employee_name'], icon: doc['avatar']};
+        const item = {name: doc['employee_name'], icon: doc['avatar'], _id: doc['_id']};
         return item;
       });
     }).catch(err => {
