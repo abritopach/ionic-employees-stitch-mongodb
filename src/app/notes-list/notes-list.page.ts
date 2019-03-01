@@ -30,10 +30,13 @@ export class NotesListPage implements OnInit {
   notes: Note[] = [];
   copyNotes: Note[] = [];
   archivedNotes: Note[] = [];
+  avatars = null;
 
   constructor(private storage: Storage, private stitchMongoService: StitchMongoService, private router: Router,
               private popoverCtrl: PopoverController, private alertCtrl: AlertController,
-              private modalCtrl: ModalController) { }
+              private modalCtrl: ModalController) {
+      this.getAvatars();
+  }
 
   ionViewWillEnter() {
     console.log('NotesListPage::ionViewWillEnter() | method called');
@@ -262,12 +265,26 @@ export class NotesListPage implements OnInit {
         const objectId = new ObjectId(res);
         const collaborators = newCollaborators.map(c => new ObjectId(c));
         note.updated_at = new Date();
+        // Added collaborators to user's note.
         this.stitchMongoService.update(config.COLLECTION_KEY, {user_id: objectId, 'notes.id': note.id},
         {$set: { 'notes.$.collaborators': collaborators, 'notes.$.updated_at': note.updated_at }})
         .then(result => {
           console.log('result', result);
           note.collaborators = newCollaborators;
         });
+
+        const promises = collaborators.map(collaborator => {
+          // TODO: Change _id by user_id.
+          const copyNote = {...note};
+          copyNote.collaborators = objectId;
+          return  this.stitchMongoService.update(config.COLLECTION_KEY, {_id: collaborator},
+          { $push: { 'notes': copyNote } });
+        });
+        forkJoin(promises).subscribe(data => {
+          console.log(data);
+        });
+
+
       }
     });
   }
@@ -374,6 +391,24 @@ export class NotesListPage implements OnInit {
         this.presentModal({title: 'Add new collaborators', note: note, action: 'collaborator'});
         break;
     }
+  }
+
+  getAvatars() {
+    this.stitchMongoService.find(config.COLLECTION_KEY, {}).then(docs => {
+      this.avatars = docs.map(doc => {
+        const item = {_id: doc['_id'].toString(), avatar: doc['avatar']};
+        return item;
+      });
+    }).catch(err => {
+        console.error(err);
+    });
+  }
+
+  getAvatarById(id) {
+    // console.log('getAvatarById', this.avatars);
+    return this.avatars
+      .filter(avatar => avatar._id === id)
+      .pop();
   }
 
 }

@@ -51,6 +51,15 @@
                   <ion-label>{{ tag }}</ion-label>
                 </ion-chip>
               </ion-item>
+              <ion-item *ngIf="note.collaborators" lines="none">
+                <ion-row nowrap>
+                <ion-col align-self-baseline *ngFor="let collaborator of note.collaborators">
+                  <ion-avatar>
+                    <img class="avatarImg" [src]="this.getAvatarById(collaborator.toString()).avatar">
+                  </ion-avatar>
+                </ion-col>
+              </ion-row>
+              </ion-item>
               <ion-item lines="none">
                 <ion-badge slot="end" color="tertiary">{{ note?.updated_at }}</ion-badge>
               </ion-item>
