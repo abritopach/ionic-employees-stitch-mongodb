@@ -46,6 +46,7 @@ export class NotesListPage implements OnInit {
         this.stitchMongoService.find(config.COLLECTION_KEY, {user_id: objectId}).then(result => {
           if ((result.length !== 0) && (typeof result[0]['notes'] !== 'undefined')) {
             this.notes = result[0]['notes'];
+            console.log('this.notes', this.notes);
             this.notes = this.copyNotes = this.notes.map(note => {
               return { ...note, todos: note.todos.filter(todo => !todo.complete) };
             });
@@ -72,7 +73,8 @@ export class NotesListPage implements OnInit {
       archived: false,
       tags: [],
       pinned: false,
-      updated_at: new Date()
+      updated_at: new Date(),
+      collaborators: []
     };
     this.storage.get(config.TOKEN_KEY).then(res => {
       if (res) {
@@ -107,25 +109,10 @@ export class NotesListPage implements OnInit {
 
   }
 
-  deleteNote(note) {
+  deleteNote(note, userId) {
     console.log('NotesListPage::deleteNote() | method called');
-    this.storage.get(config.TOKEN_KEY).then(res => {
-      if (res) {
-        const objectId = new ObjectId(res);
-        this.stitchMongoService.update(config.COLLECTION_KEY, {user_id: objectId},
-        { $pull: { 'notes': { id: note.id } } })
-        .then(result => {
-            console.log(result);
-            if (note.archived) {
-              this.archivedNotes = this.archivedNotes.filter(n => n.id !== note.id);
-            } else {
-              this.notes = this.notes.filter(n => n.id !== note.id);
-            }
-        }).catch(err => {
-            console.error(err);
-        });
-      }
-    });
+    return this.stitchMongoService.update(config.COLLECTION_KEY, {user_id: userId},
+    { $pull: { 'notes': { id: note.id } } });
   }
 
   archiveNote(note) {
@@ -193,8 +180,8 @@ export class NotesListPage implements OnInit {
     });
   }
 
-  async presentAlertConfirm(options = {header: 'Header', message: 'message', option: 'option', note: null}) {
-    const {header, message, option, note} = options;
+  async presentAlertConfirm(options = {header: 'Header', message: 'message', option: 'option', note: null, userId: ObjectId}) {
+    const {header, message, option, note, userId} = options;
     const alert = await this.alertCtrl.create({
       header: header,
       message: message,
@@ -212,7 +199,16 @@ export class NotesListPage implements OnInit {
               this.deleteAllNotes();
             }
             if (option === 'deleteNote') {
-              this.deleteNote(note);
+              this.deleteNote(note, userId).then(result => {
+                console.log(result);
+                if (note.archived) {
+                  this.archivedNotes = this.archivedNotes.filter(n => n.id !== note.id);
+                } else {
+                  this.notes = this.notes.filter(n => n.id !== note.id);
+                }
+              }).catch(err => {
+                  console.error(err);
+              });
             }
           }
         }
@@ -271,20 +267,21 @@ export class NotesListPage implements OnInit {
         .then(result => {
           console.log('result', result);
           note.collaborators = newCollaborators;
+          console.log('note', note);
         });
 
         const promises = collaborators.map(collaborator => {
-          // TODO: Change _id by user_id.
           const copyNote = {...note};
-          copyNote.collaborators = objectId;
-          return  this.stitchMongoService.update(config.COLLECTION_KEY, {_id: collaborator},
+          const c = [];
+          c.push(objectId);
+          copyNote.collaborators = c;
+          console.log('copyNote', copyNote);
+          return  this.stitchMongoService.update(config.COLLECTION_KEY, {user_id: collaborator},
           { $push: { 'notes': copyNote } });
         });
         forkJoin(promises).subscribe(data => {
           console.log(data);
         });
-
-
       }
     });
   }
@@ -360,43 +357,49 @@ export class NotesListPage implements OnInit {
   }
 
   processData(data, note) {
-    switch (data.option) {
-      case 'deleteNote':
-        this.presentAlertConfirm({header: 'Delete note', message: 'Are you sure that you want to delete the note?',
-        option: 'deleteNote', note: note});
-        break;
-      case 'archiveNote':
-        this.archiveNote(note);
-        break;
-      case 'unarchiveNote':
-        this.archiveNote(note);
-        break;
-      case 'archiveAllNotes':
-        this.archiveAllNotes();
-        break;
-      case 'deleteAllNotes':
-        this.presentAlertConfirm({header: 'Delete all notes', message: 'Are you sure that you want to delete all the notes?',
-        option: 'deleteAllNotes', note: null});
-        break;
-      case 'tagNote':
-        this.presentModal({title: 'Add new tags', note: note, action: 'tag'});
-        break;
-      case 'createCopyNote':
-        this.createNoteCopy(note);
-        break;
-      case 'pinnedNote':
-        this.pinnedNote(note);
-        break;
-      case 'collaboratorNote':
-        this.presentModal({title: 'Add new collaborators', note: note, action: 'collaborator'});
-        break;
-    }
+    this.storage.get(config.TOKEN_KEY).then(res => {
+      if (res) {
+        const userId = new ObjectId(res);
+        switch (data.option) {
+          case 'deleteNote':
+            this.presentAlertConfirm({header: 'Delete note', message: 'Are you sure that you want to delete the note?',
+            option: 'deleteNote', note: note, userId: userId});
+            break;
+          case 'archiveNote':
+            this.archiveNote(note);
+            break;
+          case 'unarchiveNote':
+            this.archiveNote(note);
+            break;
+          case 'archiveAllNotes':
+            this.archiveAllNotes();
+            break;
+          case 'deleteAllNotes':
+            this.presentAlertConfirm({header: 'Delete all notes', message: 'Are you sure that you want to delete all the notes?',
+            option: 'deleteAllNotes', note: null, userId: userId});
+            break;
+          case 'tagNote':
+            this.presentModal({title: 'Add new tags', note: note, action: 'tag'});
+            break;
+          case 'createCopyNote':
+            this.createNoteCopy(note);
+            break;
+          case 'pinnedNote':
+            this.pinnedNote(note);
+            break;
+          case 'collaboratorNote':
+            this.presentModal({title: 'Add new collaborators', note: note, action: 'collaborator'});
+            break;
+        }
+        this.checkCollaborators(data, note);
+      }
+    });
   }
 
   getAvatars() {
     this.stitchMongoService.find(config.COLLECTION_KEY, {}).then(docs => {
       this.avatars = docs.map(doc => {
-        const item = {_id: doc['_id'].toString(), avatar: doc['avatar']};
+        const item = {user_id: doc['user_id'].toString(), avatar: doc['avatar']};
         return item;
       });
     }).catch(err => {
@@ -405,10 +408,29 @@ export class NotesListPage implements OnInit {
   }
 
   getAvatarById(id) {
-    // console.log('getAvatarById', this.avatars);
     return this.avatars
-      .filter(avatar => avatar._id === id)
+      .filter(avatar => avatar.user_id === id)
       .pop();
+  }
+
+  checkCollaborators(data, note) {
+    if ((typeof note.collaborators !== 'undefined') && (note.collaborators.length !== 0)) {
+      console.log(note.collaborators);
+      const promises = note.collaborators.map(collaborator => {
+        console.log(collaborator);
+
+        switch (data.option) {
+          case 'deleteNote':
+            return this.deleteNote(note, new ObjectId(collaborator));
+        }
+
+      });
+      forkJoin(promises).subscribe(d => {
+        console.log(d);
+      });
+    } else {
+      console.log('checkCollaborators: empty collaborators');
+    }
   }
 
 }

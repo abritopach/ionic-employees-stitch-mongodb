@@ -93,7 +93,7 @@ export class NgSelectModalComponent implements OnInit {
   fetchEmployees() {
     this.stitchMongoService.find(config.COLLECTION_KEY, {}).then(docs => {
       this.items = docs.map(doc => {
-        const item = {name: doc['employee_name'], icon: doc['avatar'], _id: doc['_id'].toString()};
+        const item = {name: doc['employee_name'], icon: doc['avatar'], _id: doc['user_id'].toString()};
         return item;
       });
     }).catch(err => {

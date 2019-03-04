@@ -1,4 +1,5 @@
 import { Todo } from './todo.model';
+import { ObjectId } from 'bson';
 
 export interface Note {
     id: number;
@@ -8,4 +9,5 @@ export interface Note {
     tags: string[] | [];
     pinned: boolean;
     updated_at: Date;
+    collaborators: ObjectId[] | [];
 }
