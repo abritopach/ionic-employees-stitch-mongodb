@@ -97,6 +97,7 @@ export class TodoPage implements OnInit {
           todo['index'] = this.todos.length;
           this.todos.push(todo);
           this.iziToast.success('Add task', 'Task added successfully.');
+          this.checkCollaborators('addTodo', this.note, todo);
         });
       }
     });
@@ -135,6 +136,7 @@ export class TodoPage implements OnInit {
             this.todos.push(todo);
             this.iziToast.success('Update task', 'Task incomplete.');
           }
+          this.checkCollaborators('toggleTodo', this.note, todo);
         });
       }
     });
@@ -157,6 +159,7 @@ export class TodoPage implements OnInit {
               this.todosCompleted = this.todosCompleted.filter(t => t.id !== todo.id);
             }
             this.iziToast.success('Delete task', 'Task deleted successfully.');
+            this.checkCollaborators('removeTodo', this.note, todo);
         }).catch(err => {
             console.error(err);
         });
@@ -258,4 +261,39 @@ export class TodoPage implements OnInit {
       }
     });
   }
+
+  updateCollaboratorNote(filter, action) {
+    console.log('TodoPage::updateCollaboratorNote() | method called');
+    return this.stitchMongoService.update(config.COLLECTION_KEY, filter, action);
+  }
+
+  checkCollaborators(option, note, todo) {
+    if ((typeof note.collaborators !== 'undefined') && (note.collaborators.length !== 0)) {
+      console.log(note.collaborators);
+      const promises = note.collaborators.map(collaborator => {
+        console.log(collaborator);
+
+        switch (option) {
+          case 'addTodo':
+            return this.updateCollaboratorNote({user_id: new ObjectId(collaborator), 'notes.id': note.id},
+            {$set: {'notes.$.updated_at': new Date()}, $push: { 'notes.$.todos': todo }});
+          case 'removeTodo':
+            return this.updateCollaboratorNote({user_id: new ObjectId(collaborator), 'notes.id': note.id},
+            {$set: {'notes.$.updated_at': new Date()}, $pull: { 'notes.$.todos': { title: todo.title } }});
+          case 'toggleTodo':
+            const obj = {};
+            obj['notes.$.todos.' + todo['index']] = todo;
+            obj['notes.$.updated_at'] = new Date();
+            return this.updateCollaboratorNote({user_id: new ObjectId(collaborator), 'notes.todos.id': todo.id},
+            { $set: obj });
+        }
+      });
+      forkJoin(promises).subscribe(d => {
+        console.log(d);
+      });
+    } else {
+      console.log('checkCollaborators: empty collaborators');
+    }
+  }
+
 }
