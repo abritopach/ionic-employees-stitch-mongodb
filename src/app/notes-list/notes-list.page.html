@@ -46,11 +46,21 @@
               <ion-card-content tappable routerLink="/todo/{{ note.id }}">
                   <app-todo-list [todos]="note?.todos" [readOnly]="true"></app-todo-list>
               </ion-card-content>
+              <ion-item-divider *ngIf="note.tags">
+                  <ion-label>
+                    Tags
+                  </ion-label>
+              </ion-item-divider>
               <ion-item lines="none">
                 <ion-chip color="secondary" *ngFor="let tag of note.tags">
                   <ion-label>{{ tag }}</ion-label>
                 </ion-chip>
               </ion-item>
+              <ion-item-divider *ngIf="note.collaborators">
+                <ion-label>
+                  Collaborators
+                </ion-label>
+              </ion-item-divider>
               <ion-item *ngIf="note.collaborators" lines="none">
                 <ion-row nowrap>
                 <ion-col align-self-baseline *ngFor="let collaborator of note.collaborators">
@@ -94,6 +104,15 @@
                 <ion-label>{{ tag }}</ion-label>
               </ion-chip>
             </ion-item>
+            <ion-item *ngIf="note.collaborators" lines="none">
+                <ion-row nowrap>
+                <ion-col align-self-baseline *ngFor="let collaborator of note.collaborators">
+                  <ion-avatar>
+                    <img class="avatarImg" [src]="this.getAvatarById(collaborator.toString()).avatar">
+                  </ion-avatar>
+                </ion-col>
+              </ion-row>
+              </ion-item>
           </ion-card>
       </ion-col>
     </ion-row>

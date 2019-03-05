@@ -109,10 +109,26 @@ export class NotesListPage implements OnInit {
 
   }
 
-  deleteNote(note, userId) {
+  deleteNote(note) {
     console.log('NotesListPage::deleteNote() | method called');
-    return this.stitchMongoService.update(config.COLLECTION_KEY, {user_id: userId},
-    { $pull: { 'notes': { id: note.id } } });
+    this.storage.get(config.TOKEN_KEY).then(res => {
+      if (res) {
+        const objectId = new ObjectId(res);
+        this.stitchMongoService.update(config.COLLECTION_KEY, {user_id: objectId},
+        { $pull: { 'notes': { id: note.id } } })
+        .then(result => {
+            console.log(result);
+            if (note.archived) {
+              this.archivedNotes = this.archivedNotes.filter(n => n.id !== note.id);
+            } else {
+              this.notes = this.notes.filter(n => n.id !== note.id);
+            }
+            this.checkCollaborators('deleteNote', note);
+        }).catch(err => {
+            console.error(err);
+        });
+      }
+    });
   }
 
   archiveNote(note) {
@@ -133,6 +149,7 @@ export class NotesListPage implements OnInit {
               this.notes.push(note);
               this.archivedNotes = this.archivedNotes.filter(n => n.id !== note.id);
             }
+            this.checkCollaborators('archiveNote', note);
         }).catch(err => {
             console.error(err);
         });
@@ -199,16 +216,7 @@ export class NotesListPage implements OnInit {
               this.deleteAllNotes();
             }
             if (option === 'deleteNote') {
-              this.deleteNote(note, userId).then(result => {
-                console.log(result);
-                if (note.archived) {
-                  this.archivedNotes = this.archivedNotes.filter(n => n.id !== note.id);
-                } else {
-                  this.notes = this.notes.filter(n => n.id !== note.id);
-                }
-              }).catch(err => {
-                  console.error(err);
-              });
+              this.deleteNote(note);
             }
           }
         }
@@ -250,6 +258,7 @@ export class NotesListPage implements OnInit {
         .then(result => {
           console.log('result', result);
           note.tags = newTags;
+          this.checkCollaborators('tagNote', note, newTags);
         });
       }
     });
@@ -297,6 +306,7 @@ export class NotesListPage implements OnInit {
           .then(result => {
             console.log('result', result);
             this.notes.push(copyNote);
+            this.checkCollaborators('createCopyNote', copyNote);
           });
         }
     });
@@ -314,6 +324,7 @@ export class NotesListPage implements OnInit {
         .then(result => {
             console.log(result);
             this.notes.sort((n1, n2) => Number(n2.pinned) - Number(n1.pinned));
+            this.checkCollaborators('pinnedNote', note);
         }).catch(err => {
             console.error(err);
         });
@@ -391,7 +402,6 @@ export class NotesListPage implements OnInit {
             this.presentModal({title: 'Add new collaborators', note: note, action: 'collaborator'});
             break;
         }
-        this.checkCollaborators(data, note);
       }
     });
   }
@@ -413,15 +423,33 @@ export class NotesListPage implements OnInit {
       .pop();
   }
 
-  checkCollaborators(data, note) {
+  updateCollaboratorNote(note, filter, action) {
+    console.log('NotesListPage::updateCollaboratorNote() | method called');
+    return this.stitchMongoService.update(config.COLLECTION_KEY, filter, action);
+  }
+
+  checkCollaborators(option, note, newTags?) {
     if ((typeof note.collaborators !== 'undefined') && (note.collaborators.length !== 0)) {
       console.log(note.collaborators);
       const promises = note.collaborators.map(collaborator => {
         console.log(collaborator);
 
-        switch (data.option) {
+        switch (option) {
           case 'deleteNote':
-            return this.deleteNote(note, new ObjectId(collaborator));
+            // return this.deleteNote(note, new ObjectId(collaborator));
+            return this.updateCollaboratorNote(note, {user_id: new ObjectId(collaborator)}, { $pull: { 'notes': { id: note.id } } });
+          case 'archiveNote':
+            return this.updateCollaboratorNote(note, {user_id: new ObjectId(collaborator), 'notes.id': note.id},
+            { $set: { 'notes.$.archived' : note.archived, 'notes.$.updated_at': note.updated_at} });
+          case 'tagNote':
+            return this.updateCollaboratorNote(note, {user_id: new ObjectId(collaborator), 'notes.id': note.id},
+            {$set: { 'notes.$.tags': newTags, 'notes.$.updated_at': note.updated_at }});
+          case 'createCopyNote':
+            return this.updateCollaboratorNote(note, {user_id: new ObjectId(collaborator)},
+            {$push: { 'notes': note }});
+          case 'pinnedNote':
+            return this.updateCollaboratorNote(note, {user_id: new ObjectId(collaborator), 'notes.id': note.id},
+            { $set: { 'notes.$.pinned' : note.pinned, 'notes.$.updated_at': note.updated_at} });
         }
 
       });
