@@ -23,7 +23,7 @@
         <ion-col align-self-center size-lg="4" size-md="6" size-xs="6" *ngFor="let note of notes">
           <ion-card>
               <ion-item>
-                <ion-label text-wrap>{{ note?.title }}</ion-label>
+                <ion-label text-wrap><b>{{ note?.title }}</b></ion-label>
                 <!--
                 <ion-button slot='end' (click)="presentPopover('optionsNote', note)" fill="clear">
                     <ion-icon slot="icon-only" name="more"></ion-icon>
@@ -45,22 +45,23 @@
               -->
               <ion-card-content tappable routerLink="/todo/{{ note.id }}">
                   <app-todo-list [todos]="note?.todos" [readOnly]="true"></app-todo-list>
+                  <ion-item-divider></ion-item-divider>
 
-                  <ion-item-divider *ngIf="note.tags">
+                  <ion-item *ngIf="note.tags" lines="none">
                       <ion-label>
-                        Tags
+                          <ion-icon name="pricetags"></ion-icon> Tags
                       </ion-label>
-                  </ion-item-divider>
+                  </ion-item>
                   <ion-item lines="none">
                     <ion-chip color="secondary" *ngFor="let tag of note.tags">
                       <ion-label>{{ tag }}</ion-label>
                     </ion-chip>
                   </ion-item>
-                  <ion-item-divider *ngIf="note.collaborators">
+                  <ion-item *ngIf="note.collaborators" lines="none">
                     <ion-label>
-                      Collaborators
+                        <ion-icon name="people"></ion-icon> Collaborators
                     </ion-label>
-                  </ion-item-divider>
+                  </ion-item>
                   <ion-item *ngIf="note.collaborators" lines="none">
                     <ion-row nowrap>
                     <ion-col align-self-baseline *ngFor="let collaborator of note.collaborators">
@@ -71,7 +72,7 @@
                   </ion-row>
                   </ion-item>
                   <ion-item lines="none">
-                    <ion-badge slot="end" color="tertiary">{{ note?.updated_at }}</ion-badge>
+                    <ion-badge slot="end" color="tertiary">{{ note?.updated_at | date:'short' }}</ion-badge>
                   </ion-item>
               </ion-card-content>
             </ion-card>

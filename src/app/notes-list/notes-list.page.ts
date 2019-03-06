@@ -166,6 +166,7 @@ export class NotesListPage implements OnInit {
         const promises = this.notes.map(note => {
           note.archived = !note.archived;
           note.updated_at = new Date();
+          this.checkCollaborators('archiveAllNotes', note);
           return  this.stitchMongoService.update(config.COLLECTION_KEY, {user_id: objectId, 'notes.id': note.id},
           { $set: { 'notes.$.archived' : note.archived, 'notes.$.updated_at': note.updated_at} });
         });
@@ -450,6 +451,9 @@ export class NotesListPage implements OnInit {
           case 'pinnedNote':
             return this.updateCollaboratorNote(note, {user_id: new ObjectId(collaborator), 'notes.id': note.id},
             { $set: { 'notes.$.pinned' : note.pinned, 'notes.$.updated_at': note.updated_at} });
+          case 'archiveAllNotes':
+            return this.updateCollaboratorNote(note, {user_id: new ObjectId(collaborator), 'notes.id': note.id},
+            { $set: { 'notes.$.archived' : note.archived, 'notes.$.updated_at': note.updated_at} });
         }
 
       });
