@@ -352,7 +352,8 @@ export class NotesListPage implements OnInit {
             {name: 'Create copy', icon: 'copy', function: 'createCopyNote'},
             {name: 'Tags', icon: 'pricetags', function: 'tagNote'},
             {name: 'Pinned', icon: 'pin', function: 'pinnedNote'},
-            {name: 'Collaborator', icon: 'person-add', function: 'collaboratorNote'}
+            {name: 'Collaborator', icon: 'person-add', function: 'collaboratorNote'},
+            {name: 'Color', icon: 'color-palette', function: 'colourNote'}
           ]
         }};
         break;

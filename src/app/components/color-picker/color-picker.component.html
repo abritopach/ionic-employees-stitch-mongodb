@@ -1,0 +1,23 @@
+<ion-card>
+  <ion-card-header>
+  <ion-card-subtitle>Made with love!!</ion-card-subtitle>
+  <ion-card-title>Color picker</ion-card-title>
+  </ion-card-header>
+  <ion-card-content>
+      <ion-item>
+        <ion-avatar slot="start">
+            <div class="circle"></div>
+        </ion-avatar>
+        <ion-label>
+          <h2>Background</h2>
+          <h3>#FFFFFF</h3>
+        </ion-label>
+      </ion-item>
+      <br>
+      <ion-item>
+        <div class="colors">
+          <div *ngFor="let paint of defaultColors" class="circle" [ngStyle]="{'background': paint}"></div>
+        </div>
+      </ion-item>
+  </ion-card-content>
+</ion-card>
