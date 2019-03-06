@@ -188,6 +188,7 @@ export class TodoPage implements OnInit {
             const obj = {};
             obj['notes.$.todos.' + todo['index']] = todo;
             obj['notes.$.updated_at'] = new Date();
+            this.checkCollaborators('deselectTasks', this.note, todo);
             return this.stitchMongoService.update(config.COLLECTION_KEY, {user_id: objectId, 'notes.todos.id': todo.id},
             { $set: obj });
           });
@@ -199,6 +200,7 @@ export class TodoPage implements OnInit {
           });
         } else if (result.option === 'delete') {
           const promises = this.todosCompleted.map(todo => {
+            this.checkCollaborators('deleteSelected', this.note, todo);
             return this.stitchMongoService.update(config.COLLECTION_KEY, {user_id: objectId, 'notes.id': noteObjectId},
              {$set: {'notes.$.updated_at': new Date()}, $pull: { 'notes.$.todos': { title: todo.title } }});
           });
@@ -222,6 +224,7 @@ export class TodoPage implements OnInit {
         .then(result => {
             console.log(result);
             this.iziToast.success('Delete note', 'Note deleted successfully.');
+            this.checkCollaborators('deleteNote', this.note);
             this.location.back();
         }).catch(err => {
             console.error(err);
@@ -241,6 +244,7 @@ export class TodoPage implements OnInit {
           {$push: { 'notes': copyNote }})
           .then(result => {
             console.log('result', result);
+            this.checkCollaborators('copyNote', copyNote);
             this.iziToast.success('Copy note', 'Created copy note successfully.');
           });
         }
@@ -267,7 +271,7 @@ export class TodoPage implements OnInit {
     return this.stitchMongoService.update(config.COLLECTION_KEY, filter, action);
   }
 
-  checkCollaborators(option, note, todo) {
+  checkCollaborators(option, note, todo?) {
     if ((typeof note.collaborators !== 'undefined') && (note.collaborators.length !== 0)) {
       console.log(note.collaborators);
       const promises = note.collaborators.map(collaborator => {
@@ -286,6 +290,19 @@ export class TodoPage implements OnInit {
             obj['notes.$.updated_at'] = new Date();
             return this.updateCollaboratorNote({user_id: new ObjectId(collaborator), 'notes.todos.id': todo.id},
             { $set: obj });
+          case 'copyNote':
+            return this.updateCollaboratorNote({user_id: new ObjectId(collaborator)}, {$push: { 'notes': note }});
+          case 'deleteNote':
+            return this.updateCollaboratorNote({user_id: new ObjectId(collaborator)}, { $pull: { 'notes': { id: note.id } } });
+          case 'deselectTasks':
+            const obj1 = {};
+            obj1['notes.$.todos.' + todo['index']] = todo;
+            obj1['notes.$.updated_at'] = new Date();
+            return this.updateCollaboratorNote({user_id: new ObjectId(collaborator), 'notes.todos.id': todo.id},
+            { $set: obj1 });
+          case 'deleteSelected':
+            return this.updateCollaboratorNote({user_id: new ObjectId(collaborator), 'notes.id': note.id},
+            {$set: {'notes.$.updated_at': new Date()}, $pull: { 'notes.$.todos': { title: todo.title } }});
         }
       });
       forkJoin(promises).subscribe(d => {
