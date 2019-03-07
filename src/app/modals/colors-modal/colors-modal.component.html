@@ -1,0 +1,18 @@
+<ion-header>
+    <ion-toolbar color="tertiary">
+        <ion-buttons slot="end">
+            <ion-button (click)="dismiss()">
+                <ion-icon name="close" color="light"></ion-icon>
+            </ion-button>
+        </ion-buttons>
+        <ion-title>
+            {{modalTitle}}
+        </ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+    <app-color-picker [color]="backgroundColor" [heading]="'Background'"
+    (event)="setColor('background', $event)"></app-color-picker>
+    <ion-button shape="round" fill="outline" (click)="accept()">Accept</ion-button>
+</ion-content>

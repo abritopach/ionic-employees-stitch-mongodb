@@ -15,6 +15,7 @@ import { PopoverController, AlertController, ModalController } from '@ionic/angu
 
 import { MoreOptionsPopoverComponent } from '../popovers/more-options/more-options.popover';
 import { NgSelectModalComponent } from '../modals/ngselect-modal/ngselect.modal';
+import { ColorsModalComponent } from '../modals/colors-modal/colors-modal.component';
 
 import {forkJoin} from 'rxjs';
 import { not } from '@angular/compiler/src/output/output_ast';
@@ -74,7 +75,8 @@ export class NotesListPage implements OnInit {
       tags: [],
       pinned: false,
       updated_at: new Date(),
-      collaborators: []
+      collaborators: [],
+      color: '#fff'
     };
     this.storage.get(config.TOKEN_KEY).then(res => {
       if (res) {
@@ -227,10 +229,10 @@ export class NotesListPage implements OnInit {
     await alert.present();
   }
 
-  async presentModal(options: {title: string, note: Note, action: string}) {
+  async presentModal(options: {title: string, note?: Note, action?: string}, component) {
     const componentProps = { modalProps: { title: options.title, note: options.note, action: options.action}};
     const modal = await this.modalCtrl.create({
-      component: NgSelectModalComponent,
+      component: component,
       componentProps: componentProps
     });
     await modal.present();
@@ -243,6 +245,11 @@ export class NotesListPage implements OnInit {
       }
       if (data.option === 'collaborator') {
         this.addNewCollaborators(options.note, data.newData);
+      }
+      if (data.option === 'colour') {
+        console.log(data);
+        console.log(options.note);
+        this.setColorNote(options.note, data.color);
       }
     }
   }
@@ -295,6 +302,23 @@ export class NotesListPage implements OnInit {
       }
     });
   }
+
+  setColorNote(note, color) {
+    this.storage.get(config.TOKEN_KEY).then(res => {
+      if (res) {
+        const objectId = new ObjectId(res);
+        note.updated_at = new Date();
+        this.stitchMongoService.update(config.COLLECTION_KEY, {user_id: objectId, 'notes.id': note.id},
+        {$set: { 'notes.$.color': color, 'notes.$.updated_at': note.updated_at }})
+        .then(result => {
+          console.log('result', result);
+          note.color = color;
+          this.checkCollaborators('colourNote', note);
+        });
+      }
+    });
+  }
+
 
   createNoteCopy(note) {
     console.log('NotesListPage::createNoteCopy() | method called');
@@ -392,7 +416,7 @@ export class NotesListPage implements OnInit {
             option: 'deleteAllNotes', note: null, userId: userId});
             break;
           case 'tagNote':
-            this.presentModal({title: 'Add new tags', note: note, action: 'tag'});
+            this.presentModal({title: 'Add new tags', note: note, action: 'tag'}, NgSelectModalComponent);
             break;
           case 'createCopyNote':
             this.createNoteCopy(note);
@@ -401,7 +425,10 @@ export class NotesListPage implements OnInit {
             this.pinnedNote(note);
             break;
           case 'collaboratorNote':
-            this.presentModal({title: 'Add new collaborators', note: note, action: 'collaborator'});
+            this.presentModal({title: 'Add new collaborators', note: note, action: 'collaborator'}, NgSelectModalComponent);
+            break;
+          case 'colourNote':
+            this.presentModal({title: 'Select color', note: note}, ColorsModalComponent);
             break;
         }
       }
@@ -420,9 +447,11 @@ export class NotesListPage implements OnInit {
   }
 
   getAvatarById(id) {
-    return this.avatars
+    if (this.avatars.length !== 0) {
+      return this.avatars
       .filter(avatar => avatar.user_id === id)
       .pop();
+    }
   }
 
   updateCollaboratorNote(note, filter, action) {
@@ -455,6 +484,9 @@ export class NotesListPage implements OnInit {
           case 'archiveAllNotes':
             return this.updateCollaboratorNote(note, {user_id: new ObjectId(collaborator), 'notes.id': note.id},
             { $set: { 'notes.$.archived' : note.archived, 'notes.$.updated_at': note.updated_at} });
+          case 'colourNote':
+            return this.updateCollaboratorNote(note, {user_id: new ObjectId(collaborator), 'notes.id': note.id},
+            {$set: { 'notes.$.color': note.color, 'notes.$.updated_at': note.updated_at }});
         }
 
       });

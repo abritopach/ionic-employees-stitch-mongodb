@@ -10,4 +10,5 @@ export interface Note {
     pinned: boolean;
     updated_at: Date;
     collaborators: ObjectId[] | [];
+    color: string | '#fff';
 }

@@ -13,6 +13,7 @@ import { NgSelectModalComponent } from '../modals/ngselect-modal/ngselect.modal'
 import { NgSelectModule } from '@ng-select/ng-select';
 
 import { ColorPickerComponent } from '../components/color-picker/color-picker.component';
+import { ColorsModalComponent } from '../modals/colors-modal/colors-modal.component';
 
 const routes: Routes = [
   {
@@ -31,7 +32,7 @@ const routes: Routes = [
     SharedComponentsModule,
     NgSelectModule
   ],
-  declarations: [NotesListPage, NgSelectModalComponent, ColorPickerComponent],
-  entryComponents: [NgSelectModalComponent, ColorPickerComponent]
+  declarations: [NotesListPage, NgSelectModalComponent, ColorPickerComponent, ColorsModalComponent],
+  entryComponents: [NgSelectModalComponent, ColorPickerComponent, ColorsModalComponent]
 })
 export class NotesListPageModule {}

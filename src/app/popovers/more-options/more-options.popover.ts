@@ -82,6 +82,11 @@ export class MoreOptionsPopoverComponent implements OnInit, OnDestroy {
     this.popoverCtrl.dismiss({option: 'collaboratorNote'});
   }
 
+  colourNote() {
+    console.log('MoreOptionsPopoverComponent::colourNote | method called');
+    this.popoverCtrl.dismiss({option: 'colourNote'});
+  }
+
   /*****/
 
   // Todo page options.

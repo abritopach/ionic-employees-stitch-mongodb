@@ -6,17 +6,17 @@
   <ion-card-content>
       <ion-item>
         <ion-avatar slot="start">
-            <div class="circle"></div>
+            <div class="circle" [ngStyle]="{'background': color}"></div>
         </ion-avatar>
         <ion-label>
-          <h2>Background</h2>
-          <h3>#FFFFFF</h3>
+          <h2> {{heading}} </h2>
+          <h3> {{color}} </h3>
         </ion-label>
       </ion-item>
       <br>
-      <ion-item>
+      <ion-item *ngIf="show">
         <div class="colors">
-          <div *ngFor="let paint of defaultColors" class="circle" [ngStyle]="{'background': paint}"></div>
+          <div (click)="changeColor(paint)" *ngFor="let paint of defaultColors" class="circle" [ngStyle]="{'background': paint}"></div>
         </div>
       </ion-item>
   </ion-card-content>

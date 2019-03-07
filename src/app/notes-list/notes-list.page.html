@@ -17,13 +17,11 @@
         </ion-fab-button>
     </ion-fab>
 
-    <app-color-picker></app-color-picker>
-
    <!-- Notes List Grid view. -->
    <ion-grid>
       <ion-row>
         <ion-col align-self-center size-lg="4" size-md="6" size-xs="6" *ngFor="let note of notes">
-          <ion-card>
+          <ion-card [ngStyle]="{'background': note.color}">
               <ion-item>
                 <ion-label text-wrap><b>{{ note?.title }}</b></ion-label>
                 <!--
