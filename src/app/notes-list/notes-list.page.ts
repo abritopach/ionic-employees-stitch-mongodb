@@ -447,7 +447,7 @@ export class NotesListPage implements OnInit {
   }
 
   getAvatarById(id) {
-    if (this.avatars.length !== 0) {
+    if (this.avatars !== null) {
       return this.avatars
       .filter(avatar => avatar.user_id === id)
       .pop();

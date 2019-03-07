@@ -15,6 +15,8 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { ColorPickerComponent } from '../components/color-picker/color-picker.component';
 import { ColorsModalComponent } from '../modals/colors-modal/colors-modal.component';
 
+import { DragulaModule } from 'ng2-dragula';
+
 const routes: Routes = [
   {
     path: '',
@@ -30,7 +32,8 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes),
     SharedComponentsModule,
-    NgSelectModule
+    NgSelectModule,
+    DragulaModule.forRoot()
   ],
   declarations: [NotesListPage, NgSelectModalComponent, ColorPickerComponent, ColorsModalComponent],
   entryComponents: [NgSelectModalComponent, ColorPickerComponent, ColorsModalComponent]

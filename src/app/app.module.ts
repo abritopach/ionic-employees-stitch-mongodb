@@ -14,7 +14,6 @@ import { ShowPeoplePopoverComponent } from './popovers/show-people.popover';
 
 import { IonicStorageModule } from '@ionic/storage';
 
-
 @NgModule({
   declarations: [AppComponent, ShowPeoplePopoverComponent],
   entryComponents: [ShowPeoplePopoverComponent],
