@@ -1,0 +1,67 @@
+<ion-header>
+  <ion-toolbar color="tertiary">
+      <ion-buttons slot="end">
+          <ion-button (click)="dismiss()">
+              <ion-icon name="close" color="light"></ion-icon>
+          </ion-button>
+      </ion-buttons>
+      <ion-title>
+          {{modalTitle}}
+      </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <form [formGroup]="reminderForm" novalidate (ngSubmit)="reminderFormSubmit()">
+    <ion-list inset>
+        <ion-item lines="none">
+          <ion-checkbox checked="false" formControlName="hourCheckbox"
+          (ionChange)="ionChangeHour(permission, $event)" color="primary"></ion-checkbox>
+          <ion-label class="checkboxLabel">Hour</ion-label>
+          <ion-checkbox checked="false" formControlName="locationCheckbox"
+          (ionChange)="ionChangeHour(permission, $event)" color="primary"></ion-checkbox>
+          <ion-label class="checkboxLabel">Location</ion-label>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating">Date</ion-label>
+          <ion-select #date formControlName="date" interface="popover" (ionChange)="selectedDate(platform.date)">
+              <ion-select-option value="today">Today</ion-select-option>
+              <ion-select-option value="tomorrow">Tomorrow</ion-select-option>
+              <ion-select-option value="nextMonday">Next monday</ion-select-option>
+              <ion-select-option value="selectDate">Select date...</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating">Hour</ion-label>
+          <ion-select #hour formControlName="hour" interface="popover" (ionChange)="selectedHour(platform.hour)">
+              <ion-select-option value="tomorrow">Tomorrow (8:00)</ion-select-option>
+              <ion-select-option value="atMidday">At midday (13:00)</ion-select-option>
+              <ion-select-option value="afternoon">Afternoon (18:00)</ion-select-option>
+              <ion-select-option value="night">Night (20:00)</ion-select-option>
+              <ion-select-option value="selectHour">Select hour...</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item>
+            <ion-label position="floating">Frequency</ion-label>
+            <ion-select #frequency formControlName="frequency" interface="popover" (ionChange)="selectedFrequency(platform.frequency)">
+                <ion-select-option value="noRepetition">No repetition</ion-select-option>
+                <ion-select-option value="daily">Daily</ion-select-option>
+                <ion-select-option value="weekly">Weekly</ion-select-option>
+                <ion-select-option value="monthly">Monthly</ion-select-option>
+                <ion-select-option value="annually">Annually</ion-select-option>
+                <ion-select-option value="customize">Customize...</ion-select-option>
+            </ion-select>
+          </ion-item>
+    </ion-list>
+    <ion-row no-padding justify-content-center>
+        <ion-col col-auto text-right>
+            <ion-button fill="clear" size="small" color="danger">
+                Cancel
+              </ion-button>
+            <ion-button [disabled]='!reminderForm.valid' type="submit" size="small" color="primary">
+              Save
+            </ion-button>
+        </ion-col>
+    </ion-row>
+  </form>
+</ion-content>

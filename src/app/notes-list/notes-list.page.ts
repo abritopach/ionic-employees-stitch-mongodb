@@ -16,10 +16,11 @@ import { PopoverController, AlertController, ModalController } from '@ionic/angu
 import { MoreOptionsPopoverComponent } from '../popovers/more-options/more-options.popover';
 import { NgSelectModalComponent } from '../modals/ngselect-modal/ngselect.modal';
 import { ColorsModalComponent } from '../modals/colors-modal/colors-modal.component';
+import { ReminderModalComponent } from '../modals/reminder-modal/reminder-modal.component';
 
 import {forkJoin} from 'rxjs';
-import { not } from '@angular/compiler/src/output/output_ast';
-import { Title } from '@angular/platform-browser';
+
+import { Plugins } from '@capacitor/core';
 
 @Component({
   selector: 'app-notes-list',
@@ -357,6 +358,28 @@ export class NotesListPage implements OnInit {
     });
   }
 
+  reminderNote() {
+
+    /*
+    const { LocalNotifications } = Plugins;
+
+    LocalNotifications.schedule({
+      notifications: [
+        {
+          title: 'Title',
+          body: 'Body',
+          id: 1,
+          schedule: { at: new Date(Date.now() + 1000 * 5) },
+          sound: null,
+          attachments: null,
+          actionTypeId: '',
+          extra: null
+        }
+      ]
+    });
+    */
+  }
+
   builtComponentProps(options) {
     let componentProps;
     switch (options) {
@@ -377,7 +400,8 @@ export class NotesListPage implements OnInit {
             {name: 'Tags', icon: 'pricetags', function: 'tagNote'},
             {name: 'Pinned', icon: 'pin', function: 'pinnedNote'},
             {name: 'Collaborator', icon: 'person-add', function: 'collaboratorNote'},
-            {name: 'Color', icon: 'color-palette', function: 'colourNote'}
+            {name: 'Color', icon: 'color-palette', function: 'colourNote'},
+            {name: 'Reminder', icon: 'notifications', function: 'reminderNote'}
           ]
         }};
         break;
@@ -429,6 +453,9 @@ export class NotesListPage implements OnInit {
             break;
           case 'colourNote':
             this.presentModal({title: 'Select color', note: note}, ColorsModalComponent);
+            break;
+          case 'reminderNote':
+            this.presentModal({title: 'Add reminder', note: note}, ReminderModalComponent);
             break;
         }
       }
