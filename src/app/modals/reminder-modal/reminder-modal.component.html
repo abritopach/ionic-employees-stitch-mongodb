@@ -31,7 +31,7 @@
                   <ion-select-option [value]="dateOptions.nextMonday">Next monday</ion-select-option>
                   <ion-select-option value="selectDate">Select date...</ion-select-option>
               </ion-select>
-              <ion-datetime displayFormat="MM/DD/YYYY" [min]="currentYear" formControlName="customDate" placeholder="Select date..."></ion-datetime>
+              <ion-datetime [hidden]="true" #datePicker displayFormat="MM/DD/YYYY" [min]="currentYear" formControlName="customDate" placeholder="Select date..." (ionChange)="changeCustomDate($event)"></ion-datetime>
             </ion-item>
             <ion-item>
               <ion-label position="floating">Hour</ion-label>

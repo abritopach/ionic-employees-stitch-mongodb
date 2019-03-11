@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { ModalController, NavParams } from '@ionic/angular';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { ModalController, NavParams, IonDatetime } from '@ionic/angular';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 
 import * as moment from 'moment';
@@ -15,6 +15,7 @@ export class ReminderModalComponent implements OnInit {
   reminderForm: FormGroup;
   showHourItems = true;
   showLocationItems = false;
+  @ViewChild('datePicker') datePicker;
 
   dateOptions = {
     today: moment().toDate(),
@@ -65,6 +66,9 @@ export class ReminderModalComponent implements OnInit {
 
   selectedDate(date) {
     console.log('ReminderModalComponent::selectedDate() | method called', date);
+    if (date === 'selectDate') {
+      this.datePicker.open();
+    }
   }
 
   selectedHour(hour) {
@@ -73,5 +77,10 @@ export class ReminderModalComponent implements OnInit {
 
   selectedFrequency(frequency) {
     console.log('ReminderModalComponent::selectedFrequency() | method called', frequency);
+  }
+
+  changeCustomDate(event) {
+    console.log('ReminderModalComponent::changeCustomDate() | method called', event.detail.value);
+    this.reminderForm.patchValue({date: event.detail.value});
   }
 }
