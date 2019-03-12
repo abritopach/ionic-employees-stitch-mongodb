@@ -1,8 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ModalController, NavParams, IonDatetime } from '@ionic/angular';
+import { ModalController, NavParams, PopoverController } from '@ionic/angular';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 
 import * as moment from 'moment';
+
+import { FrequencyComponent } from '../../popovers/frequency/frequency.component';
 
 @Component({
   selector: 'app-reminder-modal',
@@ -16,6 +18,9 @@ export class ReminderModalComponent implements OnInit {
   showHourItems = true;
   showLocationItems = false;
   @ViewChild('datePicker') datePicker;
+  @ViewChild('hourPicker') hourPicker;
+  hiddenCustomDate = true;
+  hiddenCustomHour = true;
 
   dateOptions = {
     today: moment().toDate(),
@@ -23,12 +28,14 @@ export class ReminderModalComponent implements OnInit {
     nextMonday: moment(new Date()).add(7, 'days').toDate()
   };
 
-  constructor(private modalCtrl: ModalController, private navParams: NavParams, private formBuilder: FormBuilder) {
+  constructor(private modalCtrl: ModalController, private navParams: NavParams, private formBuilder: FormBuilder,
+              private popoverCtrl: PopoverController) {
     this.createForm();
   }
 
   ngOnInit() {
     this.modalTitle = this.navParams.data.modalProps.title;
+    console.log('this.reminderForm', this.reminderForm.value);
   }
 
   createForm() {
@@ -40,6 +47,7 @@ export class ReminderModalComponent implements OnInit {
       frequency: new FormControl('', Validators.required),
       location: new FormControl('', Validators.required),
       customDate: new FormControl('', Validators.required),
+      customHour: new FormControl('', Validators.required),
     });
   }
 
@@ -68,19 +76,52 @@ export class ReminderModalComponent implements OnInit {
     console.log('ReminderModalComponent::selectedDate() | method called', date);
     if (date === 'selectDate') {
       this.datePicker.open();
+    } else {
+      this.hiddenCustomDate = true;
     }
   }
 
   selectedHour(hour) {
+    console.log('selectedHour this.reminderForm', this.reminderForm.value);
     console.log('ReminderModalComponent::selectedHour() | method called', hour);
+    if (hour === 'selectHour') {
+      this.hourPicker.open();
+    } else {
+      this.hiddenCustomHour = true;
+    }
   }
 
   selectedFrequency(frequency) {
     console.log('ReminderModalComponent::selectedFrequency() | method called', frequency);
+    if (frequency === 'customize') {
+      this.presentPopover();
+    }
   }
 
   changeCustomDate(event) {
     console.log('ReminderModalComponent::changeCustomDate() | method called', event.detail.value);
-    this.reminderForm.patchValue({date: event.detail.value});
+    this.hiddenCustomDate = false;
+  }
+
+  changeCustomHour(event) {
+    console.log('ReminderModalComponent::changeCustomHour() | method called', event.detail.value);
+    this.hiddenCustomHour = false;
+  }
+
+  async presentPopover() {
+    const componentProps = { popoverProps: {}};
+    const popover = await this.popoverCtrl.create({
+      component: FrequencyComponent,
+      componentProps: componentProps
+    });
+
+    await popover.present();
+
+    const { data } = await popover.onWillDismiss();
+
+    if (data) {
+      console.log('data popover.onWillDismiss', data);
+    }
+
   }
 }

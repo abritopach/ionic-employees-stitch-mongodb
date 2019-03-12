@@ -1,0 +1,32 @@
+<ion-header>
+  <ion-toolbar color="tertiary">
+      <ion-title>
+        Customize Frequency
+      </ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content padding>
+  <ion-list>
+      <ion-item>
+          <ion-label>Enabled</ion-label>
+          <ion-toggle color="primary"></ion-toggle>
+        </ion-item>
+    <ion-item lines="none">
+      <ion-label position="floating">Frequency</ion-label>
+      <ion-select interface="popover">
+          <ion-select-option value="daily">Repeat daily</ion-select-option>
+          <ion-select-option value="weekly">Repeat every week</ion-select-option>
+          <ion-select-option value="monthly">Repeat every month</ion-select-option>
+          <ion-select-option value="annually">Repeat every year</ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-item lines="none">
+      <ion-label position="floating">When</ion-label>
+      <ion-select interface="popover">
+          <ion-select-option value="always">Always</ion-select-option>
+          <ion-select-option value="untilDate">Until a date</ion-select-option>
+          <ion-select-option value="numberEvents">A number of events</ion-select-option>
+      </ion-select>
+    </ion-item>
+  </ion-list>
+</ion-content>

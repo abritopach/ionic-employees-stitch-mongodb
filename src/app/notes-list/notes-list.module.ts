@@ -15,6 +15,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { ColorPickerComponent } from '../components/color-picker/color-picker.component';
 import { ColorsModalComponent } from '../modals/colors-modal/colors-modal.component';
 import { ReminderModalComponent } from '../modals/reminder-modal/reminder-modal.component';
+import { FrequencyComponent } from '../popovers/frequency/frequency.component';
 
 import { DragulaModule } from 'ng2-dragula';
 
@@ -36,7 +37,8 @@ const routes: Routes = [
     NgSelectModule,
     DragulaModule.forRoot()
   ],
-  declarations: [NotesListPage, NgSelectModalComponent, ColorPickerComponent, ColorsModalComponent, ReminderModalComponent],
-  entryComponents: [NgSelectModalComponent, ColorPickerComponent, ColorsModalComponent, ReminderModalComponent]
+  declarations: [NotesListPage, NgSelectModalComponent, ColorPickerComponent, ColorsModalComponent, ReminderModalComponent,
+                FrequencyComponent],
+  entryComponents: [NgSelectModalComponent, ColorPickerComponent, ColorsModalComponent, ReminderModalComponent, FrequencyComponent]
 })
 export class NotesListPageModule {}

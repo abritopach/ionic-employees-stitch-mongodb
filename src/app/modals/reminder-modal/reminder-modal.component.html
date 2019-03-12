@@ -23,27 +23,28 @@
           <ion-label class="checkboxLabel">Location</ion-label>
         </ion-item>
         <div *ngIf="showHourItems">
-          <ion-item>
+          <ion-item lines="none">
               <ion-label position="floating">Date</ion-label>
               <ion-select #date formControlName="date" interface="popover" (ionChange)="selectedDate(date.value)">
-                  <ion-select-option [value]="dateOptions.today">Today</ion-select-option>
+                  <ion-select-option [disabled]="hour.value === 'tomorrow'" [value]="dateOptions.today">Today</ion-select-option>
                   <ion-select-option [value]="dateOptions.tomorrow">Tomorrow</ion-select-option>
                   <ion-select-option [value]="dateOptions.nextMonday">Next monday</ion-select-option>
                   <ion-select-option value="selectDate">Select date...</ion-select-option>
               </ion-select>
-              <ion-datetime [hidden]="true" #datePicker displayFormat="MM/DD/YYYY" [min]="currentYear" formControlName="customDate" placeholder="Select date..." (ionChange)="changeCustomDate($event)"></ion-datetime>
+              <ion-datetime [hidden]="hiddenCustomDate" #datePicker displayFormat="MM/DD/YYYY" [min]="currentYear" formControlName="customDate" (ionChange)="changeCustomDate($event)"></ion-datetime>
             </ion-item>
-            <ion-item>
+            <ion-item lines="none">
               <ion-label position="floating">Hour</ion-label>
               <ion-select #hour formControlName="hour" interface="popover" (ionChange)="selectedHour(hour.value)">
-                  <ion-select-option value="tomorrow">Tomorrow (8:00)</ion-select-option>
+                  <ion-select-option [disabled]="date.value === dateOptions.today" value="tomorrow">Tomorrow (8:00)</ion-select-option>
                   <ion-select-option value="atMidday">At midday (13:00)</ion-select-option>
                   <ion-select-option value="afternoon">Afternoon (18:00)</ion-select-option>
                   <ion-select-option value="night">Night (20:00)</ion-select-option>
                   <ion-select-option value="selectHour">Select hour...</ion-select-option>
               </ion-select>
+              <ion-datetime [hidden]="hiddenCustomHour" #hourPicker displayFormat="h:mm a" formControlName="customHour" (ionChange)="changeCustomHour($event)"></ion-datetime>
             </ion-item>
-            <ion-item>
+            <ion-item lines="none">
               <ion-label position="floating">Frequency</ion-label>
               <ion-select #frequency formControlName="frequency" interface="popover" (ionChange)="selectedFrequency(frequency.value)">
                   <ion-select-option value="noRepetition">No repetition</ion-select-option>
