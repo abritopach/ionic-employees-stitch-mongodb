@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, NgZone, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { ModalController, NavParams, PopoverController, LoadingController } from '@ionic/angular';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 
@@ -6,9 +6,7 @@ import * as moment from 'moment';
 
 import { FrequencyComponent } from '../../popovers/frequency/frequency.component';
 
-import { MapsAPILoader } from '@agm/core';
-
-declare const google: any;
+import { GeolocationService } from '../../services/geolocation.service';
 
 @Component({
   selector: 'app-reminder-modal',
@@ -35,8 +33,8 @@ export class ReminderModalComponent implements OnInit, AfterViewInit {
   };
 
   constructor(private modalCtrl: ModalController, private navParams: NavParams, private formBuilder: FormBuilder,
-              private popoverCtrl: PopoverController, private loadingCtrl: LoadingController, private mapsApiLoader: MapsAPILoader,
-              private ngZone: NgZone) {
+              private popoverCtrl: PopoverController, private loadingCtrl: LoadingController,
+              private geolocationService: GeolocationService) {
     this.createForm();
   }
 
@@ -47,7 +45,7 @@ export class ReminderModalComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     console.log('ReminderModalComponent::ngAfterViewInit | method called');
-    this.findAdress();
+    this.geolocationService.findAdress(this.locationElementRef);
   }
 
   createForm() {
@@ -152,60 +150,9 @@ export class ReminderModalComponent implements OnInit, AfterViewInit {
 
   locate() {
     console.log('ReminderModalComponent::locate | method called');
-    this.presentLoading('Please wait, geolocating...');
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        position => {
-          const lat = position.coords.latitude; // Works fine
-          const lng = position.coords.longitude;  // Works fine
-          console.log('Coords', lat, lng);
-          this.getAddress(lat, lng);
-        },
-        error => {
-          console.log('Error code: ' + error.code + '<br /> Error message: ' + error.message);
-        }
-      );
-    }
-  }
-
-  getAddress(lat: number, lng: number) {
-    console.log('ReminderModalComponent::getAddress | method called');
-    if (navigator.geolocation) {
-      const geocoder = new google.maps.Geocoder();
-      const latlng = new google.maps.LatLng(lat, lng);
-      const request = { latLng: latlng };
-      geocoder.geocode(request, (results, status) => {
-        if (status === google.maps.GeocoderStatus.OK) {
-          const result = results[0];
-          if (result != null) {
-            console.log(result.formatted_address);
-            this.reminderForm.patchValue({location: result.formatted_address});
-          } else {
-            alert('No address available!');
-          }
-          this.dismissLoading();
-        } else if (status === google.maps.GeocoderStatus.ZERO_RESULTS) {
-          console.log('Bad destination address.');
-          this.dismissLoading();
-      } else {
-          console.log('Error calling Google Geocode API.');
-          this.dismissLoading();
-      }
-      });
-    }
-  }
-
-  findAdress() {
-    this.mapsApiLoader.load().then(() => {
-      const inputElement = this.locationElementRef.nativeElement;
-      const autocomplete = new google.maps.places.Autocomplete(inputElement);
-      autocomplete.addListener('place_changed', () => {
-        this.ngZone.run(() => {
-          const place = google.maps.places.PlaceResult = autocomplete.getPlace();
-          console.log('place', place);
-          this.reminderForm.patchValue({location: place.formatted_address});
-        });
-      });
+    this.geolocationService.getAddress().then(address => {
+      this.reminderForm.patchValue({location: address});
     });
-   }
+  }
+
 }
