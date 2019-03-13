@@ -33,10 +33,13 @@ const routes: Routes = [
     ReactiveFormsModule,
     IonicModule,
     RouterModule.forChild(routes),
+    AgmCoreModule,
+    /*
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyDB9__kjPlloGKBm6moXS9hrRbmJ4-gXXc', // Google API key for maps
       libraries: ['places']
     }),
+    */
     NgSelectModule,
     CalendarModule.forRoot({
       provide: DateAdapter,

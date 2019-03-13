@@ -1,17 +1,21 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { ModalController, NavParams, PopoverController } from '@ionic/angular';
+import { Component, OnInit, ViewChild, ElementRef, NgZone, AfterViewInit } from '@angular/core';
+import { ModalController, NavParams, PopoverController, LoadingController } from '@ionic/angular';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 
 import * as moment from 'moment';
 
 import { FrequencyComponent } from '../../popovers/frequency/frequency.component';
 
+import { MapsAPILoader } from '@agm/core';
+
+declare const google: any;
+
 @Component({
   selector: 'app-reminder-modal',
   templateUrl: './reminder-modal.component.html',
   styleUrls: ['./reminder-modal.component.scss'],
 })
-export class ReminderModalComponent implements OnInit {
+export class ReminderModalComponent implements OnInit, AfterViewInit {
 
   modalTitle: '';
   reminderForm: FormGroup;
@@ -21,6 +25,8 @@ export class ReminderModalComponent implements OnInit {
   @ViewChild('hourPicker') hourPicker;
   hiddenCustomDate = true;
   hiddenCustomHour = true;
+  @ViewChild('location') locationElementRef: ElementRef;
+  loading: any;
 
   dateOptions = {
     today: moment().toDate(),
@@ -29,13 +35,19 @@ export class ReminderModalComponent implements OnInit {
   };
 
   constructor(private modalCtrl: ModalController, private navParams: NavParams, private formBuilder: FormBuilder,
-              private popoverCtrl: PopoverController) {
+              private popoverCtrl: PopoverController, private loadingCtrl: LoadingController, private mapsApiLoader: MapsAPILoader,
+              private ngZone: NgZone) {
     this.createForm();
   }
 
   ngOnInit() {
     this.modalTitle = this.navParams.data.modalProps.title;
     console.log('this.reminderForm', this.reminderForm.value);
+  }
+
+  ngAfterViewInit() {
+    console.log('ReminderModalComponent::ngAfterViewInit | method called');
+    this.findAdress();
   }
 
   createForm() {
@@ -124,4 +136,76 @@ export class ReminderModalComponent implements OnInit {
     }
 
   }
+
+  async presentLoading(message) {
+    this.loading = await this.loadingCtrl.create({
+      message: message,
+    });
+
+    return await this.loading.present();
+  }
+
+  async dismissLoading() {
+    this.loading.dismiss();
+    this.loading = null;
+  }
+
+  locate() {
+    console.log('ReminderModalComponent::locate | method called');
+    this.presentLoading('Please wait, geolocating...');
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        position => {
+          const lat = position.coords.latitude; // Works fine
+          const lng = position.coords.longitude;  // Works fine
+          console.log('Coords', lat, lng);
+          this.getAddress(lat, lng);
+        },
+        error => {
+          console.log('Error code: ' + error.code + '<br /> Error message: ' + error.message);
+        }
+      );
+    }
+  }
+
+  getAddress(lat: number, lng: number) {
+    console.log('ReminderModalComponent::getAddress | method called');
+    if (navigator.geolocation) {
+      const geocoder = new google.maps.Geocoder();
+      const latlng = new google.maps.LatLng(lat, lng);
+      const request = { latLng: latlng };
+      geocoder.geocode(request, (results, status) => {
+        if (status === google.maps.GeocoderStatus.OK) {
+          const result = results[0];
+          if (result != null) {
+            console.log(result.formatted_address);
+            this.reminderForm.patchValue({location: result.formatted_address});
+          } else {
+            alert('No address available!');
+          }
+          this.dismissLoading();
+        } else if (status === google.maps.GeocoderStatus.ZERO_RESULTS) {
+          console.log('Bad destination address.');
+          this.dismissLoading();
+      } else {
+          console.log('Error calling Google Geocode API.');
+          this.dismissLoading();
+      }
+      });
+    }
+  }
+
+  findAdress() {
+    this.mapsApiLoader.load().then(() => {
+      const inputElement = this.locationElementRef.nativeElement;
+      const autocomplete = new google.maps.places.Autocomplete(inputElement);
+      autocomplete.addListener('place_changed', () => {
+        this.ngZone.run(() => {
+          const place = google.maps.places.PlaceResult = autocomplete.getPlace();
+          console.log('place', place);
+          this.reminderForm.patchValue({location: place.formatted_address});
+        });
+      });
+    });
+   }
 }

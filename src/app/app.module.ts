@@ -14,6 +14,8 @@ import { ShowPeoplePopoverComponent } from './popovers/show-people.popover';
 
 import { IonicStorageModule } from '@ionic/storage';
 
+import { AgmCoreModule } from '@agm/core';
+
 @NgModule({
   declarations: [AppComponent, ShowPeoplePopoverComponent],
   entryComponents: [ShowPeoplePopoverComponent],
@@ -22,7 +24,11 @@ import { IonicStorageModule } from '@ionic/storage';
     BrowserAnimationsModule,
     IonicModule.forRoot(),
     AppRoutingModule,
-    IonicStorageModule.forRoot()
+    IonicStorageModule.forRoot(),
+    AgmCoreModule.forRoot({
+      apiKey: 'AIzaSyDB9__kjPlloGKBm6moXS9hrRbmJ4-gXXc', // Google API key for maps
+      libraries: ['places']
+    }),
   ],
   providers: [
     StatusBar,

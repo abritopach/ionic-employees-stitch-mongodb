@@ -13,7 +13,7 @@ import { MoreOptionsPopoverComponent } from '../popovers/more-options/more-optio
   declarations: [FooterComponent, HeaderComponent, TodoListHeaderComponent, TodoListComponent,
      TodoListItemComponent, TodoListFooterComponent, MoreOptionsPopoverComponent],
   imports: [
-  CommonModule,
+    CommonModule,
     FormsModule,
     IonicModule
   ],

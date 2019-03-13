@@ -19,6 +19,8 @@ import { FrequencyComponent } from '../popovers/frequency/frequency.component';
 
 import { DragulaModule } from 'ng2-dragula';
 
+import { AgmCoreModule } from '@agm/core';
+
 const routes: Routes = [
   {
     path: '',
@@ -35,7 +37,8 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     SharedComponentsModule,
     NgSelectModule,
-    DragulaModule.forRoot()
+    DragulaModule.forRoot(),
+    AgmCoreModule,
   ],
   declarations: [NotesListPage, NgSelectModalComponent, ColorPickerComponent, ColorsModalComponent, ReminderModalComponent,
                 FrequencyComponent],

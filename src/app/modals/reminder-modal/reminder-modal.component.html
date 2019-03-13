@@ -56,10 +56,14 @@
               </ion-select>
             </ion-item>
         </div>
-        <div *ngIf="showLocationItems">
+        <div [hidden]="!showLocationItems">
             <ion-item lines="none">
                 <ion-label position="floating">Location</ion-label>
-                <ion-input type="text" formControlName="location"></ion-input>
+                <!--<ion-input type="text" formControlName="location"></ion-input>-->
+                <input id="location" #location type="text" formControlName="location">
+                <ion-button fill="clear" size="small" (click)="locate()">Current location</ion-button>
+                <!-- Need to use google. -->
+                <agm-map></agm-map>
             </ion-item>
         </div>
     </ion-list>
