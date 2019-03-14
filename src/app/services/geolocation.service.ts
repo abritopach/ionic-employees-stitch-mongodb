@@ -2,6 +2,7 @@ import { Injectable, NgZone } from '@angular/core';
 
 import { LoadingController } from '@ionic/angular';
 import { MapsAPILoader } from '@agm/core';
+import { Subject } from 'rxjs';
 
 declare const google: any;
 
@@ -11,6 +12,7 @@ declare const google: any;
 export class GeolocationService {
 
   loading: any;
+  placeSubject: Subject<Object> = new Subject<Object>() ;
 
   constructor(private loadingCtrl: LoadingController, private ngZone: NgZone, private mapsApiLoader: MapsAPILoader) { }
 
@@ -56,7 +58,7 @@ export class GeolocationService {
           const result = results[0];
           if (result != null) {
             console.log(result.formatted_address);
-            resolve(result.formatted_address);
+            resolve({address: result.formatted_address, lat: lat, lng: lng});
           } else {
             alert('No address available!');
             reject('No address available!');
@@ -80,9 +82,12 @@ export class GeolocationService {
       const inputElement = elementRef.nativeElement;
       const autocomplete = new google.maps.places.Autocomplete(inputElement);
       autocomplete.addListener('place_changed', () => {
+        console.log('place_changed');
         this.ngZone.run(() => {
           const place = google.maps.places.PlaceResult = autocomplete.getPlace();
           console.log('place', place);
+          this.placeSubject.next({address: place.formatted_address, lat: place.geometry.location.lat(),
+          lng: place.geometry.location.lng()});
         });
       });
     });

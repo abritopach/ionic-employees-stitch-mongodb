@@ -1,7 +1,7 @@
 import { FormControl, Validators, FormGroup, FormBuilder } from '@angular/forms';
 import { Component, ViewEncapsulation, OnInit, ViewChild, ElementRef, NgZone, AfterViewInit } from '@angular/core';
 import { ModalController, LoadingController, NavParams } from '@ionic/angular';
-import { StitchMongoService, IziToastService } from './../../services';
+import { StitchMongoService, IziToastService, GeolocationService } from './../../services';
 import config from '../../config/config';
 import { Storage } from '@ionic/storage';
 import { ObjectId } from 'bson';
@@ -30,7 +30,8 @@ export class EventModalComponent implements OnInit, AfterViewInit {
 
   constructor(private modalCtrl: ModalController, private formBuilder: FormBuilder, private stitchMongoService: StitchMongoService,
               private storage: Storage, private iziToast: IziToastService, private loadingCtrl: LoadingController,
-              private navParams: NavParams, private mapsApiLoader: MapsAPILoader, private ngZone: NgZone) {
+              private navParams: NavParams, private mapsApiLoader: MapsAPILoader, private ngZone: NgZone,
+              private geolocationService: GeolocationService) {
     this.createForm();
   }
 
@@ -43,7 +44,14 @@ export class EventModalComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     console.log('EventModalComponent::ngAfterViewInit | method called');
-    this.findAdress();
+    this.geolocationService.findAdress(this.addressElementRef);
+
+    this.geolocationService.placeSubject.subscribe((result) => {
+      console.log('result', result);
+      this.eventForm.patchValue({address: result['address']});
+      this.eventForm.patchValue({lat: result['lat']});
+      this.eventForm.patchValue({lng: result['lng']});
+    });
   }
 
   createForm() {
@@ -145,6 +153,13 @@ export class EventModalComponent implements OnInit, AfterViewInit {
 
   locate() {
     console.log('EventModalComponent::locate | method called');
+    this.geolocationService.getAddress().then(result => {
+      console.log(result);
+      this.eventForm.patchValue({address: result['address']});
+      this.eventForm.patchValue({lat: result['lat']});
+      this.eventForm.patchValue({lng: result['lng']});
+    });
+    /*
     this.presentLoading('Please wait, geolocating...');
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -159,8 +174,10 @@ export class EventModalComponent implements OnInit, AfterViewInit {
         }
       );
     }
+    */
   }
 
+  /*
   getAddress(lat: number, lng: number) {
     console.log('EventModalComponent::getAddress | method called');
     if (navigator.geolocation) {
@@ -192,13 +209,6 @@ export class EventModalComponent implements OnInit, AfterViewInit {
 
   findAdress() {
     this.mapsApiLoader.load().then(() => {
-
-        /*
-        console.log(document.getElementById('address'));
-        const _inputElement = this.addressElementRef.nativeElement as HTMLInputElement;
-        console.log(_inputElement.shadowRoot);
-        */
-
          const inputElement = this.addressElementRef.nativeElement;
          const autocomplete = new google.maps.places.Autocomplete(inputElement);
          autocomplete.addListener('place_changed', () => {
@@ -210,21 +220,10 @@ export class EventModalComponent implements OnInit, AfterViewInit {
               this.eventForm.patchValue({address: place.formatted_address});
               this.eventForm.patchValue({lat: place.geometry.location.lat()});
               this.eventForm.patchValue({lng: place.geometry.location.lng()});
-
-             /*
-             this.address = place.formatted_address;
-             this.web_site = place.website;
-             this.name = place.name;
-             this.zip_code = place.address_components[place.address_components.length - 1].long_name;
-             //set latitude, longitude and zoom
-             this.latitude = place.geometry.location.lat();
-             this.longitude = place.geometry.location.lng();
-             this.zoom = 12;
-              */
-
            });
          });
        });
    }
+   */
 
 }

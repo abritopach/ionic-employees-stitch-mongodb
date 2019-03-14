@@ -46,6 +46,10 @@ export class ReminderModalComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     console.log('ReminderModalComponent::ngAfterViewInit | method called');
     this.geolocationService.findAdress(this.locationElementRef);
+
+    this.geolocationService.placeSubject.subscribe((result) => {
+      console.log('result', result);
+    });
   }
 
   createForm() {
@@ -150,8 +154,8 @@ export class ReminderModalComponent implements OnInit, AfterViewInit {
 
   locate() {
     console.log('ReminderModalComponent::locate | method called');
-    this.geolocationService.getAddress().then(address => {
-      this.reminderForm.patchValue({location: address});
+    this.geolocationService.getAddress().then(result => {
+      this.reminderForm.patchValue({location: result['address']});
     });
   }
 
