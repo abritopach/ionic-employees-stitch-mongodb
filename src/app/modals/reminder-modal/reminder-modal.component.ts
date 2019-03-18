@@ -56,9 +56,9 @@ export class ReminderModalComponent implements OnInit, AfterViewInit {
     this.reminderForm = this.formBuilder.group({
       hourCheckbox: new FormControl('', Validators.required),
       locationCheckbox: new FormControl('', Validators.required),
-      date: new FormControl('', Validators.required),
-      hour: new FormControl('', Validators.required),
-      frequency: new FormControl('', Validators.required),
+      date: new FormControl(this.dateOptions.today, Validators.required),
+      hour: new FormControl('atMidday', Validators.required),
+      frequency: new FormControl('noRepetition', Validators.required),
       location: new FormControl('', Validators.required),
       customDate: new FormControl('', Validators.required),
       customHour: new FormControl('', Validators.required),

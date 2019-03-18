@@ -95,9 +95,11 @@ export class SchedulePage implements OnInit {
 
   constructor(private popoverCtrl: PopoverController, private stitchMongoService: StitchMongoService,
               private storage: Storage, private modalCtrl: ModalController) {
+    console.log('SchedulePage::constructor() | method called');
   }
 
   ngOnInit() {
+    console.log('SchedulePage::ngOnInit() | method called');
     this.innerWidth = window.innerWidth;
     this.checkWidth(this.innerWidth);
 
@@ -197,11 +199,13 @@ export class SchedulePage implements OnInit {
       console.log('events', this.events);
       // Check that the event is not empty.
       if (data._id !== '') {
-        this.events = [...this.events, data];
+        this.events = [data];
         console.log('events', this.events);
+        this.eventsCopy = [...this.eventsCopy, ...this.events];
         this.formatEventsCalendar();
         // this.events.sort((a, b) => +moment(a.date).format('YYYYMMDD') - +moment(b.date).format('YYYYMMDD'));
         this.updateParticipants();
+        this.filterEvents(this.option);
       }
 
     }
@@ -273,19 +277,20 @@ export class SchedulePage implements OnInit {
   }
 
   filterEvents(option) {
-
+    console.log('filterEvents option', option);
     if (option === 'previous') {
-      const previousEvents = this.eventsCopy.filter(event => moment(event.date).isBefore(moment()));
+      const previousEvents = this.eventsCopy.filter(event => moment(event.date).isBefore(moment(), 'day'));
       console.log('previousEvents', previousEvents);
       this.events = [...previousEvents];
     }
     if (option === 'today') {
-      const todayEvents = this.eventsCopy.filter(event => moment(event.date).isSame(moment()));
+      console.log('this.eventsCopy', this.eventsCopy);
+      const todayEvents = this.eventsCopy.filter(event => moment(event.date).isSame(moment(), 'day'));
       console.log('todayEvents', todayEvents);
       this.events = [...todayEvents];
     }
     if (option === 'upcoming') {
-      const upcomingEvents = this.eventsCopy.filter(event => moment(event.date).isAfter(moment()));
+      const upcomingEvents = this.eventsCopy.filter(event => moment(event.date).isAfter(moment(), 'day'));
       console.log('upcomingEvents', upcomingEvents);
       this.events = [...upcomingEvents];
     }
