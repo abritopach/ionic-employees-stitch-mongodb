@@ -77,7 +77,8 @@ export class NotesListPage implements OnInit {
       pinned: false,
       updated_at: new Date(),
       collaborators: [],
-      color: '#fff'
+      color: '#fff',
+      reminder: {}
     };
     this.storage.get(config.TOKEN_KEY).then(res => {
       if (res) {
@@ -252,6 +253,9 @@ export class NotesListPage implements OnInit {
         console.log(options.note);
         this.setColorNote(options.note, data.color);
       }
+      if (data.option === 'reminder') {
+        this.reminderNote(options.note, data.reminder);
+      }
     }
   }
 
@@ -358,7 +362,22 @@ export class NotesListPage implements OnInit {
     });
   }
 
-  reminderNote() {
+  reminderNote(note, reminder) {
+
+    this.storage.get(config.TOKEN_KEY).then(res => {
+      if (res) {
+        const objectId = new ObjectId(res);
+        note.updated_at = new Date();
+        this.stitchMongoService.update(config.COLLECTION_KEY, {user_id: objectId, 'notes.id': note.id},
+        {$set: { 'notes.$.reminder': reminder, 'notes.$.updated_at': note.updated_at }})
+        .then(result => {
+          console.log('result', result);
+          note.reminder = reminder;
+
+          // TODO: Local Notifications code.
+        });
+      }
+    });
 
     /*
     const { LocalNotifications } = Plugins;

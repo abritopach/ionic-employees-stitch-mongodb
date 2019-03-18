@@ -7,6 +7,7 @@ import * as moment from 'moment';
 import { FrequencyComponent } from '../../popovers/frequency/frequency.component';
 
 import { GeolocationService } from '../../services/geolocation.service';
+import { Note } from '../../models/note.model';
 
 @Component({
   selector: 'app-reminder-modal',
@@ -25,11 +26,12 @@ export class ReminderModalComponent implements OnInit, AfterViewInit {
   hiddenCustomHour = true;
   @ViewChild('location') locationElementRef: ElementRef;
   loading: any;
+  note: Note;
 
   dateOptions = {
-    today: moment().toDate(),
-    tomorrow: moment(new Date()).add(1, 'days').toDate(),
-    nextMonday: moment(new Date()).add(7, 'days').toDate()
+    today: moment().format('DD-MM-YYYY'), // moment().toDate(),
+    tomorrow: moment(new Date()).add(1, 'days').format('DD-MM-YYYY'),
+    nextMonday: moment(new Date()).add(7, 'days').format('DD-MM-YYYY')
   };
 
   constructor(private modalCtrl: ModalController, private navParams: NavParams, private formBuilder: FormBuilder,
@@ -41,6 +43,21 @@ export class ReminderModalComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     this.modalTitle = this.navParams.data.modalProps.title;
     console.log('this.reminderForm', this.reminderForm.value);
+    this.note = this.navParams.data.modalProps.note;
+    console.log('note', this.note);
+    if (typeof this.note.reminder !== 'undefined') {
+      if (this.note.reminder['type'] === 'hour') {
+        this.showHourItems = true;
+        this.showLocationItems = false;
+        this.reminderForm.patchValue({date: this.note.reminder['date'], hour: this.note.reminder['hour'],
+                                    frequency: this.note.reminder['frequency']});
+      }
+      if (this.note.reminder['type'] === 'location') {
+        this.showHourItems = false;
+        this.showLocationItems = true;
+        this.reminderForm.patchValue({location: this.note.reminder['location']});
+      }
+    }
   }
 
   ngAfterViewInit() {
@@ -54,14 +71,14 @@ export class ReminderModalComponent implements OnInit, AfterViewInit {
 
   createForm() {
     this.reminderForm = this.formBuilder.group({
-      hourCheckbox: new FormControl('', Validators.required),
-      locationCheckbox: new FormControl('', Validators.required),
+      hourCheckbox: new FormControl(true),
+      locationCheckbox: new FormControl(false),
       date: new FormControl(this.dateOptions.today, Validators.required),
-      hour: new FormControl('atMidday', Validators.required),
+      hour: new FormControl('13:00', Validators.required),
       frequency: new FormControl('noRepetition', Validators.required),
-      location: new FormControl('', Validators.required),
-      customDate: new FormControl('', Validators.required),
-      customHour: new FormControl('', Validators.required),
+      location: new FormControl(''),
+      customDate: new FormControl(''),
+      customHour: new FormControl(''),
     });
   }
 
@@ -74,6 +91,16 @@ export class ReminderModalComponent implements OnInit, AfterViewInit {
 
   reminderFormSubmit() {
     console.log('ReminderModalComponent::reminderFormSubmit() | method called', this.reminderForm.value);
+    let reminder = {};
+    if (this.reminderForm.value.hourCheckbox) {
+      reminder = {type: 'hour', date: this.reminderForm.value.date, hour: this.reminderForm.value.hour,
+                  frequency: this.reminderForm.value.frequency};
+    }
+    if (this.reminderForm.value.locationCheckbox) {
+      reminder = {type: 'location', location: this.reminderForm.value.location};
+    }
+    console.log('reminder', reminder);
+    this.modalCtrl.dismiss( {option: 'reminder', reminder: reminder} );
   }
 
   ionChangeHour(event) {

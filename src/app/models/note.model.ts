@@ -11,4 +11,5 @@ export interface Note {
     updated_at: Date;
     collaborators: ObjectId[] | [];
     color: string | '#fff';
+    reminder: Object | {};
 }

@@ -42,9 +42,9 @@
             <ion-label position="floating">Hour</ion-label>
             <ion-select #hour formControlName="hour" interface="popover" (ionChange)="selectedHour(hour.value)">
                 <ion-select-option [disabled]="date.value === dateOptions.today" value="tomorrow">Tomorrow (8:00)</ion-select-option>
-                <ion-select-option value="atMidday">At midday (13:00)</ion-select-option>
-                <ion-select-option value="afternoon">Afternoon (18:00)</ion-select-option>
-                <ion-select-option value="night">Night (20:00)</ion-select-option>
+                <ion-select-option value="13:00">At midday (13:00)</ion-select-option>
+                <ion-select-option value="18:00">Afternoon (18:00)</ion-select-option>
+                <ion-select-option value="20:00">Night (20:00)</ion-select-option>
                 <ion-select-option value="selectHour">Select hour...</ion-select-option>
             </ion-select>
             <ion-datetime [hidden]="hiddenCustomHour" #hourPicker displayFormat="h:mm a" formControlName="customHour" (ionChange)="changeCustomHour($event)"></ion-datetime>

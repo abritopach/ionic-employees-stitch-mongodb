@@ -33,6 +33,9 @@
                   <ion-button *ngIf="note.pinned" (click)="pinnedNote(note)">
                     <img class="pinnedImg" src="assets/images/pinned.png">
                   </ion-button>
+                  <ion-button *ngIf="note.reminder">
+                    <ion-icon slot="icon-only" name="notifications" color="primary"></ion-icon>
+                  </ion-button>
                   <ion-button (click)="presentPopover('optionsNote', note)" fill="clear">
                     <ion-icon slot="icon-only" name="more"></ion-icon>
                   </ion-button>
