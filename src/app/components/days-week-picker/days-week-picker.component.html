@@ -1,3 +1,5 @@
-<p>
-  days-week-picker works!
-</p>
+<div class="days">
+  <div *ngFor="let weekday of weekdays" class="circle" (click)="selectedDay(weekday)" [style.background-color]="this.selectedWeekdays[weekday] ? '#03a9f4' : '#d1d6d8'">
+    <b> {{ weekday.substring(0, 3).toUpperCase() }} </b>
+  </div>
+</div>

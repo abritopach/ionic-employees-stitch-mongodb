@@ -1,0 +1,34 @@
+.circle {
+    $size: 40px;
+    height: $size;
+    width: $size;
+    box-sizing: border-box;
+    border-radius: 100%;
+    cursor: pointer;
+    border: 1px solid #dadada;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.14);
+    font-size: 10px;
+    /* become a flex container */
+    /* its children will be flex items */
+    display: flex;
+    /* place items in column */
+    flex-direction: column;
+    /* center flex items horizontally */
+    align-items: center;
+    /* center all content vertically */
+    justify-content: center;
+    background-color: #d1d6d8;
+    color: #ffffff;
+
+}
+
+.days {
+    display: flex;
+    flex-wrap: wrap;
+
+    .circle {
+      flex: 40px 0 0;
+      margin-right: 10px;
+      margin-bottom: 10px;
+    }
+}

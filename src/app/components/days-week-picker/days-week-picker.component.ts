@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-days-week-picker',
@@ -7,8 +9,26 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DaysWeekPickerComponent implements OnInit {
 
+  weekdays = moment.weekdays();
+  @Output() event: EventEmitter<Object> = new EventEmitter<Object>();
+  selectedWeekdays = {
+    Sunday: false,
+    Monday: false,
+    Tuesday: false,
+    Wednesday: false,
+    Thursday: false,
+    Friday: false,
+    Saturday: false,
+  };
+
   constructor() { }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
+
+  selectedDay(weekday) {
+    this.selectedWeekdays[weekday] = !this.selectedWeekdays[weekday];
+    this.event.emit(this.selectedWeekdays);
+  }
 
 }

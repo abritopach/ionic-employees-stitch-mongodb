@@ -35,4 +35,8 @@ export class FrequencyComponent implements OnInit {
     console.log('dateText', this.dateText);
   }
 
+  selectedWeekday(event) {
+    console.log('FrequencyComponent::selectedWeekday(event) | method called', event);
+  }
+
 }

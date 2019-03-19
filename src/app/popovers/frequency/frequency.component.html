@@ -27,7 +27,7 @@
     </ion-item>
     <div *ngIf="options.frequency === 'weekly'">
       <!-- TODO: Load week selector component. -->
-      <app-days-week-picker></app-days-week-picker>
+      <app-days-week-picker (event)="selectedWeekday($event)"></app-days-week-picker>
     </div>
     <div *ngIf="options.frequency === 'monthly'">
       <ion-item>
