@@ -16,6 +16,7 @@ import { ColorPickerComponent } from '../components/color-picker/color-picker.co
 import { ColorsModalComponent } from '../modals/colors-modal/colors-modal.component';
 import { ReminderModalComponent } from '../modals/reminder-modal/reminder-modal.component';
 import { FrequencyComponent } from '../popovers/frequency/frequency.component';
+import { DaysWeekPickerComponent } from '../components/days-week-picker/days-week-picker.component';
 
 import { DragulaModule } from 'ng2-dragula';
 
@@ -41,7 +42,8 @@ const routes: Routes = [
     AgmCoreModule,
   ],
   declarations: [NotesListPage, NgSelectModalComponent, ColorPickerComponent, ColorsModalComponent, ReminderModalComponent,
-                FrequencyComponent],
-  entryComponents: [NgSelectModalComponent, ColorPickerComponent, ColorsModalComponent, ReminderModalComponent, FrequencyComponent]
+                FrequencyComponent, DaysWeekPickerComponent],
+  entryComponents: [NgSelectModalComponent, ColorPickerComponent, ColorsModalComponent, ReminderModalComponent, FrequencyComponent,
+                    DaysWeekPickerComponent]
 })
 export class NotesListPageModule {}

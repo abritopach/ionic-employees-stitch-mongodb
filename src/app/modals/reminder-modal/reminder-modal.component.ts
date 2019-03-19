@@ -29,9 +29,9 @@ export class ReminderModalComponent implements OnInit, AfterViewInit {
   note: Note;
 
   dateOptions = {
-    today: moment().format('DD-MM-YYYY'), // moment().toDate(),
-    tomorrow: moment(new Date()).add(1, 'days').format('DD-MM-YYYY'),
-    nextMonday: moment(new Date()).add(7, 'days').format('DD-MM-YYYY')
+    today: moment().format('YYYY-MM-DD'), // moment().toDate(),
+    tomorrow: moment(new Date()).add(1, 'days').format('YYYY-MM-DD'),
+    nextMonday: moment(new Date()).add(7, 'days').format('YYYY-MM-DD')
   };
 
   constructor(private modalCtrl: ModalController, private navParams: NavParams, private formBuilder: FormBuilder,
@@ -49,8 +49,11 @@ export class ReminderModalComponent implements OnInit, AfterViewInit {
       if (this.note.reminder['type'] === 'hour') {
         this.showHourItems = true;
         this.showLocationItems = false;
-        this.reminderForm.patchValue({date: this.note.reminder['date'], hour: this.note.reminder['hour'],
-                                    frequency: this.note.reminder['frequency']});
+        this.hiddenCustomDate = false;
+        this.hiddenCustomHour = false;
+        this.reminderForm.patchValue({date: 'selectDate', hour: 'selectHour',
+                                    frequency: this.note.reminder['frequency'], customDate: this.note.reminder['date'],
+                                    customHour: this.note.reminder['hour'] });
       }
       if (this.note.reminder['type'] === 'location') {
         this.showHourItems = false;
@@ -93,7 +96,13 @@ export class ReminderModalComponent implements OnInit, AfterViewInit {
     console.log('ReminderModalComponent::reminderFormSubmit() | method called', this.reminderForm.value);
     let reminder = {};
     if (this.reminderForm.value.hourCheckbox) {
-      reminder = {type: 'hour', date: this.reminderForm.value.date, hour: this.reminderForm.value.hour,
+
+      let date = this.reminderForm.value.date;
+      if (this.reminderForm.value.date === 'selectDate') {
+        date = this.reminderForm.value.customDate;
+      }
+      console.log('date', date);
+      reminder = {type: 'hour', date: date, hour: this.reminderForm.value.hour,
                   frequency: this.reminderForm.value.frequency};
     }
     if (this.reminderForm.value.locationCheckbox) {
