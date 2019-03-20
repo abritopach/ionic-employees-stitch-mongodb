@@ -12,8 +12,8 @@
       <ion-toggle [(ngModel)]="options.enabled" color="primary"></ion-toggle>
     </ion-item>
     <ion-item lines="none">
-      <ion-label position="floating">Frequency</ion-label>
-      <ion-select [(ngModel)]="options.frequency" interface="popover" (ionChange)="onSelectChange($event)">
+      <ion-label position="floating">Repeat</ion-label>
+      <ion-select [(ngModel)]="options.repeat" interface="popover" (ionChange)="onSelectChange($event)">
           <ion-select-option value="daily">Repeat daily</ion-select-option>
           <ion-select-option value="weekly">Repeat every week</ion-select-option>
           <ion-select-option value="monthly">Repeat every month</ion-select-option>
@@ -25,18 +25,18 @@
         <ion-input class="count" [(ngModel)]="options.count" type="number"></ion-input>
         <span> {{ dateText }} </span>
     </ion-item>
-    <div *ngIf="options.frequency === 'weekly'">
+    <div *ngIf="options.repeat === 'weekly'">
       <!-- TODO: Load week selector component. -->
       <app-days-week-picker (event)="selectedWeekday($event)"></app-days-week-picker>
     </div>
-    <div *ngIf="options.frequency === 'monthly'">
+    <div *ngIf="options.repeat === 'monthly'">
       <ion-item>
         <ion-label text-wrap>The same day of the month</ion-label>
-        <ion-toggle color="primary"></ion-toggle>
+        <ion-toggle [(ngModel)]="toggle" color="primary" (ionChange)="ionChangeCondition1($event)"></ion-toggle>
       </ion-item>
       <ion-item>
         <ion-label text-wrap>The third Tuesday of the month</ion-label>
-        <ion-toggle color="primary"></ion-toggle>
+        <ion-toggle [(ngModel)]="!toggle" color="primary" (ionChange)="ionChangeCondition2($event)"></ion-toggle>
       </ion-item>
     </div>
     <ion-item lines="none">
@@ -48,7 +48,7 @@
       </ion-select>
     </ion-item>
     <ion-item text-center lines="none">
-      <ion-button fill="clear">
+      <ion-button fill="clear" (click)="onClickAccept()">
         <ion-icon name="checkmark"></ion-icon>
         Accept
       </ion-button>

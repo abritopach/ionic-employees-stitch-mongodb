@@ -27,6 +27,7 @@ export class ReminderModalComponent implements OnInit, AfterViewInit {
   @ViewChild('location') locationElementRef: ElementRef;
   loading: any;
   note: Note;
+  frequencyPopoverData = null;
 
   dateOptions = {
     today: moment().format('YYYY-MM-DD'), // moment().toDate(),
@@ -102,8 +103,22 @@ export class ReminderModalComponent implements OnInit, AfterViewInit {
         date = this.reminderForm.value.customDate;
       }
       console.log('date', date);
+
+      /*
+        "frequency": {
+      "enabled": true,
+      "repeat": "daily",
+      "count": 1,
+      "when": "always"
+    }
+      */
+
       reminder = {type: 'hour', date: date, hour: this.reminderForm.value.hour,
                   frequency: this.reminderForm.value.frequency};
+      if (this.frequencyPopoverData !== null) {
+        reminder = {type: 'hour', date: date, hour: this.reminderForm.value.hour,
+                  frequency: this.frequencyPopoverData};
+      }
     }
     if (this.reminderForm.value.locationCheckbox) {
       reminder = {type: 'location', location: this.reminderForm.value.location};
@@ -171,6 +186,7 @@ export class ReminderModalComponent implements OnInit, AfterViewInit {
 
     if (data) {
       console.log('data popover.onWillDismiss', data);
+      this.frequencyPopoverData = data;
     }
 
   }
