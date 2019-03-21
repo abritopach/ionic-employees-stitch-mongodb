@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { PopoverController } from '@ionic/angular';
+import { PopoverController, NavParams } from '@ionic/angular';
 
 @Component({
   selector: 'app-frequency',
@@ -25,11 +25,22 @@ export class FrequencyComponent implements OnInit {
   dateText;
   toggle = true;
 
-  constructor(private popoverCtrl: PopoverController) {
+  constructor(private popoverCtrl: PopoverController, private navParams: NavParams) {
     this.dateText = this.frequencyMap.daily;
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    if (typeof this.navParams.data.popoverProps.frequency !== 'undefined') {
+      console.log('this.navParams.data.popoverProps.frequency', this.navParams.data.popoverProps.frequency);
+      this.options.enabled = this.navParams.data.popoverProps.frequency.enabled;
+      this.options.repeat = this.navParams.data.popoverProps.frequency.repeat;
+      this.options.count = this.navParams.data.popoverProps.frequency.count;
+      this.options.when = this.navParams.data.popoverProps.frequency.when;
+      if (this.options.repeat === 'weekly') {
+        // TODO: Set days.
+      }
+    }
+  }
 
   onSelectChange(selected) {
     console.log('FrequencyComponent::onSelectChange(selectedValue) | method called', selected.detail.value);

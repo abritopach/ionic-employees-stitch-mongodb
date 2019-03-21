@@ -16,13 +16,13 @@ import { Note } from '../../models/note.model';
 })
 export class ReminderModalComponent implements OnInit, AfterViewInit {
 
+  currentYear = new Date().getFullYear();
   modalTitle: '';
   reminderForm: FormGroup;
   showHourItems = true;
   showLocationItems = false;
   @ViewChild('datePicker') datePicker;
   @ViewChild('hourPicker') hourPicker;
-  hiddenCustomDate = true;
   hiddenCustomHour = true;
   @ViewChild('location') locationElementRef: ElementRef;
   loading: any;
@@ -32,8 +32,12 @@ export class ReminderModalComponent implements OnInit, AfterViewInit {
   dateOptions = {
     today: moment().format('YYYY-MM-DD'), // moment().toDate(),
     tomorrow: moment(new Date()).add(1, 'days').format('YYYY-MM-DD'),
-    nextMonday: moment(new Date()).add(7, 'days').format('YYYY-MM-DD')
+    nextMonday: moment(new Date()).add(7, 'days').format('YYYY-MM-DD'),
+    selectDate: 'Select date...'
   };
+
+  customize = 'Customize...';
+  frequencyTexts = ['noRepetition', 'daily', 'weekly', 'monthly', 'annually'];
 
   constructor(private modalCtrl: ModalController, private navParams: NavParams, private formBuilder: FormBuilder,
               private popoverCtrl: PopoverController, private loadingCtrl: LoadingController,
@@ -50,10 +54,17 @@ export class ReminderModalComponent implements OnInit, AfterViewInit {
       if (this.note.reminder['type'] === 'hour') {
         this.showHourItems = true;
         this.showLocationItems = false;
-        this.hiddenCustomDate = false;
         this.hiddenCustomHour = false;
-        this.reminderForm.patchValue({date: 'selectDate', hour: 'selectHour',
-                                    frequency: this.note.reminder['frequency'], customDate: this.note.reminder['date'],
+
+        if (typeof this.note.reminder['frequency'] !== 'undefined') {
+          console.log('*****Frequency not empty');
+          // se repite cada 2 semanas el lunes, martes
+          // TODO: Complete string.
+          this.customize = `Is repeated every ${this.note.reminder['frequency']['count']} weeks on`;
+        }
+
+        this.reminderForm.patchValue({date: 'Select date...', hour: 'selectHour',
+                                    frequency: this.customize, customDate: this.note.reminder['date'],
                                     customHour: this.note.reminder['hour'] });
       }
       if (this.note.reminder['type'] === 'location') {
@@ -62,6 +73,7 @@ export class ReminderModalComponent implements OnInit, AfterViewInit {
         this.reminderForm.patchValue({location: this.note.reminder['location']});
       }
     }
+    console.log('this.reminderForm', this.reminderForm.value);
   }
 
   ngAfterViewInit() {
@@ -104,19 +116,16 @@ export class ReminderModalComponent implements OnInit, AfterViewInit {
       }
       console.log('date', date);
 
-      /*
-        "frequency": {
-      "enabled": true,
-      "repeat": "daily",
-      "count": 1,
-      "when": "always"
-    }
-      */
+      let hour = this.reminderForm.value.hour;
+      if (this.reminderForm.value.hour === 'selectHour') {
+        hour = this.reminderForm.value.customHour;
+      }
+      console.log('hour', hour);
 
-      reminder = {type: 'hour', date: date, hour: this.reminderForm.value.hour,
+      reminder = {type: 'hour', date: date, hour: hour,
                   frequency: this.reminderForm.value.frequency};
       if (this.frequencyPopoverData !== null) {
-        reminder = {type: 'hour', date: date, hour: this.reminderForm.value.hour,
+        reminder = {type: 'hour', date: date, hour: hour,
                   frequency: this.frequencyPopoverData};
       }
     }
@@ -139,10 +148,9 @@ export class ReminderModalComponent implements OnInit, AfterViewInit {
 
   selectedDate(date) {
     console.log('ReminderModalComponent::selectedDate() | method called', date);
-    if (date === 'selectDate') {
+
+    if ((date !== this.dateOptions.today) && (date !== this.dateOptions.tomorrow) && (date !== this.dateOptions.nextMonday)) {
       this.datePicker.open();
-    } else {
-      this.hiddenCustomDate = true;
     }
   }
 
@@ -158,14 +166,15 @@ export class ReminderModalComponent implements OnInit, AfterViewInit {
 
   selectedFrequency(frequency) {
     console.log('ReminderModalComponent::selectedFrequency() | method called', frequency);
-    if (frequency === 'customize') {
+    if (this.frequencyTexts.indexOf(frequency) === -1) {
       this.presentPopover();
     }
   }
 
   changeCustomDate(event) {
     console.log('ReminderModalComponent::changeCustomDate() | method called', event.detail.value);
-    this.hiddenCustomDate = false;
+    this.dateOptions.selectDate = event.detail.value.toString();
+    setTimeout(() => this.reminderForm.patchValue({date: this.dateOptions.selectDate}), 1000);
   }
 
   changeCustomHour(event) {
@@ -174,7 +183,7 @@ export class ReminderModalComponent implements OnInit, AfterViewInit {
   }
 
   async presentPopover() {
-    const componentProps = { popoverProps: {}};
+    const componentProps = { popoverProps: {frequency: this.note.reminder['frequency']}};
     const popover = await this.popoverCtrl.create({
       component: FrequencyComponent,
       componentProps: componentProps

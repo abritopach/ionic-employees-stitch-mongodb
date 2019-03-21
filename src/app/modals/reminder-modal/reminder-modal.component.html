@@ -29,9 +29,9 @@
                 <ion-select-option [disabled]="hour.value === 'tomorrow'" [value]="dateOptions.today">Today</ion-select-option>
                 <ion-select-option [value]="dateOptions.tomorrow">Tomorrow</ion-select-option>
                 <ion-select-option [value]="dateOptions.nextMonday">Next monday</ion-select-option>
-                <ion-select-option value="selectDate">Select date...</ion-select-option>
+                <ion-select-option [value]="dateOptions.selectDate"> {{dateOptions.selectDate}} </ion-select-option>
             </ion-select>
-            <ion-datetime [hidden]="hiddenCustomDate" #datePicker displayFormat="MM/DD/YYYY" [min]="currentYear" formControlName="customDate" (ionChange)="changeCustomDate($event)"></ion-datetime>
+            <ion-datetime [hidden]="true" #datePicker displayFormat="MM/DD/YYYY" [min]="currentYear" formControlName="customDate" (ionChange)="changeCustomDate($event)"></ion-datetime>
           </ion-item>
           <ion-item lines="none" *ngIf="reminderForm.get('date').hasError('required') && reminderForm.get('date').touched">
             <div class="error-message">
@@ -62,7 +62,7 @@
                 <ion-select-option value="weekly">Weekly</ion-select-option>
                 <ion-select-option value="monthly">Monthly</ion-select-option>
                 <ion-select-option value="annually">Annually</ion-select-option>
-                <ion-select-option value="customize">Customize...</ion-select-option>
+                <ion-select-option [value]="customize"> {{customize}}</ion-select-option>
             </ion-select>
           </ion-item>
           <ion-item lines="none" *ngIf="reminderForm.get('frequency').hasError('required') && reminderForm.get('frequency').touched">
