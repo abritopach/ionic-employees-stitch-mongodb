@@ -26,10 +26,10 @@
           <ion-item lines="none" [class.has-error]="reminderForm.get('date').hasError('required') && reminderForm.get('date').touched">
             <ion-label position="floating">Date</ion-label>
             <ion-select #date formControlName="date" interface="popover" (ionChange)="selectedDate(date.value)">
-                <ion-select-option [disabled]="hour.value === 'tomorrow'" [value]="dateOptions.today">Today</ion-select-option>
-                <ion-select-option [value]="dateOptions.tomorrow">Tomorrow</ion-select-option>
-                <ion-select-option [value]="dateOptions.nextMonday">Next monday</ion-select-option>
-                <ion-select-option [value]="dateOptions.selectDate"> {{dateOptions.selectDate}} </ion-select-option>
+                <ion-select-option [disabled]="hour.value === 'tomorrow'" [value]="dateOptions.today.text">Today</ion-select-option>
+                <ion-select-option [value]="dateOptions.tomorrow.text">Tomorrow</ion-select-option>
+                <ion-select-option [value]="dateOptions.nextMonday.text">Next monday</ion-select-option>
+                <ion-select-option [value]="dateOptions.selectDate.text"> {{dateOptions.selectDate.text}} </ion-select-option>
             </ion-select>
             <ion-datetime [hidden]="true" #datePicker displayFormat="MM/DD/YYYY" [min]="currentYear" formControlName="customDate" (ionChange)="changeCustomDate($event)"></ion-datetime>
           </ion-item>
@@ -41,13 +41,13 @@
           <ion-item lines="none" [class.has-error]="reminderForm.get('hour').hasError('required') && reminderForm.get('hour').touched">
             <ion-label position="floating">Hour</ion-label>
             <ion-select #hour formControlName="hour" interface="popover" (ionChange)="selectedHour(hour.value)">
-                <ion-select-option [disabled]="date.value === dateOptions.today" value="tomorrow">Tomorrow (8:00)</ion-select-option>
-                <ion-select-option value="13:00">At midday (13:00)</ion-select-option>
-                <ion-select-option value="18:00">Afternoon (18:00)</ion-select-option>
-                <ion-select-option value="20:00">Night (20:00)</ion-select-option>
-                <ion-select-option value="selectHour">Select hour...</ion-select-option>
+                <ion-select-option [disabled]="date.value === dateOptions.today" [value]="hourOptions.tomorrow.text">Tomorrow (8:00)</ion-select-option>
+                <ion-select-option [value]="hourOptions.midday.text">At midday (13:00)</ion-select-option>
+                <ion-select-option [value]="hourOptions.afternoon.text">Afternoon (18:00)</ion-select-option>
+                <ion-select-option [value]="hourOptions.night.text">Night (20:00)</ion-select-option>
+                <ion-select-option [value]="hourOptions.selectHour.text"> {{hourOptions.selectHour.text}} </ion-select-option>
             </ion-select>
-            <ion-datetime [hidden]="hiddenCustomHour" #hourPicker displayFormat="h:mm a" formControlName="customHour" (ionChange)="changeCustomHour($event)"></ion-datetime>
+            <ion-datetime [hidden]="true" #hourPicker displayFormat="h:mm a" formControlName="customHour" (ionChange)="changeCustomHour($event)"></ion-datetime>
           </ion-item>
           <ion-item lines="none" *ngIf="reminderForm.get('hour').hasError('required') && reminderForm.get('hour').touched">
             <div class="error-message">
@@ -57,12 +57,12 @@
           <ion-item lines="none" [class.has-error]="reminderForm.get('frequency').hasError('required') && reminderForm.get('frequency').touched">
             <ion-label position="floating">Frequency</ion-label>
             <ion-select #frequency formControlName="frequency" interface="popover" (ionChange)="selectedFrequency(frequency.value)">
-                <ion-select-option value="noRepetition">No repetition</ion-select-option>
-                <ion-select-option value="daily">Daily</ion-select-option>
-                <ion-select-option value="weekly">Weekly</ion-select-option>
-                <ion-select-option value="monthly">Monthly</ion-select-option>
-                <ion-select-option value="annually">Annually</ion-select-option>
-                <ion-select-option [value]="customize"> {{customize}}</ion-select-option>
+                <ion-select-option [value]="frequencyOptions.noRepetition.text">No repetition</ion-select-option>
+                <ion-select-option [value]="frequencyOptions.daily.text">Daily</ion-select-option>
+                <ion-select-option [value]="frequencyOptions.weekly.text">Weekly</ion-select-option>
+                <ion-select-option [value]="frequencyOptions.monthly.text">Monthly</ion-select-option>
+                <ion-select-option [value]="frequencyOptions.annually.text">Annually</ion-select-option>
+                <ion-select-option [value]="frequencyOptions.customize.text"> {{frequencyOptions.customize.text}}</ion-select-option>
             </ion-select>
           </ion-item>
           <ion-item lines="none" *ngIf="reminderForm.get('frequency').hasError('required') && reminderForm.get('frequency').touched">
