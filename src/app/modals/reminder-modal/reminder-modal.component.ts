@@ -45,10 +45,10 @@ export class ReminderModalComponent implements OnInit, AfterViewInit {
 
   frequencyOptions = {
     noRepetition: {text: 'noRepetition'},
-    daily: {text: 'daily'},
-    weekly: {text: 'weekly'},
-    monthly: {text: 'monthly'},
-    annually: {text: 'annually'},
+    daily: {text: 'daily', value: 'days'},
+    weekly: {text: 'weekly', value: 'weeks'},
+    monthly: {text: 'monthly', value: 'months'},
+    annually: {text: 'annually', value: 'years'},
     customize: {text: 'Customize...'}
   };
   frequencyTexts = ['noRepetition', 'daily', 'weekly', 'monthly', 'annually'];
@@ -75,9 +75,8 @@ export class ReminderModalComponent implements OnInit, AfterViewInit {
         let frequency = '';
         if ((typeof this.note.reminder['frequency'] !== 'undefined') && (typeof this.note.reminder['frequency'] === 'object')) {
           console.log('*****Frequency not empty');
-          // se repite cada 2 semanas el lunes, martes
           // TODO: Complete string.
-          this.frequencyOptions.customize.text = `Is repeated every ${this.note.reminder['frequency']['count']} weeks on`;
+          this.formatCustomizeText();
           frequency = this.frequencyOptions.customize.text;
         } else {
           frequency = this.note.reminder['frequency'];
@@ -231,6 +230,41 @@ export class ReminderModalComponent implements OnInit, AfterViewInit {
     this.geolocationService.getAddress().then(result => {
       this.reminderForm.patchValue({location: result['address']});
     });
+  }
+
+  formatCustomizeText() {
+    // se repite cada 2 semanas el lunes, martes
+    // se repite a diario / se repite cada x días / se repite cada x días; hasta el dd/mm / se repite cada x días; y veces
+    if ((this.note.reminder['frequency']['repeat'] === 'daily') || (this.note.reminder['frequency']['repeat'] === 'annually')) {
+      this.frequencyOptions.customize.text = `Is repeated every ${this.note.reminder['frequency']['count']}
+      ${this.frequencyOptions[this.note.reminder['frequency']['repeat']].value}`;
+    }
+    if (this.note.reminder['frequency']['repeat'] === 'weekly') {
+
+      let days = '';
+      Object.keys(this.note.reminder['frequency']['days']).forEach(day => {
+        console.log('day', day); // key
+        console.log('value', this.note.reminder['frequency']['days'][day]); // value
+        if (this.note.reminder['frequency']['days'][day]) {
+          days += day.substring(0, 3).toString() + '. ';
+        }
+      });
+
+      this.frequencyOptions.customize.text = `Is repeated every ${this.note.reminder['frequency']['count']}
+          ${this.frequencyOptions[this.note.reminder['frequency']['repeat']].value} on ${days}`;
+    }
+
+    if (this.note.reminder['frequency']['repeat'] === 'monthly') {
+      let condition = '';
+      if (this.note.reminder['frequency']['condition'] === 'thirdTuesday') {
+        condition = 'The third Tuesday of the month';
+      }
+      if (this.note.reminder['frequency']['condition'] === 'sameDay') {
+        condition = 'The same day of the month';
+      }
+      this.frequencyOptions.customize.text = `Is repeated every ${this.note.reminder['frequency']['count']}
+          ${this.frequencyOptions[this.note.reminder['frequency']['repeat']].value} (${condition})`;
+    }
   }
 
 }
