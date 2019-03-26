@@ -39,8 +39,22 @@ export class FrequencyComponent implements OnInit {
       this.options.repeat = this.navParams.data.popoverProps.frequency.repeat;
       this.options.count = this.navParams.data.popoverProps.frequency.count;
       this.options.when = this.navParams.data.popoverProps.frequency.when;
+      if (this.options.when.text === 'numberEvents') {
+        this.numberEvents =  parseInt(this.options.when.value, 10);
+      }
+      if (this.options.when.text === 'untilDate') {
+        this.untilDate = this.options.when.value;
+      }
       if (this.options.repeat === 'weekly') {
         // TODO: Set days.
+        this.options['days'] = this.navParams.data.popoverProps.frequency.days;
+      }
+      if (this.options.repeat === 'monthly') {
+        // TODO: Set condition
+        this.options.condition = this.navParams.data.popoverProps.frequency.condition;
+        if (this.options.condition.text === 'thirdTuesday') {
+          this.toggle = !this.toggle;
+        }
       }
     }
   }

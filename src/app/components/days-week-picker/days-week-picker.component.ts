@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 
 import * as moment from 'moment';
 
@@ -10,6 +10,7 @@ import * as moment from 'moment';
 export class DaysWeekPickerComponent implements OnInit {
 
   weekdays = moment.weekdays();
+  @Input() days;
   @Output() event: EventEmitter<Object> = new EventEmitter<Object>();
   selectedWeekdays = {
     Sunday: false,
@@ -24,6 +25,8 @@ export class DaysWeekPickerComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    console.log('days', this.days);
+    this.selectedWeekdays = this.days;
   }
 
   selectedDay(weekday) {

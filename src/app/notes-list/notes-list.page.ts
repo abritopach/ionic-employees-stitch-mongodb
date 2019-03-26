@@ -33,6 +33,7 @@ export class NotesListPage implements OnInit {
   copyNotes: Note[] = [];
   archivedNotes: Note[] = [];
   avatars = null;
+  showArchivedNotes = false;
 
   constructor(private storage: Storage, private stitchMongoService: StitchMongoService, private router: Router,
               private popoverCtrl: PopoverController, private alertCtrl: AlertController,
