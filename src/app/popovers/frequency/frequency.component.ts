@@ -12,7 +12,8 @@ export class FrequencyComponent implements OnInit {
     enabled: true,
     repeat: 'daily',
     count: 1,
-    when: 'always'
+    when: {text: 'always', value: 'always'},
+    condition: {text: 'sameDay', value: 'The same day of the month'}
   };
 
   frequencyMap = {
@@ -24,13 +25,15 @@ export class FrequencyComponent implements OnInit {
 
   dateText;
   toggle = true;
+  numberEvents = 1;
+  untilDate = '';
 
   constructor(private popoverCtrl: PopoverController, private navParams: NavParams) {
     this.dateText = this.frequencyMap.daily;
   }
 
   ngOnInit() {
-    if (typeof this.navParams.data.popoverProps.frequency !== 'undefined') {
+    if ((typeof this.navParams.data.popoverProps.frequency !== 'undefined') && (this.navParams.data.popoverProps.frequency !== null)) {
       console.log('this.navParams.data.popoverProps.frequency', this.navParams.data.popoverProps.frequency);
       this.options.enabled = this.navParams.data.popoverProps.frequency.enabled;
       this.options.repeat = this.navParams.data.popoverProps.frequency.repeat;
@@ -62,6 +65,15 @@ export class FrequencyComponent implements OnInit {
   }
 
   onClickAccept() {
+    if (this.options.when.text === 'untilDate') {
+      this.options.when.value = this.untilDate;
+    }
+    if (this.options.when.text === 'numberEvents') {
+      this.options.when.value = this.numberEvents.toString();
+    }
+    if (this.options.repeat !== 'monthly') {
+      delete this.options.condition;
+    }
     console.log('FrequencyComponent::onClickAccept() | method called', this.options);
     this.popoverCtrl.dismiss(this.options);
   }
@@ -70,7 +82,8 @@ export class FrequencyComponent implements OnInit {
     console.log('FrequencyComponent::ionChangeCondition1(event) | method called', event);
     console.log('condition1', event.detail.checked);
     if (event.detail.checked) {
-      this.options['condition'] = 'sameDay';
+      this.options.condition.text = 'sameDay';
+      this.options.condition.value = 'The same day of the month';
     }
   }
 
@@ -78,8 +91,13 @@ export class FrequencyComponent implements OnInit {
     console.log('FrequencyComponent::ionChangeCondition2(event) | method called', event);
     console.log('condition2', event.detail.checked);
     if (event.detail.checked) {
-      this.options['condition'] = 'thirdTuesday';
+      this.options.condition.text = 'thirdTuesday';
+      this.options.condition.value = 'The third Tuesday of the month';
     }
+  }
+
+  onSelectWhenChange(selected) {
+    console.log('FrequencyComponent::onSelectWhenChange(selectedValue) | method called', selected.detail.value);
   }
 
 }
