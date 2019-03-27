@@ -34,7 +34,6 @@ export class FrequencyComponent implements OnInit {
 
   ngOnInit() {
     if ((typeof this.navParams.data.popoverProps.frequency !== 'undefined') && (this.navParams.data.popoverProps.frequency !== null)) {
-      console.log('this.navParams.data.popoverProps.frequency', this.navParams.data.popoverProps.frequency);
       this.options.enabled = this.navParams.data.popoverProps.frequency.enabled;
       this.options.repeat = this.navParams.data.popoverProps.frequency.repeat;
       this.options.count = this.navParams.data.popoverProps.frequency.count;
@@ -62,7 +61,6 @@ export class FrequencyComponent implements OnInit {
   onSelectChange(selected) {
     console.log('FrequencyComponent::onSelectChange(selectedValue) | method called', selected.detail.value);
     this.dateText = this.frequencyMap[selected.detail.value];
-    console.log('dateText', this.dateText);
     if ((this.dateText === 'day') || (this.dateText === 'year')) {
       if (typeof this.options['days'] !== 'undefined') {
         delete this.options['days'];
@@ -94,7 +92,6 @@ export class FrequencyComponent implements OnInit {
 
   ionChangeCondition1(event) {
     console.log('FrequencyComponent::ionChangeCondition1(event) | method called', event);
-    console.log('condition1', event.detail.checked);
     if (event.detail.checked) {
       this.options.condition.text = 'sameDay';
       this.options.condition.value = 'The same day of the month';
@@ -103,7 +100,6 @@ export class FrequencyComponent implements OnInit {
 
   ionChangeCondition2(event) {
     console.log('FrequencyComponent::ionChangeCondition2(event) | method called', event);
-    console.log('condition2', event.detail.checked);
     if (event.detail.checked) {
       this.options.condition.text = 'thirdTuesday';
       this.options.condition.value = 'The third Tuesday of the month';

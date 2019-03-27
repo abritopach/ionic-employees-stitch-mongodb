@@ -27,6 +27,7 @@ export class ReminderModalComponent implements OnInit, AfterViewInit {
   loading: any;
   note: Note;
   frequencyPopoverData = null;
+  updatedFrequency = false;
 
   dateOptions = {
     today: {text: 'today', date: moment().format('YYYY-MM-DD')},
@@ -61,9 +62,7 @@ export class ReminderModalComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.modalTitle = this.navParams.data.modalProps.title;
-    console.log('this.reminderForm', this.reminderForm.value);
     this.note = this.navParams.data.modalProps.note;
-    console.log('note', this.note);
     if (typeof this.note.reminder !== 'undefined') {
       if (this.note.reminder['type'] === 'hour') {
         this.showHourItems = true;
@@ -74,9 +73,7 @@ export class ReminderModalComponent implements OnInit, AfterViewInit {
 
         let frequency = '';
         if ((typeof this.note.reminder['frequency'] !== 'undefined') && (typeof this.note.reminder['frequency'] === 'object')) {
-          console.log('*****Frequency not empty');
-          // TODO: Complete string.
-          this.formatCustomizeText();
+          this.formatCustomizeText(this.note.reminder['frequency']);
           frequency = this.frequencyOptions.customize.text;
         } else {
           frequency = this.note.reminder['frequency'];
@@ -91,7 +88,6 @@ export class ReminderModalComponent implements OnInit, AfterViewInit {
         this.reminderForm.patchValue({location: this.note.reminder['location']});
       }
     }
-    console.log('this.reminderForm', this.reminderForm.value);
   }
 
   ngAfterViewInit() {
@@ -139,7 +135,6 @@ export class ReminderModalComponent implements OnInit, AfterViewInit {
     if (this.reminderForm.value.locationCheckbox) {
       reminder = {type: 'location', location: this.reminderForm.value.location};
     }
-    console.log('reminder', reminder);
     this.modalCtrl.dismiss( {option: 'reminder', reminder: reminder} );
   }
 
@@ -177,8 +172,10 @@ export class ReminderModalComponent implements OnInit, AfterViewInit {
 
   selectedFrequency(frequency) {
     console.log('ReminderModalComponent::selectedFrequency() | method called', frequency);
-    if (this.frequencyTexts.indexOf(frequency) === -1) {
+    if ((this.frequencyTexts.indexOf(frequency) === -1) && (this.updatedFrequency === false)) {
       this.presentPopover();
+    } else {
+      this.updatedFrequency = false;
     }
   }
 
@@ -211,7 +208,10 @@ export class ReminderModalComponent implements OnInit, AfterViewInit {
 
     if (data) {
       console.log('data popover.onWillDismiss', data);
+      this.formatCustomizeText(data);
       this.frequencyPopoverData = data;
+      this.updatedFrequency = true;
+      setTimeout(() => this.reminderForm.patchValue({frequency: this.frequencyOptions.customize.text }), 1000);
     }
 
   }
@@ -236,48 +236,48 @@ export class ReminderModalComponent implements OnInit, AfterViewInit {
     });
   }
 
-  formatCustomizeText() {
+  formatCustomizeText(frequency) {
     // se repite cada 2 semanas el lunes, martes
     // se repite a diario / se repite cada x días / se repite cada x días; hasta el dd/mm / se repite cada x días; y veces
 
     let when = '';
-    if (this.note.reminder['frequency']['when']['text'] === 'numberEvents') {
-      when = '; ' + this.note.reminder['frequency']['when']['value'] + ' times';
+    if (frequency['when']['text'] === 'numberEvents') {
+      when = '; ' + frequency['when']['value'] + ' times';
     }
 
-    if (this.note.reminder['frequency']['when']['text'] === 'untilDate') {
-      when = '; until' + this.note.reminder['frequency']['when']['value'];
+    if (frequency['when']['text'] === 'untilDate') {
+      when = '; until ' +  moment(frequency['when']['value']).format('YYYY-MM-DD');
     }
 
-    if ((this.note.reminder['frequency']['repeat'] === 'daily') || (this.note.reminder['frequency']['repeat'] === 'annually')) {
-      this.frequencyOptions.customize.text = `Is repeated every ${this.note.reminder['frequency']['count']}
-      ${this.frequencyOptions[this.note.reminder['frequency']['repeat']].value} ${when}`;
+    if ((frequency['repeat'] === 'daily') || (frequency['repeat'] === 'annually')) {
+      this.frequencyOptions.customize.text = `Is repeated every ${frequency['count']}
+      ${this.frequencyOptions[frequency['repeat']].value} ${when}`;
     }
-    if (this.note.reminder['frequency']['repeat'] === 'weekly') {
+    if (frequency['repeat'] === 'weekly') {
 
       let days = '';
-      Object.keys(this.note.reminder['frequency']['days']).forEach(day => {
+      Object.keys(frequency['days']).forEach(day => {
         // console.log('day', day); // key
-        // console.log('value', this.note.reminder['frequency']['days'][day]); // value
-        if (this.note.reminder['frequency']['days'][day]) {
+        // console.log('value', frequency['days'][day]); // value
+        if (frequency['days'][day]) {
           days += day.substring(0, 3).toString() + '. ';
         }
       });
 
-      this.frequencyOptions.customize.text = `Is repeated every ${this.note.reminder['frequency']['count']}
-          ${this.frequencyOptions[this.note.reminder['frequency']['repeat']].value} on ${days} ${when}`;
+      this.frequencyOptions.customize.text = `Is repeated every ${frequency['count']}
+          ${this.frequencyOptions[frequency['repeat']].value} on ${days} ${when}`;
     }
 
-    if (this.note.reminder['frequency']['repeat'] === 'monthly') {
+    if (frequency['repeat'] === 'monthly') {
       let condition = '';
-      if (this.note.reminder['frequency']['condition']['text'] === 'thirdTuesday') {
+      if (frequency['condition']['text'] === 'thirdTuesday') {
         condition = 'The third Tuesday of the month';
       }
-      if (this.note.reminder['frequency']['condition']['text'] === 'sameDay') {
+      if (frequency['condition']['text'] === 'sameDay') {
         condition = 'The same day of the month';
       }
-      this.frequencyOptions.customize.text = `Is repeated every ${this.note.reminder['frequency']['count']}
-          ${this.frequencyOptions[this.note.reminder['frequency']['repeat']].value} (${condition}) ${when}`;
+      this.frequencyOptions.customize.text = `Is repeated every ${frequency['count']}
+          ${this.frequencyOptions[frequency['repeat']].value} (${condition}) ${when}`;
     }
   }
 

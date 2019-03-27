@@ -25,8 +25,10 @@ export class DaysWeekPickerComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    console.log('days', this.days);
-    this.selectedWeekdays = this.days;
+    if ((this.days !== null) && (typeof this.days !== 'undefined')) {
+      console.log('days', this.days);
+      this.selectedWeekdays = this.days;
+    }
   }
 
   selectedDay(weekday) {
