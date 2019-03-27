@@ -33,7 +33,8 @@
                   <ion-button *ngIf="note.pinned" (click)="pinnedNote(note)">
                     <img class="pinnedImg" src="assets/images/pinned.png">
                   </ion-button>
-                  <ion-button *ngIf="note.reminder">
+                  <ion-button *ngIf="note.reminder" (click)="presentAlertConfirm({header: 'Delete reminder', message: 'Are you sure that you want to delete the reminder?',
+                  option: 'deleteReminder', note: note})">
                     <ion-icon slot="icon-only" name="notifications" color="primary"></ion-icon>
                   </ion-button>
                   <ion-button (click)="presentPopover('optionsNote', note)" fill="clear">

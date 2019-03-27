@@ -203,8 +203,8 @@ export class NotesListPage implements OnInit {
     });
   }
 
-  async presentAlertConfirm(options = {header: 'Header', message: 'message', option: 'option', note: null, userId: ObjectId}) {
-    const {header, message, option, note, userId} = options;
+  async presentAlertConfirm(options = {header: 'Header', message: 'message', option: 'option', note: null}) {
+    const {header, message, option, note} = options;
     const alert = await this.alertCtrl.create({
       header: header,
       message: message,
@@ -223,6 +223,9 @@ export class NotesListPage implements OnInit {
             }
             if (option === 'deleteNote') {
               this.deleteNote(note);
+            }
+            if (option === 'deleteReminder') {
+              this.deleteReminder(note);
             }
           }
         }
@@ -444,7 +447,7 @@ export class NotesListPage implements OnInit {
         switch (data.option) {
           case 'deleteNote':
             this.presentAlertConfirm({header: 'Delete note', message: 'Are you sure that you want to delete the note?',
-            option: 'deleteNote', note: note, userId: userId});
+            option: 'deleteNote', note: note});
             break;
           case 'archiveNote':
             this.archiveNote(note);
@@ -457,7 +460,7 @@ export class NotesListPage implements OnInit {
             break;
           case 'deleteAllNotes':
             this.presentAlertConfirm({header: 'Delete all notes', message: 'Are you sure that you want to delete all the notes?',
-            option: 'deleteAllNotes', note: null, userId: userId});
+            option: 'deleteAllNotes', note: null});
             break;
           case 'tagNote':
             this.presentModal({title: 'Add new tags', note: note, action: 'tag'}, NgSelectModalComponent);
@@ -543,6 +546,24 @@ export class NotesListPage implements OnInit {
     } else {
       console.log('checkCollaborators: empty collaborators');
     }
+  }
+
+  deleteReminder(note) {
+    console.log('NotesListPage::deleteReminder(note) | method called');
+    this.storage.get(config.TOKEN_KEY).then(res => {
+      if (res) {
+        const objectId = new ObjectId(res);
+        delete note.reminder;
+        note.updated_at = new Date();
+        this.stitchMongoService.update(config.COLLECTION_KEY, {user_id: objectId, 'notes.id': note.id},
+        { $unset: { 'notes.$.reminder' : '' }, $set: { 'notes.$.updated_at': note.updated_at} })
+        .then(result => {
+            console.log(result);
+        }).catch(err => {
+            console.error(err);
+        });
+      }
+    });
   }
 
 }
