@@ -21,6 +21,7 @@ import { ReminderModalComponent } from '../modals/reminder-modal/reminder-modal.
 import {forkJoin} from 'rxjs';
 
 import { Plugins } from '@capacitor/core';
+import { Reminder } from '../models/reminder.model';
 
 @Component({
   selector: 'app-notes-list',
@@ -69,6 +70,9 @@ export class NotesListPage implements OnInit {
 
   addNewNote() {
     console.log('NotesListPage::addNewNote() | method called');
+    const newReminder: Reminder = {
+      type: ''
+    };
     const newNote: Note = {
       id: new ObjectId(),
       title: 'My new note',
@@ -79,7 +83,7 @@ export class NotesListPage implements OnInit {
       updated_at: new Date(),
       collaborators: [],
       color: '#fff',
-      reminder: {}
+      reminder: newReminder
     };
     this.storage.get(config.TOKEN_KEY).then(res => {
       if (res) {

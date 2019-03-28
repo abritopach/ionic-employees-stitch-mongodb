@@ -13,7 +13,8 @@ export class FrequencyComponent implements OnInit {
     repeat: 'daily',
     count: 1,
     when: {text: 'always', value: 'always'},
-    condition: {text: 'sameDay', value: 'The same day of the month'}
+    condition: {text: 'sameDay', value: 'The same day of the month'},
+    days: {}
   };
 
   frequencyMap = {
@@ -45,11 +46,9 @@ export class FrequencyComponent implements OnInit {
         this.untilDate = this.options.when.value;
       }
       if (this.options.repeat === 'weekly') {
-        // TODO: Set days.
-        this.options['days'] = this.navParams.data.popoverProps.frequency.days;
+        this.options.days = this.navParams.data.popoverProps.frequency.days;
       }
       if (this.options.repeat === 'monthly') {
-        // TODO: Set condition
         this.options.condition = this.navParams.data.popoverProps.frequency.condition;
         if (this.options.condition.text === 'thirdTuesday') {
           this.toggle = !this.toggle;
@@ -62,18 +61,18 @@ export class FrequencyComponent implements OnInit {
     console.log('FrequencyComponent::onSelectChange(selectedValue) | method called', selected.detail.value);
     this.dateText = this.frequencyMap[selected.detail.value];
     if ((this.dateText === 'day') || (this.dateText === 'year')) {
-      if (typeof this.options['days'] !== 'undefined') {
-        delete this.options['days'];
+      if (typeof this.options.days !== 'undefined') {
+        delete this.options.days;
       }
-      if (typeof this.options['condition'] !== 'undefined') {
-        delete this.options['condition'];
+      if (typeof this.options.condition !== 'undefined') {
+        delete this.options.condition;
       }
     }
   }
 
   selectedWeekday(event) {
     console.log('FrequencyComponent::selectedWeekday(event) | method called', event);
-    this.options['days'] = event;
+    this.options.days = event;
   }
 
   onClickAccept() {

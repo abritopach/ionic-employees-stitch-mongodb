@@ -1,5 +1,6 @@
 import { Todo } from './todo.model';
 import { ObjectId } from 'bson';
+import { Reminder } from './reminder.model';
 
 export interface Note {
     id: number;
@@ -11,5 +12,5 @@ export interface Note {
     updated_at: Date;
     collaborators: ObjectId[] | [];
     color: string | '#fff';
-    reminder: Object | {};
+    reminder: Reminder;
 }
