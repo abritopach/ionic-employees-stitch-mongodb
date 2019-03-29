@@ -88,7 +88,6 @@ export class NotesListPage implements OnInit {
     this.storage.get(config.TOKEN_KEY).then(res => {
       if (res) {
         const objectId = new ObjectId(res);
-        // TODO: Add new note.
         this.stitchMongoService.update(config.COLLECTION_KEY, {user_id: objectId},
           {$push: { 'notes': newNote }})
           .then(result => {
@@ -428,7 +427,8 @@ export class NotesListPage implements OnInit {
             {name: 'Pinned', icon: 'pin', function: 'pinnedNote'},
             {name: 'Collaborator', icon: 'person-add', function: 'collaboratorNote'},
             {name: 'Color', icon: 'color-palette', function: 'colourNote'},
-            {name: 'Reminder', icon: 'notifications', function: 'reminderNote'}
+            {name: 'Reminder', icon: 'notifications', function: 'reminderNote'},
+            {name: 'Share', icon: 'share', function: 'shareNote'}
           ]
         }};
         break;
@@ -483,6 +483,9 @@ export class NotesListPage implements OnInit {
             break;
           case 'reminderNote':
             this.presentModal({title: 'Add reminder', note: note}, ReminderModalComponent);
+            break;
+          case 'shareNote':
+            this.shareNote(note);
             break;
         }
       }
@@ -567,6 +570,20 @@ export class NotesListPage implements OnInit {
             console.error(err);
         });
       }
+    });
+  }
+
+  async shareNote(note) {
+    console.log('NotesListPage::shareNote(note) | method called');
+
+    // TODO: Test in mobile. On the web doesn't work yet :( https://developer.mozilla.org/en-US/docs/Web/API/Navigator/share
+    const { Share } = Plugins;
+
+    const shareRet = await Share.share({
+      title: 'See cool stuff',
+      text: 'Really awesome thing you need to see right meow',
+      url: 'http://ionicframework.com/',
+      dialogTitle: 'Share with buddies'
     });
   }
 

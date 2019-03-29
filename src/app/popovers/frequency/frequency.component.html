@@ -26,7 +26,6 @@
         <span> {{ dateText }} </span>
     </ion-item>
     <div *ngIf="options.repeat === 'weekly'">
-      <!-- TODO: Load week selector component. -->
       <app-days-week-picker [days]="options.days" (event)="selectedWeekday($event)"></app-days-week-picker>
     </div>
     <div *ngIf="options.repeat === 'monthly'">
