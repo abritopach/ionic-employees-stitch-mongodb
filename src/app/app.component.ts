@@ -45,6 +45,11 @@ export class AppComponent implements OnInit {
       title: 'Notes',
       url: '/notes-list',
       icon: 'list-box'
+    },
+    {
+      title: 'Holidays',
+      url: '/holidays',
+      icon: 'airplane'
     }
   ];
 

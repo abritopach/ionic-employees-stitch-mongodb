@@ -14,7 +14,8 @@ const routes: Routes = [
   { path: 'products', canActivate: [AuthGuardService], loadChildren: './products/products.module#ProductsPageModule' },
   // { path: 'todo', canActivate: [AuthGuardService], loadChildren: './todo/todo.module#TodoPageModule' },
   { path: 'todo/:id', canActivate: [AuthGuardService], loadChildren: './todo/todo.module#TodoPageModule' },
-  { path: 'notes-list', canActivate: [AuthGuardService], loadChildren: './notes-list/notes-list.module#NotesListPageModule' }
+  { path: 'notes-list', canActivate: [AuthGuardService], loadChildren: './notes-list/notes-list.module#NotesListPageModule' },
+  { path: 'holidays', loadChildren: './holidays/holidays.module#HolidaysPageModule' }
 ];
 
 @NgModule({
