@@ -1,0 +1,83 @@
+<ion-header>
+  <ion-toolbar color="tertiary">
+      <ion-buttons slot="end">
+          <ion-button (click)="dismiss()">
+              <ion-icon name="close" color="light"></ion-icon>
+          </ion-button>
+      </ion-buttons>
+      <ion-title>
+          Request time off
+      </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <form [formGroup]="requestHolidaysForm" novalidate (ngSubmit)="requestHolidaysFormSubmit()">
+      <ion-list inset>
+        <ion-item lines="none">
+            <ng-select [class.has-error]="requestHolidaysForm.get('whoFor').hasError('required') && requestHolidaysForm.get('whoFor').touched" [multiple]="true" [items]="employees"
+                        bindLabel="employee_name"
+                        bindValue="avatar"
+                        placeholder="Select"
+                        formControlName="whoFor">
+                <ng-template ng-label-tmp let-item="item">
+                    <img height="48" width="48" [src]="item.avatar"/>
+                    <b>{{item.employee_name}}</b>
+                </ng-template>
+                <ng-template ng-option-tmp let-item="item" let-index="index">
+                    <img height="48" width="48" [src]="item.avatar"/>
+                    <b> {{item.employee_name}}</b>
+                </ng-template>
+            </ng-select>
+        </ion-item>
+        <ion-item lines="none" *ngIf="requestHolidaysForm.get('whoFor').hasError('required') && requestHolidaysForm.get('whoFor').touched">
+            <div class="error-message">
+                This field is required.
+            </div>
+        </ion-item>
+        <br>
+        <ion-item [class.has-error]="requestHolidaysForm.get('type').hasError('required') && requestHolidaysForm.get('type').touched">
+          <ion-label position="floating">Type *</ion-label>
+          <ion-select formControlName="type" interface="popover">
+              <ion-select-option value="holiday">Holiday</ion-select-option>
+              <ion-select-option value="sickness">Sickness</ion-select-option>
+              <ion-select-option value="maternity">Maternity / Paternity</ion-select-option>
+              <ion-select-option value="meeting">Meeting</ion-select-option>
+              <ion-select-option value="home">Work from home</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item [class.has-error]="requestHolidaysForm.get('startDate').hasError('required') && requestHolidaysForm.get('startDate').touched">
+            <ion-label position="floating">Starting *</ion-label>
+            <ion-datetime displayFormat="MM/DD/YYYY" formControlName="startDate"></ion-datetime>
+        </ion-item>
+        <ion-item lines="none" *ngIf="requestHolidaysForm.get('startDate').hasError('required') && requestHolidaysForm.get('startDate').touched">
+            <div class="error-message">
+                This field is required.
+            </div>
+        </ion-item>
+        <br>
+        <ion-item [class.has-error]="requestHolidaysForm.get('endDate').hasError('required') && requestHolidaysForm.get('endDate').touched">
+            <ion-label position="floating">Ending *</ion-label>
+            <ion-datetime displayFormat="MM/DD/YYYY" formControlName="endDate"></ion-datetime>
+        </ion-item>
+        <ion-item lines="none" *ngIf="requestHolidaysForm.get('endDate').hasError('required') && requestHolidaysForm.get('endDate').touched">
+            <div class="error-message">
+                This field is required.
+            </div>
+        </ion-item>
+        <br>
+        <ion-item>
+          <ion-label position="floating">Reason</ion-label>
+          <ion-textarea formControlName="reason"></ion-textarea>
+        </ion-item>
+      </ion-list>
+      <ion-row no-padding justify-content-center>
+          <ion-col col-auto text-right>
+              <ion-button [disabled]='!requestHolidaysForm.valid' type="submit" fill="clear" size="small" color="primary">
+              <ion-icon name='send' slot="start"></ion-icon>
+              Book
+              </ion-button>
+          </ion-col>
+      </ion-row>
+  </form>
+</ion-content>

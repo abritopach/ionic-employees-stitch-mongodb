@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Routes, RouterModule } from '@angular/router';
 
 import { IonicModule } from '@ionic/angular';
@@ -8,6 +8,9 @@ import { IonicModule } from '@ionic/angular';
 import { HolidaysPage } from './holidays.page';
 
 import { SharedComponentsModule } from '../components/shared-components.module';
+import { RequestHolidaysModalComponent } from '../modals/request-holidays-modal/request-holidays-modal.component';
+
+import { NgSelectModule } from '@ng-select/ng-select';
 
 const routes: Routes = [
   {
@@ -20,10 +23,13 @@ const routes: Routes = [
   imports: [
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
     IonicModule,
     RouterModule.forChild(routes),
-    SharedComponentsModule
+    SharedComponentsModule,
+    NgSelectModule
   ],
-  declarations: [HolidaysPage]
+  declarations: [HolidaysPage, RequestHolidaysModalComponent],
+  entryComponents: [RequestHolidaysModalComponent]
 })
 export class HolidaysPageModule {}
