@@ -45,3 +45,8 @@ ion-avatar img {
     -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=20)";
     filter: alpha(opacity=20);
   }
+
+.ng-dropdown-panel {
+  border: none!important;
+  position: unset!important;
+}

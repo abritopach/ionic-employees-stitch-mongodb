@@ -18,7 +18,7 @@
             <ng-select [class.has-error]="requestHolidaysForm.get('whoFor').hasError('required') && requestHolidaysForm.get('whoFor').touched" [multiple]="true" [items]="employees"
                         bindLabel="employee_name"
                         bindValue="avatar"
-                        placeholder="Select"
+                        placeholder="Who for"
                         formControlName="whoFor">
                 <ng-template ng-label-tmp let-item="item">
                     <img height="48" width="48" [src]="item.avatar"/>
@@ -46,6 +46,7 @@
               <ion-select-option value="home">Work from home</ion-select-option>
           </ion-select>
         </ion-item>
+        <br>
         <ion-item [class.has-error]="requestHolidaysForm.get('startDate').hasError('required') && requestHolidaysForm.get('startDate').touched">
             <ion-label position="floating">Starting *</ion-label>
             <ion-datetime displayFormat="MM/DD/YYYY" formControlName="startDate"></ion-datetime>

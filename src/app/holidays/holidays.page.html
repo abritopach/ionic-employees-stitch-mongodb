@@ -10,7 +10,30 @@
 </app-header>
 
 <ion-content>
-
+  <ion-card>
+    <ion-card-header>
+      <ion-avatar class="avatar">
+        <img src="assets/images/login-avatar.png">
+      </ion-avatar>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-item lines="none">
+        <ion-icon slot="start" name="arrow-dropright"></ion-icon>
+        <ion-label>Total holidays</ion-label>
+        <ion-badge slot="end">22</ion-badge>
+      </ion-item>
+      <ion-item lines="none">
+        <ion-icon slot="start" name="arrow-dropright"></ion-icon>
+        <ion-label>Holidays not taken</ion-label>
+        <ion-badge slot="end">22</ion-badge>
+      </ion-item>
+      <ion-item lines="none">
+        <ion-icon slot="start" name="arrow-dropright"></ion-icon>
+        <ion-label>Holidays taken</ion-label>
+        <ion-badge slot="end">0</ion-badge>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
 </ion-content>
 
 <app-footer></app-footer>
