@@ -101,9 +101,8 @@
 
       <ion-grid *ngIf="showCalendarFlag">
           <ion-row align-items-center>
-              <ion-col size-md="4" size-xs="12" align-self-center>
-          <ion-toolbar>
-            <ion-buttons slot="start">
+            <ion-col size-md="4" size-xs="12" align-self-center>
+            <div text-center>
               <ion-button size="small" shape="round" fill="outline">
                 <div mwlCalendarPreviousView [view]="view" [(viewDate)]="viewDate" (viewDateChange)="activeDayIsOpen = false">
                   Prev
@@ -119,26 +118,23 @@
                   Next
                 </div>
               </ion-button>
-            </ion-buttons>
-          </ion-toolbar>
+            </div>
           </ion-col>
           <ion-col size-md="4" size-xs="12" align-self-center>
             <h3 text-center>{{ viewDate | calendarDate:(view + 'ViewTitle'):'en' }}</h3>
           </ion-col>
           <ion-col size-md="4" size-xs="12" align-self-center>
-          <ion-toolbar>
-            <ion-buttons slot="start">
-              <ion-button color="primary" fill="solid" size="small" (click)="view = CalendarView.Month" [class.active]="view === CalendarView.Month">
+              <div text-center>
+              <ion-button size="small" shape="round" fill="outline" (click)="view = CalendarView.Month" [class.active]="view === CalendarView.Month">
                   Month
               </ion-button>
-              <ion-button color="primary" fill="solid" size="small" (click)="view = CalendarView.Week" [class.active]="view === CalendarView.Week">
+              <ion-button size="small" shape="round" fill="outline" (click)="view = CalendarView.Week" [class.active]="view === CalendarView.Week">
                 Week
               </ion-button>
-              <ion-button color="primary" fill="solid" size="small" (click)="view = CalendarView.Day" [class.active]="view === CalendarView.Day">
+              <ion-button size="small" shape="round" fill="outline" (click)="view = CalendarView.Day" [class.active]="view === CalendarView.Day">
                 Day
               </ion-button>
-            </ion-buttons>
-          </ion-toolbar>
+            </div>
         </ion-col>
         </ion-row>
         <div [ngSwitch]="view">

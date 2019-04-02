@@ -12,6 +12,10 @@ import { RequestHolidaysModalComponent } from '../modals/request-holidays-modal/
 
 import { NgSelectModule } from '@ng-select/ng-select';
 
+// Angular Calendar
+import { CalendarModule, DateAdapter } from 'angular-calendar';
+import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
+
 const routes: Routes = [
   {
     path: '',
@@ -27,7 +31,11 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes),
     SharedComponentsModule,
-    NgSelectModule
+    NgSelectModule,
+    CalendarModule.forRoot({
+      provide: DateAdapter,
+      useFactory: adapterFactory
+    }),
   ],
   declarations: [HolidaysPage, RequestHolidaysModalComponent],
   entryComponents: [RequestHolidaysModalComponent]
