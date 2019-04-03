@@ -9,6 +9,21 @@ import { Storage } from '@ionic/storage';
 import { StitchMongoService } from '../services/stitch-mongo.service';
 import { Holiday } from '../models/holiday.model';
 
+const colors: any = {
+  red: {
+    primary: '#ad2121',
+    secondary: '#FAE3E3'
+  },
+  blue: {
+    primary: '#1e90ff',
+    secondary: '#D1E8FF'
+  },
+  yellow: {
+    primary: '#e3bc08',
+    secondary: '#FDF1BA'
+  }
+};
+
 @Component({
   selector: 'app-holidays',
   templateUrl: './holidays.page.html',
@@ -34,6 +49,7 @@ export class HolidaysPage implements OnInit {
           console.log(result);
           if ((result.length !== 0) && (typeof result[0]['holidays'] !== 'undefined')) {
             this.holidays = result[0]['holidays'];
+            this.formatEventsCalendar();
           }
         });
       }
@@ -81,6 +97,20 @@ export class HolidaysPage implements OnInit {
 
   handleEvent(action: string, event: CalendarEvent): void {
     console.log('HolidaysPage::handleEvent() | method called');
+  }
+
+  formatEventsCalendar() {
+    this.eventsCalendar = [];
+    this.holidays.taken.info.map(holiday => {
+      console.log(holiday);
+      const formattedEvent = {
+        title: holiday.type,
+        start: new Date(holiday.startDate),
+        end: new Date(holiday.endDate),
+        color: colors.red,
+      };
+      this.eventsCalendar.push(formattedEvent);
+    });
   }
 
 }

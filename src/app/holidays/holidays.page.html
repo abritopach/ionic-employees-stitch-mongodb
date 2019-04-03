@@ -10,7 +10,7 @@
 </app-header>
 
 <ion-content>
-  <ion-card>
+  <ion-card *ngIf="holidays">
     <ion-card-header>
       <ion-avatar class="avatar">
         <img src="assets/images/login-avatar.png">
@@ -20,17 +20,17 @@
       <ion-item lines="none">
         <ion-icon slot="start" name="arrow-dropright"></ion-icon>
         <ion-label>Total holidays</ion-label>
-        <ion-badge slot="end">22</ion-badge>
+        <ion-badge slot="end"> {{holidays.total}} </ion-badge>
       </ion-item>
       <ion-item lines="none">
         <ion-icon slot="start" name="arrow-dropright"></ion-icon>
         <ion-label>Holidays not taken</ion-label>
-        <ion-badge slot="end">22</ion-badge>
+        <ion-badge slot="end"> {{holidays.not_taken}} </ion-badge>
       </ion-item>
       <ion-item lines="none">
         <ion-icon slot="start" name="arrow-dropright"></ion-icon>
         <ion-label>Holidays taken</ion-label>
-        <ion-badge slot="end">0</ion-badge>
+        <ion-badge slot="end"> {{holidays.taken.days}} </ion-badge>
       </ion-item>
     </ion-card-content>
   </ion-card>
