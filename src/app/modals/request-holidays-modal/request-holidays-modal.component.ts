@@ -7,6 +7,7 @@ import { ObjectId } from 'bson';
 import * as moment from 'moment';
 import { Storage } from '@ionic/storage';
 import { Holiday } from '../../models/holiday.model';
+import { IziToastService } from '../../services/izi-toast.service';
 
 @Component({
   selector: 'app-request-holidays-modal',
@@ -17,15 +18,25 @@ export class RequestHolidaysModalComponent implements OnInit {
 
   requestHolidaysForm: FormGroup;
   employees: any;
-  holidays: Holiday;
+  holidays: Holiday = {
+    total: 22,
+    not_taken: 22,
+    taken: {days: 0, info: []},
+  };
+  loading: any;
 
   constructor(private formBuilder: FormBuilder, private stitchMongoService: StitchMongoService, private modalCtrl: ModalController,
-              private storage: Storage, private navParams: NavParams) {
+              private storage: Storage, private navParams: NavParams, private loadingCtrl: LoadingController, 
+              private iziToast: IziToastService) {
     this.createForm();
   }
 
   ngOnInit() {
     this.fetchEmployees();
+    if ((typeof this.navParams.data.modalProps.holidays !== 'undefined') && (this.navParams.data.modalProps.holidays !== null)) {
+      // this.requestHolidaysForm.patchValue(this.navParams.data.modalProps.holidays);
+      this.holidays = this.navParams.data.modalProps.holidays;
+    }
     console.log('holydays', this.holidays);
   }
 
@@ -36,41 +47,57 @@ export class RequestHolidaysModalComponent implements OnInit {
       startDate: new FormControl('', Validators.required),
       endDate: new FormControl('', Validators.required),
       type: new FormControl('', Validators.required),
-      reason: new FormControl('', Validators.required)
+      reason: new FormControl(''),
+      status: new FormControl('pending'),
     });
   }
 
   requestHolidaysFormSubmit() {
     console.log(this.requestHolidaysForm.value);
 
-          /*
-    const startDate = moment(this.requestHolidaysForm.value.startDate, 'HH:mm p');
-    const endDate = moment(this.requestHolidaysForm.value.endDate, 'HH:mm p');
+    const startDate = moment(this.requestHolidaysForm.value.startDate, 'YYYY-MM-DD');
+    const endDate = moment(this.requestHolidaysForm.value.endDate, 'YYYY-MM-DD');
+    const countDays = Math.abs(startDate.diff(endDate, 'days')) + 1;
+    console.log('countDays', countDays);
 
-    if (startDate.isSameOrAfter(endDate)) {
-      this.iziToast.show('Error', 'The start time of the event cannot be the same or later than the end time.',
-       'red', 'ico-error', 'assets/avatar.png');
-    } else {
-      this.storage.get(config.TOKEN_KEY).then(res => {
-        if (res) {
-          const objectId = new ObjectId(res);
-          console.log('objectId', objectId);
-          // Update holiday.
-          if (typeof this.navParams.data.modalProps.event !== 'undefined') {
-          } else { // Add new holiday.
-            // this.presentLoading('Please wait, adding holiday...');
-            this.stitchMongoService.update(config.COLLECTION_KEY, {user_id: objectId}, {$push: { holidays: this.eventForm.value }})
+    /*
+    for (const d = moment(startDate); d.diff(endDate) <= 0; d.add(1, 'days')) {
+      console.log('d', d.format('YYYY-MM-DD'));
+    }
+    */
+
+    if (endDate.isSameOrAfter(startDate)) {
+
+      if (countDays <= this.holidays.not_taken) {
+
+        this.holidays.not_taken -= countDays;
+        this.holidays.taken.days += countDays;
+        this.holidays.taken.info.push(this.requestHolidaysForm.value);
+
+        console.log('holidays sent', this.holidays);
+
+        this.storage.get(config.TOKEN_KEY).then(res => {
+          if (res) {
+            const objectId = new ObjectId(res);
+            console.log('objectId', objectId);
+            this.presentLoading('Please wait, adding holiday...');
+            this.stitchMongoService.update(config.COLLECTION_KEY, {user_id: objectId}, {$set: { holidays: this.holidays }})
             .then(result => {
               console.log('result', result);
               this.dismissLoading();
               this.dismiss();
-              this.iziToast.success('Add event', 'Event added successfully.');
+              this.iziToast.success('Holiday request', 'Holiday request sent successfully.');
             });
           }
-        }
-      });
+        });
+      } else {
+        this.iziToast.show('Error', 'You dont have enough vacation days left.',
+        'red', 'ico-error', 'assets/avatar.png');
+      }
+    } else {
+      this.iziToast.show('Error', 'The end date cannot be earlier than the start date.',
+       'red', 'ico-error', 'assets/avatar.png');
     }
-    */
   }
 
   fetchEmployees() {
@@ -86,6 +113,19 @@ export class RequestHolidaysModalComponent implements OnInit {
     // can "dismiss" itself and pass back data.
     // console.log('dismiss', data);
     this.modalCtrl.dismiss();
+  }
+
+  async presentLoading(message) {
+    this.loading = await this.loadingCtrl.create({
+      message: message,
+    });
+
+    return await this.loading.present();
+  }
+
+  async dismissLoading() {
+    this.loading.dismiss();
+    this.loading = null;
   }
 
 }

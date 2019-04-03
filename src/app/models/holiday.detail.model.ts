@@ -7,4 +7,5 @@ export interface HolidayDetail {
     startDate: string;
     endDate: string;
     reason: string;
+    status: string;
 }

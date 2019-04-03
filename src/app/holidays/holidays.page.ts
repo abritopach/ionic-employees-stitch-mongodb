@@ -7,6 +7,7 @@ import config from '../config/config';
 import { ObjectId } from 'bson';
 import { Storage } from '@ionic/storage';
 import { StitchMongoService } from '../services/stitch-mongo.service';
+import { Holiday } from '../models/holiday.model';
 
 @Component({
   selector: 'app-holidays',
@@ -21,6 +22,7 @@ export class HolidaysPage implements OnInit {
    CalendarView = CalendarView;
    viewDate: Date = new Date();
    activeDayIsOpen = false;
+   holidays: Holiday = null;
 
   constructor(private modalCtrl: ModalController, private storage: Storage, private stitchMongoService: StitchMongoService) { }
 
@@ -31,6 +33,7 @@ export class HolidaysPage implements OnInit {
         this.stitchMongoService.find(config.COLLECTION_KEY, {user_id: objectId}).then(result => {
           console.log(result);
           if ((result.length !== 0) && (typeof result[0]['holidays'] !== 'undefined')) {
+            this.holidays = result[0]['holidays'];
           }
         });
       }
@@ -43,7 +46,7 @@ export class HolidaysPage implements OnInit {
   }
 
   async presentModal() {
-    const componentProps = { modalProps: { title: 'Request time off' }};
+    const componentProps = { modalProps: { title: 'Request time off', holidays: this.holidays }};
     const modal = await this.modalCtrl.create({
       component: RequestHolidaysModalComponent,
       componentProps: componentProps
