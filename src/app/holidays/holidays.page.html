@@ -17,6 +17,19 @@
       </ion-avatar>
     </ion-card-header>
     <ion-card-content>
+      <ion-item-group>
+        <ion-item-divider style="margin-bottom: 10px">
+          <h2>Total holidays</h2>
+          <ion-badge slot="end"> {{holidays.total}} </ion-badge>
+        </ion-item-divider>
+      </ion-item-group>
+      <ion-item-group>
+        <ion-item-divider style="margin-bottom: 10px">
+          <h2>Holidays not taken</h2>
+          <ion-badge slot="end"> {{holidays.not_taken}} </ion-badge>
+        </ion-item-divider>
+      </ion-item-group>
+      <!--
       <ion-item lines="none">
         <ion-icon slot="start" name="arrow-dropright"></ion-icon>
         <ion-label>Total holidays</ion-label>
@@ -32,6 +45,22 @@
         <ion-label>Holidays taken</ion-label>
         <ion-badge slot="end"> {{holidays.taken.days}} </ion-badge>
       </ion-item>
+      -->
+      <ion-item-group>
+          <ion-item-divider>
+              <h2>Holidays taken</h2>
+              <ion-badge slot="end"> {{holidays.taken.days}} </ion-badge>
+          </ion-item-divider>
+          <ion-list>
+          <div *ngFor="let key of Object.keys(infoHolidaysByType)">
+            <ion-item lines="none" *ngIf="infoHolidaysByType[key] !== 0">
+              <ion-icon slot="start" name="arrow-dropright"></ion-icon>
+              <ion-label> {{key}} </ion-label>
+              <ion-badge slot="end"> {{infoHolidaysByType[key]}} </ion-badge>
+            </ion-item>
+          </div>
+        </ion-list>
+        </ion-item-group>
     </ion-card-content>
   </ion-card>
 

@@ -8,6 +8,8 @@ import { ObjectId } from 'bson';
 import { Storage } from '@ionic/storage';
 import { StitchMongoService } from '../services/stitch-mongo.service';
 import { Holiday } from '../models/holiday.model';
+import { HolidayDetail } from '../models/holiday.detail.model';
+import * as moment from 'moment';
 
 const colors: any = {
   red: {
@@ -31,6 +33,8 @@ const colors: any = {
 })
 export class HolidaysPage implements OnInit {
 
+  Object = Object;
+
    // Calendar
    eventsCalendar: CalendarEvent[] = [];
    view: CalendarView = CalendarView.Month;
@@ -38,6 +42,13 @@ export class HolidaysPage implements OnInit {
    viewDate: Date = new Date();
    activeDayIsOpen = false;
    holidays: Holiday = null;
+   infoHolidaysByType = {
+    holiday: 0,
+    sickness: 0,
+    maternity: 0,
+    meeting: 0,
+    home: 0,
+   };
 
   constructor(private modalCtrl: ModalController, private storage: Storage, private stitchMongoService: StitchMongoService) { }
 
@@ -103,6 +114,7 @@ export class HolidaysPage implements OnInit {
     this.eventsCalendar = [];
     this.holidays.taken.info.map(holiday => {
       console.log(holiday);
+      this.holidaysByType(holiday);
       const formattedEvent = {
         title: holiday.type,
         start: new Date(holiday.startDate),
@@ -111,6 +123,15 @@ export class HolidaysPage implements OnInit {
       };
       this.eventsCalendar.push(formattedEvent);
     });
+    console.log(this.infoHolidaysByType);
+  }
+
+  holidaysByType(holiday: HolidayDetail) {
+    console.log('holidaysByType holiday', holiday);
+    const startDate = moment(holiday.startDate, 'YYYY-MM-DD');
+    const endDate = moment(holiday.endDate, 'YYYY-MM-DD');
+    const countDays = Math.abs(startDate.diff(endDate, 'days')) + 1;
+    this.infoHolidaysByType[holiday.type] += countDays;
   }
 
 }
