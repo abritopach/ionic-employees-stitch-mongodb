@@ -49,6 +49,8 @@ export class HolidaysPage implements OnInit {
     meeting: 0,
     home: 0,
    };
+   // exclude weekends
+  excludeDays: number[] = [0, 6];
 
   constructor(private modalCtrl: ModalController, private storage: Storage, private stitchMongoService: StitchMongoService) { }
 
@@ -128,10 +130,7 @@ export class HolidaysPage implements OnInit {
 
   holidaysByType(holiday: HolidayDetail) {
     console.log('holidaysByType holiday', holiday);
-    const startDate = moment(holiday.startDate, 'YYYY-MM-DD');
-    const endDate = moment(holiday.endDate, 'YYYY-MM-DD');
-    const countDays = Math.abs(startDate.diff(endDate, 'days')) + 1;
-    this.infoHolidaysByType[holiday.type] += countDays;
+    this.infoHolidaysByType[holiday.type] += holiday.countDays;
   }
 
 }

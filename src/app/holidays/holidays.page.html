@@ -69,7 +69,7 @@
           <ion-col size-md="4" size-xs="12" align-self-center>
         <div text-center>
           <ion-button size="small" shape="round" fill="outline">
-            <div mwlCalendarPreviousView [view]="view" [(viewDate)]="viewDate" (viewDateChange)="activeDayIsOpen = false">
+            <div mwlCalendarPreviousView [view]="view" [(viewDate)]="viewDate" [excludeDays]="excludeDays" (viewDateChange)="activeDayIsOpen = false">
               Prev
             </div>
           </ion-button>
@@ -79,7 +79,7 @@
             </div>
           </ion-button>
           <ion-button size="small" shape="round" fill="outline">
-            <div mwlCalendarNextView [view]="view" [(viewDate)]="viewDate" (viewDateChange)="activeDayIsOpen = false">
+            <div mwlCalendarNextView [view]="view" [(viewDate)]="viewDate" [excludeDays]="excludeDays" (viewDateChange)="activeDayIsOpen = false">
               Next
             </div>
           </ion-button>
@@ -107,6 +107,7 @@
           *ngSwitchCase="CalendarView.Month"
           [viewDate]="viewDate"
           [events]="eventsCalendar"
+          [excludeDays]="excludeDays"
           [activeDayIsOpen]="activeDayIsOpen"
           (dayClicked)="dayClicked($event.day)"
           (eventClicked)="handleEvent('Clicked', $event.event)">
@@ -115,6 +116,7 @@
           *ngSwitchCase="CalendarView.Week"
           [viewDate]="viewDate"
           [events]="eventsCalendar"
+          [excludeDays]="excludeDays"
           (eventClicked)="handleEvent('Clicked', $event.event)">
         </mwl-calendar-week-view>
         <mwl-calendar-day-view

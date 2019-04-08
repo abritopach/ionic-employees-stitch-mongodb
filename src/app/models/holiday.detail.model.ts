@@ -8,4 +8,5 @@ export interface HolidayDetail {
     endDate: string;
     reason: string;
     status: string;
+    countDays: number;
 }

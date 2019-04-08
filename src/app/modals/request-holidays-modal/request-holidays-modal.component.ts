@@ -26,7 +26,7 @@ export class RequestHolidaysModalComponent implements OnInit {
   loading: any;
 
   constructor(private formBuilder: FormBuilder, private stitchMongoService: StitchMongoService, private modalCtrl: ModalController,
-              private storage: Storage, private navParams: NavParams, private loadingCtrl: LoadingController, 
+              private storage: Storage, private navParams: NavParams, private loadingCtrl: LoadingController,
               private iziToast: IziToastService) {
     this.createForm();
   }
@@ -49,6 +49,7 @@ export class RequestHolidaysModalComponent implements OnInit {
       type: new FormControl('', Validators.required),
       reason: new FormControl(''),
       status: new FormControl('pending'),
+      countDays: new FormControl(0),
     });
   }
 
@@ -57,19 +58,25 @@ export class RequestHolidaysModalComponent implements OnInit {
 
     const startDate = moment(this.requestHolidaysForm.value.startDate, 'YYYY-MM-DD');
     const endDate = moment(this.requestHolidaysForm.value.endDate, 'YYYY-MM-DD');
-    const countDays = Math.abs(startDate.diff(endDate, 'days')) + 1;
+    let weekendDays = 0;
+    let countDays = Math.abs(startDate.diff(endDate, 'days')) + 1;
     console.log('countDays', countDays);
 
-    /*
     for (const d = moment(startDate); d.diff(endDate) <= 0; d.add(1, 'days')) {
-      console.log('d', d.format('YYYY-MM-DD'));
+      // console.log('d', d.format('YYYY-MM-DD'));
+      const weekday = d.format('dddd'); // Monday ... Sunday
+      const isWeekend = weekday === 'Sunday' || weekday === 'Saturday';
+      // console.log('isWeekend', isWeekend);
+      if (isWeekend) { weekendDays += 1; }
     }
-    */
+    countDays -= weekendDays;
+
 
     if (endDate.isSameOrAfter(startDate)) {
 
       if (countDays <= this.holidays.not_taken) {
 
+        this.requestHolidaysForm.value.countDays = countDays;
         this.holidays.not_taken -= countDays;
         this.holidays.taken.days += countDays;
         this.holidays.taken.info.push(this.requestHolidaysForm.value);
