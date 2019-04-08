@@ -14,4 +14,8 @@ export class ProductsPage implements OnInit {
   ngOnInit() {
   }
 
+  loadDefaultImg(event) {
+    event.target.src = '/assets/images/thumb-not-available.png';
+  }
+
 }

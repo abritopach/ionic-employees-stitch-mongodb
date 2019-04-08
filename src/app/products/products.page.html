@@ -6,7 +6,7 @@
 
 <ion-content padding>
     <ion-card class="product" *ngFor="let product of stitchMongoService.fakeProducts">
-        <ion-img [src]="product.image"></ion-img>
+        <ion-img [src]="product.image" (ionError)="loadDefaultImg($event)"></ion-img>
         <ion-card-header>
             <ion-card-subtitle>{{product.company}}</ion-card-subtitle>
             <ion-card-title>{{product.product_name}}</ion-card-title>

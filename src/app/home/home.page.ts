@@ -110,6 +110,7 @@ export class HomePage implements OnInit {
         if (docs.length === 0) {
           console.log('Collection is empty');
         } else {
+          console.log(docs);
           this.result = docs;
         }
         console.log('[MongoDB Stitch] Connected to Stitch');

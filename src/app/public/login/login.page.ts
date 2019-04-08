@@ -19,7 +19,7 @@ import { LoadingController } from '@ionic/angular';
 export class LoginPage implements OnInit {
 
   loginForm: FormGroup;
-  avatar = null;
+  avatar = '';
   loading: any;
 
   constructor(private formBuilder: FormBuilder, private stitchMongoService: StitchMongoService,

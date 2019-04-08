@@ -15,7 +15,7 @@ const routes: Routes = [
   // { path: 'todo', canActivate: [AuthGuardService], loadChildren: './todo/todo.module#TodoPageModule' },
   { path: 'todo/:id', canActivate: [AuthGuardService], loadChildren: './todo/todo.module#TodoPageModule' },
   { path: 'notes-list', canActivate: [AuthGuardService], loadChildren: './notes-list/notes-list.module#NotesListPageModule' },
-  { path: 'holidays', loadChildren: './holidays/holidays.module#HolidaysPageModule' }
+  { path: 'holidays', canActivate: [AuthGuardService], loadChildren: './holidays/holidays.module#HolidaysPageModule' }
 ];
 
 @NgModule({
