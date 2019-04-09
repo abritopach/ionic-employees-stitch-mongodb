@@ -53,10 +53,10 @@
           </ion-item-divider>
           <ion-list>
           <div *ngFor="let key of Object.keys(infoHolidaysByType)">
-            <ion-item lines="none" *ngIf="infoHolidaysByType[key] !== 0">
+            <ion-item lines="none" *ngIf="infoHolidaysByType[key].count !== 0">
               <ion-icon slot="start" name="arrow-dropright"></ion-icon>
               <ion-label> {{key}} </ion-label>
-              <ion-badge slot="end"> {{infoHolidaysByType[key]}} </ion-badge>
+              <ion-badge slot="end" [ngStyle]="{'background': infoHolidaysByType[key].color.primary}"> {{infoHolidaysByType[key].count}} </ion-badge>
             </ion-item>
           </div>
         </ion-list>

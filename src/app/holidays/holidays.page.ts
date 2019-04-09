@@ -13,16 +13,24 @@ import * as moment from 'moment';
 
 const colors: any = {
   red: {
-    primary: '#ad2121',
-    secondary: '#FAE3E3'
+    primary: '#f44336',
+    secondary: '#ffebee'
   },
-  blue: {
-    primary: '#1e90ff',
-    secondary: '#D1E8FF'
+  pink: {
+    primary: '#e91e63',
+    secondary: '#f8bbd0'
   },
-  yellow: {
-    primary: '#e3bc08',
-    secondary: '#FDF1BA'
+  teal: {
+    primary: '#009688',
+    secondary: '#b2dfdb'
+  },
+  deepOrange: {
+    primary: '#ff5722',
+    secondary: '#ffccbc'
+  },
+  indigo: {
+    primary: '#3f51b5',
+    secondary: '#9fa8da'
   }
 };
 
@@ -43,11 +51,11 @@ export class HolidaysPage implements OnInit {
    activeDayIsOpen = false;
    holidays: Holiday = null;
    infoHolidaysByType = {
-    holiday: 0,
-    sickness: 0,
-    maternity: 0,
-    meeting: 0,
-    home: 0,
+    holiday: {count: 0, color: colors.indigo},
+    sickness: {count: 0, color: colors.red},
+    maternity: {count: 0, color: colors.teal},
+    meeting: {count: 0, color: colors.deepOrange},
+    home: {count: 0, color: colors.pink}
    };
    // exclude weekends
   excludeDays: number[] = [0, 6];
@@ -118,19 +126,20 @@ export class HolidaysPage implements OnInit {
       console.log(holiday);
       this.holidaysByType(holiday);
       const formattedEvent = {
-        title: holiday.type,
         start: new Date(holiday.startDate),
         end: new Date(holiday.endDate),
-        color: colors.red,
+        title: holiday.type,
+        color: this.infoHolidaysByType[holiday.type].color,
       };
+      console.log(formattedEvent);
       this.eventsCalendar.push(formattedEvent);
     });
     console.log(this.infoHolidaysByType);
   }
 
   holidaysByType(holiday: HolidayDetail) {
-    console.log('holidaysByType holiday', holiday);
-    this.infoHolidaysByType[holiday.type] += holiday.countDays;
+    // console.log('holidaysByType holiday', holiday);
+    this.infoHolidaysByType[holiday.type].count += holiday.countDays;
   }
 
 }
