@@ -92,7 +92,7 @@ export class RequestHolidaysModalComponent implements OnInit {
             .then(result => {
               console.log('result', result);
               this.dismissLoading();
-              this.dismiss();
+              this.dismiss(this.holidays);
               this.iziToast.success('Holiday request', 'Holiday request sent successfully.');
             });
           }
@@ -115,11 +115,11 @@ export class RequestHolidaysModalComponent implements OnInit {
     });
   }
 
-  dismiss() {
+  dismiss(info) {
     // Using the injected ModalController this page
     // can "dismiss" itself and pass back data.
     // console.log('dismiss', data);
-    this.modalCtrl.dismiss();
+    this.modalCtrl.dismiss(info);
   }
 
   async presentLoading(message) {

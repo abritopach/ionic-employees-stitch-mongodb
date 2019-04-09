@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ModalController } from '@ionic/angular';
+import { ModalController, PopoverController } from '@ionic/angular';
 
 import { RequestHolidaysModalComponent } from '../modals/request-holidays-modal/request-holidays-modal.component';
 import { CalendarView, CalendarEvent } from 'angular-calendar';
@@ -10,6 +10,7 @@ import { StitchMongoService } from '../services/stitch-mongo.service';
 import { Holiday } from '../models/holiday.model';
 import { HolidayDetail } from '../models/holiday.detail.model';
 import * as moment from 'moment';
+import { MoreOptionsPopoverComponent } from '../popovers/more-options/more-options.popover';
 
 const colors: any = {
   red: {
@@ -60,7 +61,8 @@ export class HolidaysPage implements OnInit {
    // exclude weekends
   excludeDays: number[] = [0, 6];
 
-  constructor(private modalCtrl: ModalController, private storage: Storage, private stitchMongoService: StitchMongoService) { }
+  constructor(private modalCtrl: ModalController, private storage: Storage, private stitchMongoService: StitchMongoService,
+              private popoverCtrl: PopoverController) { }
 
   ngOnInit() {
     this.storage.get(config.TOKEN_KEY).then(res => {
@@ -93,18 +95,24 @@ export class HolidaysPage implements OnInit {
     const {data} = await modal.onWillDismiss();
     if (data) {
       console.log('data presentModal', data);
+      this.holidays = data;
+      this.infoHolidaysByType = {
+        holiday: {count: 0, color: colors.indigo},
+        sickness: {count: 0, color: colors.red},
+        maternity: {count: 0, color: colors.teal},
+        meeting: {count: 0, color: colors.deepOrange},
+        home: {count: 0, color: colors.pink}
+      };
+      this.formatEventsCalendar();
     }
   }
 
   dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
     console.log('HolidaysPage::dayClicked() | method called');
 
-    /*
-    // if (isSameMonth(date, this.viewDate)) {
     if (moment(date).isSame(this.viewDate, 'month')) {
       this.viewDate = date;
       if (
-        // (isSameDay(this.viewDate, date) && this.activeDayIsOpen === true) ||
         (moment(date).isSame(this.viewDate, 'day') && this.activeDayIsOpen === true) ||
         events.length === 0
       ) {
@@ -113,11 +121,11 @@ export class HolidaysPage implements OnInit {
         this.activeDayIsOpen = true;
       }
     }
-    */
   }
 
   handleEvent(action: string, event: CalendarEvent): void {
     console.log('HolidaysPage::handleEvent() | method called');
+    this.onClickMoreOptions(event);
   }
 
   formatEventsCalendar() {
@@ -141,5 +149,38 @@ export class HolidaysPage implements OnInit {
     // console.log('holidaysByType holiday', holiday);
     this.infoHolidaysByType[holiday.type].count += holiday.countDays;
   }
+
+  onClickMoreOptions(event) {
+    console.log('SchedulePage::onClickMoreOptions() | method called');
+    console.log(event);
+    this.presentOptionsPopover(event);
+  }
+
+  async presentOptionsPopover(event) {
+    console.log('presentPopover', event);
+
+    const componentProps = { popoverProps: { title: 'Options',
+      options: [
+        {name: 'Update', icon: 'create', function: 'updateHolidays'},
+        {name: 'Delete', icon: 'close-circle-outline', function: 'deleteHolidays'}
+      ],
+      event: event
+    }};
+
+    const popover = await this.popoverCtrl.create({
+      component: MoreOptionsPopoverComponent,
+      componentProps: componentProps
+    });
+
+    await popover.present();
+
+    const { data } = await popover.onWillDismiss();
+
+    if (data) {
+      console.log('data popover.onWillDismiss', data);
+    }
+
+  }
+
 
 }

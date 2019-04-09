@@ -161,4 +161,20 @@ export class MoreOptionsPopoverComponent implements OnInit, OnDestroy {
   }
   /*****/
 
+  /*****/
+
+
+  // Holidays page options.
+
+  /*****/
+
+
+  updateHolidays() {
+    console.log('MoreOptionsPopoverComponent::updateHolidays | method called');
+  }
+
+  deleteHolidays() {
+    console.log('MoreOptionsPopoverComponent::deleteHolidays | method called');
+  }
+
 }
