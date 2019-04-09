@@ -170,7 +170,8 @@ export class MoreOptionsPopoverComponent implements OnInit, OnDestroy {
 
 
   updateHolidays() {
-    console.log('MoreOptionsPopoverComponent::updateHolidays | method called');
+    console.log('MoreOptionsPopoverComponent::updateHolidays | method called', this.event);
+    this.popoverCtrl.dismiss({option: 'updateHolidays', selectedHolidays: this.event});
   }
 
   deleteHolidays() {

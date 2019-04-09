@@ -45,7 +45,8 @@ export class HolidaysPage implements OnInit {
   Object = Object;
 
    // Calendar
-   eventsCalendar: CalendarEvent[] = [];
+   // eventsCalendar: CalendarEvent[] = [];
+   eventsCalendar: Array<CalendarEvent<HolidayDetail>> = [];
    view: CalendarView = CalendarView.Month;
    CalendarView = CalendarView;
    viewDate: Date = new Date();
@@ -84,8 +85,8 @@ export class HolidaysPage implements OnInit {
     this.presentModal();
   }
 
-  async presentModal() {
-    const componentProps = { modalProps: { title: 'Request time off', holidays: this.holidays }};
+  async presentModal(selectedHolidays?) {
+    const componentProps = { modalProps: { title: 'Request time off', holidays: this.holidays, selectedHolidays: selectedHolidays}};
     const modal = await this.modalCtrl.create({
       component: RequestHolidaysModalComponent,
       componentProps: componentProps
@@ -138,6 +139,7 @@ export class HolidaysPage implements OnInit {
         end: new Date(holiday.endDate),
         title: holiday.type,
         color: this.infoHolidaysByType[holiday.type].color,
+        meta: holiday
       };
       console.log(formattedEvent);
       this.eventsCalendar.push(formattedEvent);
@@ -178,6 +180,9 @@ export class HolidaysPage implements OnInit {
 
     if (data) {
       console.log('data popover.onWillDismiss', data);
+      if (data.option === 'updateHolidays') {
+        this.presentModal(data.selectedHolidays);
+      }
     }
 
   }

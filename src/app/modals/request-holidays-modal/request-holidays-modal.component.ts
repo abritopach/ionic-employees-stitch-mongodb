@@ -34,8 +34,10 @@ export class RequestHolidaysModalComponent implements OnInit {
   ngOnInit() {
     this.fetchEmployees();
     if ((typeof this.navParams.data.modalProps.holidays !== 'undefined') && (this.navParams.data.modalProps.holidays !== null)) {
-      // this.requestHolidaysForm.patchValue(this.navParams.data.modalProps.holidays);
       this.holidays = this.navParams.data.modalProps.holidays;
+      if (typeof this.navParams.data.modalProps.selectedHolidays !== 'undefined') {
+        this.requestHolidaysForm.patchValue(this.navParams.data.modalProps.selectedHolidays.meta);
+      }
     }
     console.log('holydays', this.holidays);
   }
@@ -79,6 +81,11 @@ export class RequestHolidaysModalComponent implements OnInit {
         this.requestHolidaysForm.value.countDays = countDays;
         this.holidays.not_taken -= countDays;
         this.holidays.taken.days += countDays;
+
+        if (typeof this.navParams.data.modalProps.selectedHolidays !== 'undefined') {
+          this.holidays.taken.info = this.holidays.taken.info.filter(h => h.id !== this.navParams.data.modalProps.selectedHolidays.meta.id);
+        }
+
         this.holidays.taken.info.push(this.requestHolidaysForm.value);
 
         console.log('holidays sent', this.holidays);
