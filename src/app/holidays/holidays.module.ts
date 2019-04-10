@@ -9,6 +9,7 @@ import { HolidaysPage } from './holidays.page';
 
 import { SharedComponentsModule } from '../components/shared-components.module';
 import { RequestHolidaysModalComponent } from '../modals/request-holidays-modal/request-holidays-modal.component';
+import { HistoryHolidaysModalComponent } from '../modals/history-holidays-modal/history-holidays-modal.component';
 
 import { NgSelectModule } from '@ng-select/ng-select';
 
@@ -35,9 +36,9 @@ const routes: Routes = [
     CalendarModule.forRoot({
       provide: DateAdapter,
       useFactory: adapterFactory
-    }),
+    })
   ],
-  declarations: [HolidaysPage, RequestHolidaysModalComponent],
-  entryComponents: [RequestHolidaysModalComponent]
+  declarations: [HolidaysPage, RequestHolidaysModalComponent, HistoryHolidaysModalComponent],
+  entryComponents: [RequestHolidaysModalComponent, HistoryHolidaysModalComponent]
 })
 export class HolidaysPageModule {}

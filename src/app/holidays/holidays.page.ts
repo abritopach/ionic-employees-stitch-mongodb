@@ -12,6 +12,7 @@ import { HolidayDetail } from '../models/holiday.detail.model';
 import * as moment from 'moment';
 import { MoreOptionsPopoverComponent } from '../popovers/more-options/more-options.popover';
 import { IziToastService } from '../services/izi-toast.service';
+import { HistoryHolidaysModalComponent } from '../modals/history-holidays-modal/history-holidays-modal.component';
 
 const colors: any = {
   red: {
@@ -83,13 +84,13 @@ export class HolidaysPage implements OnInit {
 
   requestHolidays() {
     console.log('HolidaysPage::requestHolidays() | method called');
-    this.presentModal();
+    this.presentModal(RequestHolidaysModalComponent);
   }
 
-  async presentModal(selectedHolidays?) {
+  async presentModal(component, selectedHolidays?) {
     const componentProps = { modalProps: { title: 'Request time off', holidays: this.holidays, selectedHolidays: selectedHolidays}};
     const modal = await this.modalCtrl.create({
-      component: RequestHolidaysModalComponent,
+      component: component,
       componentProps: componentProps
     });
     await modal.present();
@@ -182,7 +183,7 @@ export class HolidaysPage implements OnInit {
     if (data) {
       console.log('data popover.onWillDismiss', data);
       if (data.option === 'updateHolidays') {
-        this.presentModal(data.selectedHolidays);
+        this.presentModal(RequestHolidaysModalComponent, data.selectedHolidays);
       }
       if (data.option === 'deleteHolidays') {
         this.deleteHolidays(data.selectedHolidays);
@@ -218,6 +219,10 @@ export class HolidaysPage implements OnInit {
         });
       }
     });
+  }
+
+  showHistory() {
+    this.presentModal(HistoryHolidaysModalComponent);
   }
 
 
