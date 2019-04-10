@@ -11,6 +11,7 @@ import { Holiday } from '../models/holiday.model';
 import { HolidayDetail } from '../models/holiday.detail.model';
 import * as moment from 'moment';
 import { MoreOptionsPopoverComponent } from '../popovers/more-options/more-options.popover';
+import { IziToastService } from '../services/izi-toast.service';
 
 const colors: any = {
   red: {
@@ -63,7 +64,7 @@ export class HolidaysPage implements OnInit {
   excludeDays: number[] = [0, 6];
 
   constructor(private modalCtrl: ModalController, private storage: Storage, private stitchMongoService: StitchMongoService,
-              private popoverCtrl: PopoverController) { }
+              private popoverCtrl: PopoverController, private iziToast: IziToastService) { }
 
   ngOnInit() {
     this.storage.get(config.TOKEN_KEY).then(res => {
@@ -183,8 +184,40 @@ export class HolidaysPage implements OnInit {
       if (data.option === 'updateHolidays') {
         this.presentModal(data.selectedHolidays);
       }
+      if (data.option === 'deleteHolidays') {
+        this.deleteHolidays(data.selectedHolidays);
+      }
     }
 
+  }
+
+  deleteHolidays(selectedHolidays) {
+    this.storage.get(config.TOKEN_KEY).then(res => {
+      if (res) {
+        const objectId = new ObjectId(res);
+
+        this.holidays.taken.info = this.holidays.taken.info.filter(h => h.id !== selectedHolidays.meta.id);
+        this.holidays.taken.days -= selectedHolidays.meta.countDays;
+        this.holidays.not_taken += selectedHolidays.meta.countDays;
+
+
+        this.stitchMongoService.update(config.COLLECTION_KEY, {user_id: objectId}, {$set: { holidays: this.holidays }})
+        .then(docs => {
+            console.log(docs);
+            this.iziToast.success('Delete holidays', 'Holidays deleted successfully.');
+            this.infoHolidaysByType = {
+              holiday: {count: 0, color: colors.indigo},
+              sickness: {count: 0, color: colors.red},
+              maternity: {count: 0, color: colors.teal},
+              meeting: {count: 0, color: colors.deepOrange},
+              home: {count: 0, color: colors.pink}
+            };
+            this.formatEventsCalendar();
+        }).catch(err => {
+            console.error(err);
+        });
+      }
+    });
   }
 
 
