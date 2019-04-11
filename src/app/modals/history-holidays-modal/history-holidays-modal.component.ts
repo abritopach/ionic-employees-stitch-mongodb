@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { ModalController, NavParams } from '@ionic/angular';
+import { Holiday } from '../../models/holiday.model';
 
 @Component({
   selector: 'app-history-holidays-modal',
@@ -7,8 +9,27 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HistoryHolidaysModalComponent implements OnInit {
 
-  constructor() { }
+  holidays: Holiday;
+  pendingRequests: any[] = [];
+  approvedRequests: any[] = [];
 
-  ngOnInit() {}
+  constructor(private modalCtrl: ModalController, private navParams: NavParams) { }
+
+  ngOnInit() {
+    if (typeof this.navParams.data.modalProps.holidays !== 'undefined') {
+      this.holidays = this.navParams.data.modalProps.holidays;
+      this.pendingRequests = this.holidays.taken.info.filter(h => h.status === 'pending');
+      this.approvedRequests = this.holidays.taken.info.filter(h => h.status === 'approved');
+      console.log('pendingRequests', this.pendingRequests);
+      console.log('approvedRequests', this.approvedRequests);
+    }
+  }
+
+  dismiss() {
+    // Using the injected ModalController this page
+    // can "dismiss" itself and pass back data.
+    // console.log('dismiss', data);
+    this.modalCtrl.dismiss();
+  }
 
 }

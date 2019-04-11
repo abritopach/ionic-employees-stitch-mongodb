@@ -20,14 +20,14 @@
     </ion-label>
   </ion-list-header>
   <ion-card>
-    <ion-item lines="none">
+    <ion-item lines="none" *ngFor="let request of pendingRequests">
       <ion-thumbnail slot="start">
         <img src="assets/images/pending.png">
       </ion-thumbnail>
       <ion-label text-wrap>
-          <h2><b>Fri 12 Apr 2019</b></h2>
-          <p><b>2 days</b></p>
-          <p><b>PENDING</b></p>
+          <h2><b> {{request.startDate | date:'fullDate'}} </b></h2>
+          <p><b> {{request.countDays}}  days <span *ngIf="request.reason !== ''">( {{request.reason}} )</span></b></p>
+          <p><b> {{request.status.toUpperCase()}} </b></p>
       </ion-label>
       <ion-icon name="create" slot="end"></ion-icon>
     </ion-item>
@@ -41,14 +41,14 @@
       </ion-label>
     </ion-list-header>
     <ion-card>
-      <ion-item lines="none">
+      <ion-item lines="none" *ngFor="let request of approvedRequests">
         <ion-thumbnail slot="start">
           <img src="assets/images/approved.png">
         </ion-thumbnail>
         <ion-label text-wrap>
-            <h2><b>Fri 12 Apr 2019</b></h2>
-            <p><b>2 days</b></p>
-            <p><b>APPROVED</b></p>
+            <h2><b>{{request.startDate | date:'fullDate'}}</b></h2>
+            <p><b> {{request.countDays}}  days <span *ngIf="request.reason !== ''">( {{request.reason}} ) </span></b></p>
+            <p><b> {{request.status.toUpperCase()}} </b></p>
         </ion-label>
         <ion-icon name="create" slot="end"></ion-icon>
       </ion-item>

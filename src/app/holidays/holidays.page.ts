@@ -84,11 +84,11 @@ export class HolidaysPage implements OnInit {
 
   requestHolidays() {
     console.log('HolidaysPage::requestHolidays() | method called');
-    this.presentModal(RequestHolidaysModalComponent);
+    const componentProps = { modalProps: { title: 'Request time off', holidays: this.holidays}};
+    this.presentModal(RequestHolidaysModalComponent, componentProps);
   }
 
-  async presentModal(component, selectedHolidays?) {
-    const componentProps = { modalProps: { title: 'Request time off', holidays: this.holidays, selectedHolidays: selectedHolidays}};
+  async presentModal(component, componentProps) {
     const modal = await this.modalCtrl.create({
       component: component,
       componentProps: componentProps
@@ -134,17 +134,19 @@ export class HolidaysPage implements OnInit {
   formatEventsCalendar() {
     this.eventsCalendar = [];
     this.holidays.taken.info.map(holiday => {
-      console.log(holiday);
-      this.holidaysByType(holiday);
-      const formattedEvent = {
-        start: new Date(holiday.startDate),
-        end: new Date(holiday.endDate),
-        title: holiday.type,
-        color: this.infoHolidaysByType[holiday.type].color,
-        meta: holiday
-      };
-      console.log(formattedEvent);
-      this.eventsCalendar.push(formattedEvent);
+      if (holiday.status !== 'pending') {
+        console.log(holiday);
+        this.holidaysByType(holiday);
+        const formattedEvent = {
+          start: new Date(holiday.startDate),
+          end: new Date(holiday.endDate),
+          title: holiday.type,
+          color: this.infoHolidaysByType[holiday.type].color,
+          meta: holiday
+        };
+        console.log(formattedEvent);
+        this.eventsCalendar.push(formattedEvent);
+      }
     });
     console.log(this.infoHolidaysByType);
   }
@@ -183,7 +185,9 @@ export class HolidaysPage implements OnInit {
     if (data) {
       console.log('data popover.onWillDismiss', data);
       if (data.option === 'updateHolidays') {
-        this.presentModal(RequestHolidaysModalComponent, data.selectedHolidays);
+        const componentPropsModal = { modalProps: { title: 'Request time off', holidays: this.holidays,
+         selectedHolidays: data.selectedHolidays}};
+        this.presentModal(RequestHolidaysModalComponent, componentPropsModal);
       }
       if (data.option === 'deleteHolidays') {
         this.deleteHolidays(data.selectedHolidays);
@@ -222,7 +226,8 @@ export class HolidaysPage implements OnInit {
   }
 
   showHistory() {
-    this.presentModal(HistoryHolidaysModalComponent);
+    const componentProps = { modalProps: { title: 'Request holidays history', holidays: this.holidays}};
+    this.presentModal(HistoryHolidaysModalComponent, componentProps);
   }
 
 
