@@ -78,9 +78,13 @@ export class RequestHolidaysModalComponent implements OnInit {
 
       if (countDays <= this.holidays.not_taken) {
 
-        this.requestHolidaysForm.value.countDays = countDays;
-        this.holidays.not_taken -= countDays;
-        this.holidays.taken.days += countDays;
+        this.requestHolidaysForm.patchValue({countDays: countDays});
+
+        if (this.requestHolidaysForm.value.status === 'approved') {
+          this.requestHolidaysForm.patchValue({status: 'pending'});
+          this.holidays.not_taken += this.navParams.data.modalProps.selectedHolidays.meta.countDays;
+          this.holidays.taken.days -= this.navParams.data.modalProps.selectedHolidays.meta.countDays;
+        }
 
         if (typeof this.navParams.data.modalProps.selectedHolidays !== 'undefined') {
           this.holidays.taken.info = this.holidays.taken.info.filter(h => h.id !== this.navParams.data.modalProps.selectedHolidays.meta.id);
