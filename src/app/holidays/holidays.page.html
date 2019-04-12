@@ -3,6 +3,13 @@
     <ion-menu-button></ion-menu-button>
   </ion-buttons>
   <ion-buttons buttons-end slot='end'>
+    <!--
+      Show only when user has requests vacations team not approved.
+    -->
+    <ion-button>
+      <ion-badge color="danger">2</ion-badge>
+      <ion-icon slot="icon-only" name="notifications"></ion-icon>
+    </ion-button>
     <ion-button (click)="showHistory()">
       <ion-icon slot="icon-only" name="time"></ion-icon>
     </ion-button>

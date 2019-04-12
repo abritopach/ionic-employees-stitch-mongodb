@@ -32,4 +32,8 @@ export class HistoryHolidaysModalComponent implements OnInit {
     this.modalCtrl.dismiss();
   }
 
+  updateHolidays() {
+    console.log('HistoryHolidaysModalComponent::updateHolidays() | method called');
+  }
+
 }

@@ -157,7 +157,7 @@ export class HolidaysPage implements OnInit {
   }
 
   onClickMoreOptions(event) {
-    console.log('SchedulePage::onClickMoreOptions() | method called');
+    console.log('HolidaysPage::onClickMoreOptions() | method called');
     console.log(event);
     this.presentOptionsPopover(event);
   }
