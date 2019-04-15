@@ -8,6 +8,8 @@ import * as moment from 'moment';
 import { Storage } from '@ionic/storage';
 import { Holiday } from '../../models/holiday.model';
 import { IziToastService } from '../../services/izi-toast.service';
+import { HolidayDetail } from '../../models/holiday.detail.model';
+import { RequestHolidays } from '../../models/request.holidays.model';
 
 @Component({
   selector: 'app-request-holidays-modal',
@@ -102,6 +104,7 @@ export class RequestHolidaysModalComponent implements OnInit {
             this.stitchMongoService.update(config.COLLECTION_KEY, {user_id: objectId}, {$set: { holidays: this.holidays }})
             .then(result => {
               console.log('result', result);
+              this.addHolidaysRequestToSupervisor(this.requestHolidaysForm.value, objectId);
               this.dismissLoading();
               this.dismiss(this.holidays);
               this.iziToast.success('Holiday request', 'Holiday request sent successfully.');
@@ -144,6 +147,22 @@ export class RequestHolidaysModalComponent implements OnInit {
   async dismissLoading() {
     this.loading.dismiss();
     this.loading = null;
+  }
+
+  addHolidaysRequestToSupervisor(holidaysDetail: HolidayDetail, userId: ObjectId) {
+    console.log('holidaysDetail', holidaysDetail);
+    const request: RequestHolidays = {
+      id: new ObjectId(),
+      userId: userId,
+      holidaysDetail: holidaysDetail
+    };
+    console.log('request', request);
+    this.stitchMongoService.update(config.COLLECTION_KEY, {user_id: holidaysDetail.whoFor[0]},
+    {$push: { employees_holidays_requests: request }})
+    .then(result => {
+      console.log(result);
+    });
+
   }
 
 }

@@ -17,7 +17,7 @@
         <ion-item lines="none">
             <ng-select [class.has-error]="requestHolidaysForm.get('whoFor').hasError('required') && requestHolidaysForm.get('whoFor').touched" [multiple]="true" [items]="employees"
                         bindLabel="employee_name"
-                        bindValue="avatar"
+                        bindValue="user_id"
                         placeholder="Who for"
                         formControlName="whoFor">
                 <ng-template ng-label-tmp let-item="item">
