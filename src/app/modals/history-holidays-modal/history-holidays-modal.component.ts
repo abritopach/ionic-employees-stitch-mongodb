@@ -3,6 +3,11 @@ import { ModalController, NavParams, PopoverController } from '@ionic/angular';
 import { Holiday } from '../../models/holiday.model';
 import { MoreOptionsPopoverComponent } from '../../popovers/more-options/more-options.popover';
 import { RequestHolidaysModalComponent } from '../request-holidays-modal/request-holidays-modal.component';
+import config from '../../config/config';
+import { ObjectId } from 'bson';
+import { Storage } from '@ionic/storage';
+import { StitchMongoService } from '../../services/stitch-mongo.service';
+import { IziToastService } from '../../services/izi-toast.service';
 
 @Component({
   selector: 'app-history-holidays-modal',
@@ -15,7 +20,8 @@ export class HistoryHolidaysModalComponent implements OnInit {
   pendingRequests: any[] = [];
   approvedRequests: any[] = [];
 
-  constructor(private modalCtrl: ModalController, private navParams: NavParams, private popoverCtrl: PopoverController) { }
+  constructor(private modalCtrl: ModalController, private navParams: NavParams, private popoverCtrl: PopoverController,
+              private storage: Storage, private stitchMongoService: StitchMongoService, private iziToast: IziToastService) { }
 
   ngOnInit() {
     if (typeof this.navParams.data.modalProps.holidays !== 'undefined') {
@@ -84,9 +90,37 @@ export class HistoryHolidaysModalComponent implements OnInit {
         this.presentModal(RequestHolidaysModalComponent, componentPropsModal);
       }
       if (data.option === 'deleteHolidays') {
-        // this.deleteHolidays(data.selectedHolidays);
+        this.deleteHolidays(data.selectedHolidays);
       }
     }
+
+  }
+
+  deleteHolidays(selectedHolidays) {
+    console.log(selectedHolidays);
+
+    this.storage.get(config.TOKEN_KEY).then(res => {
+      if (res) {
+        const objectId = new ObjectId(res);
+
+        if (selectedHolidays.status === 'approved') {
+          this.holidays.taken.days -= selectedHolidays.countDays;
+          this.holidays.not_taken += selectedHolidays.countDays;
+        }
+
+        this.holidays.taken.info = this.holidays.taken.info.filter(h => h.id !== selectedHolidays.id);
+
+        this.stitchMongoService.update(config.COLLECTION_KEY, {user_id: objectId}, {$set: { holidays: this.holidays }})
+        .then(docs => {
+            console.log(docs);
+            this.iziToast.success('Delete holidays', 'Holidays deleted successfully.');
+            this.pendingRequests = this.holidays.taken.info.filter(h => h.status === 'pending');
+            this.approvedRequests = this.holidays.taken.info.filter(h => h.status === 'approved');
+        }).catch(err => {
+            console.error(err);
+        });
+      }
+    });
 
   }
 
