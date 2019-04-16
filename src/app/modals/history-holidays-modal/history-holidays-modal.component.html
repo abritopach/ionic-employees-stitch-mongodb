@@ -6,51 +6,75 @@
             </ion-button>
         </ion-buttons>
         <ion-title>
-            Request holidays history
+            {{title}}
         </ion-title>
     </ion-toolbar>
   </ion-header>
 
 <ion-content padding>
-  <ion-list-header>
-    <ion-label>
-      <ion-text color="danger">
-        <h2><b>Pending Time Off</b></h2>
-      </ion-text>
-    </ion-label>
-  </ion-list-header>
-  <ion-card>
-    <ion-item lines="none" *ngFor="let request of pendingRequests">
-      <ion-thumbnail slot="start">
-        <img src="assets/images/pending.png">
-      </ion-thumbnail>
-      <ion-label text-wrap>
-          <h2><b> {{request.startDate | date:'fullDate'}} </b></h2>
-          <p><b> {{request.countDays}}  days <span *ngIf="request.reason !== ''">( {{request.reason}} )</span></b></p>
-          <p><b> {{request.status.toUpperCase()}} </b></p>
-      </ion-label>
-      <ion-icon tappable name="more" slot="end" (click)="onClickMoreOptions(request)"></ion-icon>
-    </ion-item>
-  </ion-card>
-  <br/>
-  <ion-list-header>
+  <div *ngIf="holidays !== null">
+    <ion-list-header>
       <ion-label>
-        <ion-text color="primary">
-            <h2><b>Upcoming Time Off</b></h2>
+        <ion-text color="danger">
+          <h2><b>Pending Time Off</b></h2>
         </ion-text>
       </ion-label>
     </ion-list-header>
     <ion-card>
-      <ion-item lines="none" *ngFor="let request of approvedRequests">
+      <ion-item lines="none" *ngFor="let request of pendingRequests">
         <ion-thumbnail slot="start">
-          <img src="assets/images/approved.png">
+          <img src="assets/images/pending.png">
         </ion-thumbnail>
         <ion-label text-wrap>
-            <h2><b>{{request.startDate | date:'fullDate'}}</b></h2>
-            <p><b> {{request.countDays}}  days <span *ngIf="request.reason !== ''">( {{request.reason}} ) </span></b></p>
+            <h2><b> {{request.startDate | date:'fullDate'}} </b></h2>
+            <p><b> {{request.countDays}}  days <span *ngIf="request.reason !== ''">( {{request.reason}} )</span></b></p>
             <p><b> {{request.status.toUpperCase()}} </b></p>
         </ion-label>
         <ion-icon tappable name="more" slot="end" (click)="onClickMoreOptions(request)"></ion-icon>
       </ion-item>
     </ion-card>
+    <br/>
+    <ion-list-header>
+        <ion-label>
+          <ion-text color="primary">
+              <h2><b>Upcoming Time Off</b></h2>
+          </ion-text>
+        </ion-label>
+      </ion-list-header>
+      <ion-card>
+        <ion-item lines="none" *ngFor="let request of approvedRequests">
+          <ion-thumbnail slot="start">
+            <img src="assets/images/approved.png">
+          </ion-thumbnail>
+          <ion-label text-wrap>
+              <h2><b>{{request.startDate | date:'fullDate'}}</b></h2>
+              <p><b> {{request.countDays}}  days <span *ngIf="request.reason !== ''">( {{request.reason}} ) </span></b></p>
+              <p><b> {{request.status.toUpperCase()}} </b></p>
+          </ion-label>
+          <ion-icon tappable name="more" slot="end" (click)="onClickMoreOptions(request)"></ion-icon>
+        </ion-item>
+      </ion-card>
+  </div>
+  <div *ngIf="requests !== null">
+      <ion-list-header>
+          <ion-label>
+            <ion-text color="danger">
+              <h2><b>Pending Time Off Requests</b></h2>
+            </ion-text>
+          </ion-label>
+        </ion-list-header>
+        <ion-card>
+          <ion-item lines="none" *ngFor="let request of requests">
+            <ion-thumbnail slot="start">
+              <img *ngIf="avatars !== null" [src]="getAvatarById(request.userId.toString()).avatar">
+            </ion-thumbnail>
+            <ion-label text-wrap>
+                <h2><b> {{request.holidaysDetail.startDate | date:'fullDate'}} </b></h2>
+                <p><b> {{request.holidaysDetail.countDays}}  days <span *ngIf="request.reason !== ''">( {{request.holidaysDetail.reason}} )</span></b></p>
+                <p><b> {{request.holidaysDetail.status.toUpperCase()}} </b></p>
+            </ion-label>
+            <ion-icon tappable name="create" slot="end" (click)="onClickEditRequest(request)"></ion-icon>
+          </ion-item>
+        </ion-card>
+  </div>
 </ion-content>

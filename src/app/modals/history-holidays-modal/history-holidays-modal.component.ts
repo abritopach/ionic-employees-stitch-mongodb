@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ModalController, NavParams, PopoverController } from '@ionic/angular';
+import { ModalController, NavParams, PopoverController, AlertController } from '@ionic/angular';
 import { Holiday } from '../../models/holiday.model';
 import { MoreOptionsPopoverComponent } from '../../popovers/more-options/more-options.popover';
 import { RequestHolidaysModalComponent } from '../request-holidays-modal/request-holidays-modal.component';
@@ -16,20 +16,30 @@ import { IziToastService } from '../../services/izi-toast.service';
 })
 export class HistoryHolidaysModalComponent implements OnInit {
 
-  holidays: Holiday;
+  holidays: Holiday = null;
   pendingRequests: any[] = [];
   approvedRequests: any[] = [];
+  title = '';
+  requests = null;
+  avatars = null;
 
   constructor(private modalCtrl: ModalController, private navParams: NavParams, private popoverCtrl: PopoverController,
-              private storage: Storage, private stitchMongoService: StitchMongoService, private iziToast: IziToastService) { }
+              private storage: Storage, private stitchMongoService: StitchMongoService, private iziToast: IziToastService,
+              private alertCtrl: AlertController) { }
 
   ngOnInit() {
+    this.getAvatars();
+    this.title = this.navParams.data.modalProps.title;
     if (typeof this.navParams.data.modalProps.holidays !== 'undefined') {
       this.holidays = this.navParams.data.modalProps.holidays;
       this.pendingRequests = this.holidays.taken.info.filter(h => h.status === 'pending');
       this.approvedRequests = this.holidays.taken.info.filter(h => h.status === 'approved');
       console.log('pendingRequests', this.pendingRequests);
       console.log('approvedRequests', this.approvedRequests);
+    }
+    if (typeof this.navParams.data.modalProps.requests !== 'undefined') {
+      console.log(this.navParams.data.modalProps.requests);
+      this.requests = this.navParams.data.modalProps.requests;
     }
   }
 
@@ -122,6 +132,61 @@ export class HistoryHolidaysModalComponent implements OnInit {
       }
     });
 
+  }
+
+  onClickEditRequest(request) {
+    this.presentAlertPrompt();
+  }
+
+  async presentAlertPrompt() {
+    const alert = await this.alertCtrl.create({
+      header: 'Confirm holiday request',
+      inputs: [
+        {
+          name: 'reason',
+          type: 'text',
+          placeholder: 'Reason'
+        }
+      ],
+      buttons: [
+        {
+          text: 'Reject',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: () => {
+            console.log('Confirm Cancel');
+          }
+        }, {
+          text: 'Accept',
+          handler: () => {
+            console.log('Confirm Ok');
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+  }
+
+  getAvatars() {
+    this.stitchMongoService.find(config.COLLECTION_KEY, {}).then(docs => {
+      this.avatars = docs.map(doc => {
+        const item = {user_id: doc['user_id'].toString(), avatar: doc['avatar']};
+        return item;
+      });
+      console.log(this.avatars);
+    }).catch(err => {
+        console.error(err);
+    });
+  }
+
+  getAvatarById(id) {
+    console.log('getAvatarById(id)', id);
+    if (this.avatars !== null) {
+      return this.avatars
+      .filter(avatar => avatar.user_id === id)
+      .pop();
+    }
   }
 
 }

@@ -13,6 +13,7 @@ import * as moment from 'moment';
 import { MoreOptionsPopoverComponent } from '../popovers/more-options/more-options.popover';
 import { IziToastService } from '../services/izi-toast.service';
 import { HistoryHolidaysModalComponent } from '../modals/history-holidays-modal/history-holidays-modal.component';
+import { RequestHolidays } from '../models/request.holidays.model';
 
 const colors: any = {
   red: {
@@ -63,6 +64,7 @@ export class HolidaysPage implements OnInit {
    };
    // exclude weekends
   excludeDays: number[] = [0, 6];
+  employeesHolidaysRequests: RequestHolidays[] = [];
 
   constructor(private modalCtrl: ModalController, private storage: Storage, private stitchMongoService: StitchMongoService,
               private popoverCtrl: PopoverController, private iziToast: IziToastService) { }
@@ -73,6 +75,7 @@ export class HolidaysPage implements OnInit {
         const objectId = new ObjectId(res);
         this.stitchMongoService.find(config.COLLECTION_KEY, {user_id: objectId}).then(result => {
           console.log(result);
+          this.employeesHolidaysRequests = result[0]['employees_holidays_requests'];
           if ((result.length !== 0) && (typeof result[0]['holidays'] !== 'undefined')) {
             this.holidays = result[0]['holidays'];
             this.formatEventsCalendar();
@@ -227,6 +230,11 @@ export class HolidaysPage implements OnInit {
 
   showHistory() {
     const componentProps = { modalProps: { title: 'Request holidays history', holidays: this.holidays}};
+    this.presentModal(HistoryHolidaysModalComponent, componentProps);
+  }
+
+  showEmployeesHolidaysRequests() {
+    const componentProps = { modalProps: { title: 'Employees Requests Holidays', requests: this.employeesHolidaysRequests}};
     this.presentModal(HistoryHolidaysModalComponent, componentProps);
   }
 

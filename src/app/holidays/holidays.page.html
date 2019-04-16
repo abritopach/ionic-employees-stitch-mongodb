@@ -6,8 +6,8 @@
     <!--
       Show only when user has requests vacations team not approved.
     -->
-    <ion-button>
-      <ion-badge color="danger">2</ion-badge>
+    <ion-button (click)="showEmployeesHolidaysRequests()">
+      <ion-badge color="danger"> {{employeesHolidaysRequests.length}} </ion-badge>
       <ion-icon slot="icon-only" name="notifications"></ion-icon>
     </ion-button>
     <ion-button (click)="showHistory()">
