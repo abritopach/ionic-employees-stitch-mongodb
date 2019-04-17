@@ -8,6 +8,8 @@ import { ObjectId } from 'bson';
 import { Storage } from '@ionic/storage';
 import { StitchMongoService } from '../../services/stitch-mongo.service';
 import { IziToastService } from '../../services/izi-toast.service';
+import { request } from 'https';
+import { RequestHolidays } from '../../models/request.holidays.model';
 
 @Component({
   selector: 'app-history-holidays-modal',
@@ -134,11 +136,13 @@ export class HistoryHolidaysModalComponent implements OnInit {
 
   }
 
-  onClickEditRequest(request) {
-    this.presentAlertPrompt();
+  onClickEditRequest(req: RequestHolidays) {
+    this.presentAlertPrompt(req);
   }
 
-  async presentAlertPrompt() {
+  async presentAlertPrompt(req: RequestHolidays) {
+    console.log(req);
+    console.log('userId', req.userId.toString());
     const alert = await this.alertCtrl.create({
       header: 'Confirm holiday request',
       inputs: [
@@ -155,11 +159,23 @@ export class HistoryHolidaysModalComponent implements OnInit {
           cssClass: 'secondary',
           handler: () => {
             console.log('Confirm Cancel');
+            req.holidaysDetail.status = 'rejected';
+            this.updateRequest({user_id: req.userId, 'holidays.taken.info.id': req.holidaysDetail.id},
+              {$set: { 'holidays.taken.info.$': req.holidaysDetail}
+            });
+            this.requests = this.requests.filter(r => r.holidaysDetail.status === 'pending');
           }
         }, {
           text: 'Accept',
           handler: () => {
             console.log('Confirm Ok');
+            req.holidaysDetail.status = 'approved';
+            this.updateRequest({user_id: req.userId, 'holidays.taken.info.id': req.holidaysDetail.id},
+            {$set: { 'holidays.taken.info.$': req.holidaysDetail},
+             $inc: { 'holidays.taken.days': req.holidaysDetail.countDays, 'holidays.not_taken': -req.holidaysDetail.countDays }
+            }
+            );
+            this.requests = this.requests.filter(r => r.holidaysDetail.status === 'pending');
           }
         }
       ]
@@ -175,6 +191,9 @@ export class HistoryHolidaysModalComponent implements OnInit {
         return item;
       });
       console.log(this.avatars);
+      this.requests.map(req => {
+        req.avatar = this.getAvatarById(req.userId.toString()).avatar;
+      });
     }).catch(err => {
         console.error(err);
     });
@@ -187,6 +206,15 @@ export class HistoryHolidaysModalComponent implements OnInit {
       .filter(avatar => avatar.user_id === id)
       .pop();
     }
+  }
+
+  updateRequest(filter, action) {
+    this.stitchMongoService.update(config.COLLECTION_KEY, filter, action)
+    .then(docs => {
+        console.log(docs);
+    }).catch(err => {
+        console.error(err);
+    });
   }
 
 }

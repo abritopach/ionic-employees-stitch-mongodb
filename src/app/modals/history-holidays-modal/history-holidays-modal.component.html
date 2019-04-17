@@ -55,7 +55,7 @@
         </ion-item>
       </ion-card>
   </div>
-  <div *ngIf="requests !== null">
+  <div *ngIf="requests !== null && requests.length !== 0">
       <ion-list-header>
           <ion-label>
             <ion-text color="danger">
@@ -66,7 +66,7 @@
         <ion-card>
           <ion-item lines="none" *ngFor="let request of requests">
             <ion-thumbnail slot="start">
-              <img *ngIf="avatars !== null" [src]="getAvatarById(request.userId.toString()).avatar">
+              <img *ngIf="avatars !== null" [src]="request.avatar">
             </ion-thumbnail>
             <ion-label text-wrap>
                 <h2><b> {{request.holidaysDetail.startDate | date:'fullDate'}} </b></h2>
