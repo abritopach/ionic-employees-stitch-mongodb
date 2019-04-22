@@ -137,7 +137,7 @@ export class HolidaysPage implements OnInit {
   formatEventsCalendar() {
     this.eventsCalendar = [];
     this.holidays.taken.info.map(holiday => {
-      if (holiday.status !== 'pending') {
+      if ((holiday.status !== 'pending') && (holiday.status !== 'rejected')) {
         console.log(holiday);
         this.holidaysByType(holiday);
         const formattedEvent = {

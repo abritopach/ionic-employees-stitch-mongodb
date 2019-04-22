@@ -13,9 +13,30 @@
 
 <ion-content padding>
   <div *ngIf="holidays !== null">
-    <ion-list-header>
+  <ion-list-header>
       <ion-label>
         <ion-text color="danger">
+          <h2><b>Rejected Time Off</b></h2>
+        </ion-text>
+      </ion-label>
+    </ion-list-header>
+    <ion-card>
+      <ion-item lines="none" *ngFor="let request of rejectedRequests">
+        <ion-thumbnail slot="start">
+          <img src="assets/images/rejected.png">
+        </ion-thumbnail>
+        <ion-label text-wrap>
+            <h2><b> {{request.startDate | date:'fullDate'}} </b></h2>
+            <p><b> {{request.countDays}}  days <span *ngIf="request.reason !== ''">( {{request.reason}} )</span></b></p>
+            <p><b> {{request.status.toUpperCase()}} ( {{request.managerComment}} ) </b></p>
+        </ion-label>
+        <ion-icon tappable name="more" slot="end" (click)="onClickMoreOptions(request)"></ion-icon>
+      </ion-item>
+    </ion-card>
+    <br/>
+    <ion-list-header>
+      <ion-label>
+        <ion-text color="warning">
           <h2><b>Pending Time Off</b></h2>
         </ion-text>
       </ion-label>

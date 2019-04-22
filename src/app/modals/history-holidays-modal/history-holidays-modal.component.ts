@@ -19,6 +19,7 @@ import { RequestHolidays } from '../../models/request.holidays.model';
 export class HistoryHolidaysModalComponent implements OnInit {
 
   holidays: Holiday = null;
+  rejectedRequests: any[] = [];
   pendingRequests: any[] = [];
   approvedRequests: any[] = [];
   title = '';
@@ -30,16 +31,17 @@ export class HistoryHolidaysModalComponent implements OnInit {
               private alertCtrl: AlertController) { }
 
   ngOnInit() {
-    this.getAvatars();
     this.title = this.navParams.data.modalProps.title;
     if (typeof this.navParams.data.modalProps.holidays !== 'undefined') {
       this.holidays = this.navParams.data.modalProps.holidays;
+      this.rejectedRequests = this.holidays.taken.info.filter(h => h.status === 'rejected');
       this.pendingRequests = this.holidays.taken.info.filter(h => h.status === 'pending');
       this.approvedRequests = this.holidays.taken.info.filter(h => h.status === 'approved');
       console.log('pendingRequests', this.pendingRequests);
       console.log('approvedRequests', this.approvedRequests);
     }
     if (typeof this.navParams.data.modalProps.requests !== 'undefined') {
+      this.getAvatars();
       console.log(this.navParams.data.modalProps.requests);
       this.requests = this.navParams.data.modalProps.requests;
     }
@@ -159,11 +161,20 @@ export class HistoryHolidaysModalComponent implements OnInit {
           cssClass: 'secondary',
           handler: () => {
             console.log('Confirm Cancel');
-            req.holidaysDetail.status = 'rejected';
-            this.updateRequest({user_id: req.userId, 'holidays.taken.info.id': req.holidaysDetail.id},
-              {$set: { 'holidays.taken.info.$': req.holidaysDetail}
+
+            alert.onDidDismiss().then((alertData) => {
+              req.holidaysDetail.status = 'rejected';
+              req.holidaysDetail.managerComment = alertData.data.values.reason;
+              this.updateRequest({user_id: req.userId, 'holidays.taken.info.id': req.holidaysDetail.id},
+                {$set: { 'holidays.taken.info.$': req.holidaysDetail}
+              }).then(docs => {
+                console.log(docs);
+                this.deleteRequest(req);
+                this.requests = this.requests.filter(r => r.holidaysDetail.status === 'pending');
+              }).catch(err => {
+                  console.error(err);
+              });
             });
-            this.requests = this.requests.filter(r => r.holidaysDetail.status === 'pending');
           }
         }, {
           text: 'Accept',
@@ -174,8 +185,13 @@ export class HistoryHolidaysModalComponent implements OnInit {
             {$set: { 'holidays.taken.info.$': req.holidaysDetail},
              $inc: { 'holidays.taken.days': req.holidaysDetail.countDays, 'holidays.not_taken': -req.holidaysDetail.countDays }
             }
-            );
-            this.requests = this.requests.filter(r => r.holidaysDetail.status === 'pending');
+            ).then(docs => {
+              console.log(docs);
+              this.deleteRequest(req);
+              this.requests = this.requests.filter(r => r.holidaysDetail.status === 'pending');
+            }).catch(err => {
+                console.error(err);
+            });
           }
         }
       ]
@@ -209,12 +225,17 @@ export class HistoryHolidaysModalComponent implements OnInit {
   }
 
   updateRequest(filter, action) {
-    this.stitchMongoService.update(config.COLLECTION_KEY, filter, action)
-    .then(docs => {
-        console.log(docs);
-    }).catch(err => {
-        console.error(err);
-    });
+    return this.stitchMongoService.update(config.COLLECTION_KEY, filter, action);
+  }
+
+  deleteRequest(req: RequestHolidays) {
+    this.stitchMongoService.update(config.COLLECTION_KEY, {user_id: req.userId},
+      { $pull: { 'employees_holidays_requests': { id: req.id } } })
+      .then(result => {
+          console.log(result);
+      }).catch(err => {
+          console.error(err);
+      });
   }
 
 }

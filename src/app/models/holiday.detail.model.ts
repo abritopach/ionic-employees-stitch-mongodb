@@ -7,6 +7,7 @@ export interface HolidayDetail {
     startDate: string;
     endDate: string;
     reason: string;
+    managerComment?: string;
     status: string;
     countDays: number;
 }
