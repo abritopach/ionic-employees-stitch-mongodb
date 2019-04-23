@@ -19,7 +19,7 @@ import { RequestHolidays } from '../../models/request.holidays.model';
 export class RequestHolidaysModalComponent implements OnInit {
 
   requestHolidaysForm: FormGroup;
-  employees: any;
+  employees: any[] = [];
   holidays: Holiday = {
     total: 22,
     not_taken: 22,
@@ -31,13 +31,17 @@ export class RequestHolidaysModalComponent implements OnInit {
               private storage: Storage, private navParams: NavParams, private loadingCtrl: LoadingController,
               private iziToast: IziToastService) {
     this.createForm();
+    this.fetchEmployees();
   }
 
   ngOnInit() {
-    this.fetchEmployees();
     if ((typeof this.navParams.data.modalProps.holidays !== 'undefined') && (this.navParams.data.modalProps.holidays !== null)) {
       this.holidays = this.navParams.data.modalProps.holidays;
       if (typeof this.navParams.data.modalProps.selectedHolidays !== 'undefined') {
+        console.log(this.navParams.data.modalProps.selectedHolidays.meta);
+        console.log('whoFor', this.navParams.data.modalProps.selectedHolidays.meta.whoFor.toString());
+        this.navParams.data.modalProps.selectedHolidays.meta.whoFor =
+        this.navParams.data.modalProps.selectedHolidays.meta.whoFor.toString();
         this.requestHolidaysForm.patchValue(this.navParams.data.modalProps.selectedHolidays.meta);
       }
     }
@@ -92,6 +96,7 @@ export class RequestHolidaysModalComponent implements OnInit {
           this.holidays.taken.info = this.holidays.taken.info.filter(h => h.id !== this.navParams.data.modalProps.selectedHolidays.meta.id);
         }
 
+        this.requestHolidaysForm.value.whoFor = new ObjectId(this.requestHolidaysForm.value.whoFor);
         this.holidays.taken.info.push(this.requestHolidaysForm.value);
 
         console.log('holidays sent', this.holidays);
@@ -126,6 +131,9 @@ export class RequestHolidaysModalComponent implements OnInit {
     .then(docs => {
       this.employees = docs;
       console.log('employees', this.employees);
+      this.employees.map(employee => {
+        employee['userId'] = employee.user_id.toString();
+      });
     });
   }
 
@@ -157,7 +165,7 @@ export class RequestHolidaysModalComponent implements OnInit {
       holidaysDetail: holidaysDetail
     };
     console.log('request', request);
-    this.stitchMongoService.update(config.COLLECTION_KEY, {user_id: holidaysDetail.whoFor[0]},
+    this.stitchMongoService.update(config.COLLECTION_KEY, {user_id: new ObjectId(holidaysDetail.whoFor)},
     {$push: { employees_holidays_requests: request }})
     .then(result => {
       console.log(result);

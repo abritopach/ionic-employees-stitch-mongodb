@@ -15,9 +15,9 @@
   <form [formGroup]="requestHolidaysForm" novalidate (ngSubmit)="requestHolidaysFormSubmit()">
       <ion-list inset>
         <ion-item lines="none">
-            <ng-select [class.has-error]="requestHolidaysForm.get('whoFor').hasError('required') && requestHolidaysForm.get('whoFor').touched" [multiple]="true" [items]="employees"
+            <ng-select *ngIf="employees.length !== 0" [class.has-error]="requestHolidaysForm.get('whoFor').hasError('required') && requestHolidaysForm.get('whoFor').touched" [items]="employees"
                         bindLabel="employee_name"
-                        bindValue="user_id"
+                        bindValue="userId"
                         placeholder="Who for"
                         formControlName="whoFor">
                 <ng-template ng-label-tmp let-item="item">
