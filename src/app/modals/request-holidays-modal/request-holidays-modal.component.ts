@@ -19,7 +19,7 @@ import { RequestHolidays } from '../../models/request.holidays.model';
 export class RequestHolidaysModalComponent implements OnInit {
 
   requestHolidaysForm: FormGroup;
-  employees: any[] = [];
+  employees = [];
   holidays: Holiday = {
     total: 22,
     not_taken: 22,
@@ -31,7 +31,6 @@ export class RequestHolidaysModalComponent implements OnInit {
               private storage: Storage, private navParams: NavParams, private loadingCtrl: LoadingController,
               private iziToast: IziToastService) {
     this.createForm();
-    this.fetchEmployees();
   }
 
   ngOnInit() {
@@ -44,14 +43,14 @@ export class RequestHolidaysModalComponent implements OnInit {
         this.navParams.data.modalProps.selectedHolidays.meta.whoFor.toString();
         this.requestHolidaysForm.patchValue(this.navParams.data.modalProps.selectedHolidays.meta);
       }
+      this.fetchEmployees();
     }
-    console.log('holydays', this.holidays);
   }
 
   createForm() {
     this.requestHolidaysForm = this.formBuilder.group({
       id: new FormControl(new ObjectId()),
-      whoFor: new FormControl('', Validators.required),
+      whoFor: new FormControl(null, Validators.required),
       startDate: new FormControl('', Validators.required),
       endDate: new FormControl('', Validators.required),
       type: new FormControl('', Validators.required),

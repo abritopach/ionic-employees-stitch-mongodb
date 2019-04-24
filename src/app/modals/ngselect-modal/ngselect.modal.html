@@ -19,7 +19,8 @@
                             bindLabel="name"
                             bindValue="_id"
                             placeholder="Select"
-                            formControlName="newData">
+                            formControlName="newData"
+                            appendTo="body">
                     <ng-template ng-label-tmp let-item="item">
                         <img height="48" width="48" [src]="item.icon"/>
                         <b>{{item.name}}</b>

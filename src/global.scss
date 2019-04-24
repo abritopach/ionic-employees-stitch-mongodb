@@ -46,7 +46,13 @@ ion-avatar img {
     filter: alpha(opacity=20);
   }
 
+/*
 .ng-dropdown-panel {
   border: none!important;
   position: unset!important;
+}
+*/
+
+ng-select {
+  width: 100%;
 }
