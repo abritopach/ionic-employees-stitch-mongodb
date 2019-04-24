@@ -15,42 +15,48 @@ import { AuthenticationService, IziToastService } from './services/';
 export class AppComponent implements OnInit {
 
   public appPages = [
-    {
-      title: 'Home',
-      url: '/home',
-      icon: 'home'
+    {groupName: 'General', groupItems: [
+      {
+        title: 'Home',
+        url: '/home',
+        icon: 'home'
+      },
+      {
+        title: 'Products',
+        url: '/products',
+        icon: 'cube'
+      },
+      {
+        title: 'Organization',
+        url: '/organization',
+        icon: 'people'
+      }
+    ]
     },
-    {
-      title: 'Products',
-      url: '/products',
-      icon: 'cube'
-    },
-    {
-      title: 'Organization',
-      url: '/organization',
-      icon: 'people'
-    },
-    {
-      title: 'Schedule',
-      url: '/schedule',
-      icon: 'calendar'
-    }, /*
-    {
-      title: 'To Do',
-      url: '/todo',
-      icon: 'list-box'
-    },
-    */
-    {
-      title: 'Notes',
-      url: '/notes-list',
-      icon: 'list-box'
-    },
-    {
-      title: 'Holidays',
-      url: '/holidays',
-      icon: 'airplane'
-    }
+    {groupName: 'Personal', groupItems: [
+      {
+        title: 'My Schedule',
+        url: '/schedule',
+        icon: 'calendar'
+      }, /*
+      {
+        title: 'To Do',
+        url: '/todo',
+        icon: 'list-box'
+      },
+      */
+      {
+        title: 'My Notes',
+        url: '/notes-list',
+        icon: 'list-box'
+      },
+      {
+        title: 'My Holidays',
+        url: '/holidays',
+        icon: 'airplane'
+      }
+    ]
+  }
   ];
 
   constructor(

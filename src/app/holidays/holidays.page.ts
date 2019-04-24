@@ -238,5 +238,8 @@ export class HolidaysPage implements OnInit {
     this.presentModal(HistoryHolidaysModalComponent, componentProps);
   }
 
+  showEmployeesHolidays() {
+  }
+
 
 }

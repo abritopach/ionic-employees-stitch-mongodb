@@ -6,6 +6,9 @@
     <!--
       Show only when user has requests vacations team not approved.
     -->
+    <ion-button (click)="showEmployeesHolidays()">
+      <ion-icon slot="icon-only" name="contacts"></ion-icon>
+    </ion-button>
     <ion-button (click)="showEmployeesHolidaysRequests()">
       <ion-badge *ngIf="employeesHolidaysRequests.length !== 0" color="danger"> {{employeesHolidaysRequests.length}} </ion-badge>
       <ion-icon slot="icon-only" name="notifications"></ion-icon>
