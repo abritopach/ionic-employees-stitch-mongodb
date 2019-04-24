@@ -13,15 +13,26 @@
     <ion-button (click)="showHistory()">
       <ion-icon slot="icon-only" name="time"></ion-icon>
     </ion-button>
+    <!--
     <ion-button (click)="requestHolidays()">
       <ion-icon slot="icon-only" name="add-circle-outline"></ion-icon>
     </ion-button>
+    -->
   </ion-buttons>
 </app-header>
 
 <ion-content>
+
+  <ion-fab vertical="top" horizontal="end" slot="fixed">
+    <ion-fab-button size="small" (click)="requestHolidays()">
+        <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
   <ion-card *ngIf="holidays">
     <ion-card-header>
+      <h3 text-center>Holidays Summary</h3>
+      <br>
       <ion-avatar class="avatar">
         <img src="assets/images/login-avatar.png">
       </ion-avatar>
@@ -74,6 +85,9 @@
     </ion-card-content>
   </ion-card>
 
+  <ion-card>
+      <h3 text-center>Holidays Schedule</h3>
+      <br>
   <ion-grid>
       <ion-row align-items-center>
           <ion-col size-md="4" size-xs="12" align-self-center>
@@ -137,6 +151,7 @@
         </mwl-calendar-day-view>
       </div>
   </ion-grid>
+</ion-card>
 </ion-content>
 
 <app-footer></app-footer>
