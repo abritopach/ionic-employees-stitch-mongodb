@@ -10,6 +10,7 @@ import { HolidaysPage } from './holidays.page';
 import { SharedComponentsModule } from '../components/shared-components.module';
 import { RequestHolidaysModalComponent } from '../modals/request-holidays-modal/request-holidays-modal.component';
 import { HistoryHolidaysModalComponent } from '../modals/history-holidays-modal/history-holidays-modal.component';
+import { UpcomingAbsencesModalComponent } from '../modals/upcoming-absences-modal/upcoming-absences-modal.component';
 
 import { NgSelectModule } from '@ng-select/ng-select';
 
@@ -38,7 +39,7 @@ const routes: Routes = [
       useFactory: adapterFactory
     })
   ],
-  declarations: [HolidaysPage, RequestHolidaysModalComponent, HistoryHolidaysModalComponent],
-  entryComponents: [RequestHolidaysModalComponent, HistoryHolidaysModalComponent]
+  declarations: [HolidaysPage, RequestHolidaysModalComponent, HistoryHolidaysModalComponent, UpcomingAbsencesModalComponent],
+  entryComponents: [RequestHolidaysModalComponent, HistoryHolidaysModalComponent, UpcomingAbsencesModalComponent]
 })
 export class HolidaysPageModule {}

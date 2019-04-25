@@ -14,6 +14,7 @@ import { MoreOptionsPopoverComponent } from '../popovers/more-options/more-optio
 import { IziToastService } from '../services/izi-toast.service';
 import { HistoryHolidaysModalComponent } from '../modals/history-holidays-modal/history-holidays-modal.component';
 import { RequestHolidays } from '../models/request.holidays.model';
+import { UpcomingAbsencesModalComponent } from '../modals/upcoming-absences-modal/upcoming-absences-modal.component';
 
 const colors: any = {
   red: {
@@ -238,7 +239,9 @@ export class HolidaysPage implements OnInit {
     this.presentModal(HistoryHolidaysModalComponent, componentProps);
   }
 
-  showEmployeesHolidays() {
+  showUpcomingAbsences() {
+    const componentProps = { modalProps: { title: 'Upcoming Employees Absences'}};
+    this.presentModal(UpcomingAbsencesModalComponent, componentProps);
   }
 
 

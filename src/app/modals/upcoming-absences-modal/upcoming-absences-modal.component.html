@@ -1,0 +1,57 @@
+<ion-header>
+  <ion-toolbar color="tertiary">
+      <ion-buttons slot="end">
+          <ion-button (click)="dismiss()">
+              <ion-icon name="close" color="light"></ion-icon>
+          </ion-button>
+      </ion-buttons>
+      <ion-title>
+          Upcoming Employees Absences
+      </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <ng-template #customCellTemplate let-day="day" let-locale="locale">
+    <div class="cal-cell-top">
+      <span class="cal-day-badge" *ngIf="day.badgeTotal > 0"
+        >{{ day.badgeTotal }}</span
+      >
+      <span class="cal-day-number"
+        >{{ day.date | calendarDate:'monthViewDayNumber':locale }}</span
+      >
+    </div>
+    <!--
+    <small style="margin: 5px"
+      >There are {{ day.events.length }} events on this day</small
+    >
+    -->
+    <div class="colors">
+        <div *ngFor="let paint of defaultColors" class="circle" [ngStyle]="{'background': paint}"></div>
+    </div>
+  </ng-template>
+
+  <div [ngSwitch]="view">
+    <mwl-calendar-month-view
+      *ngSwitchCase="'month'"
+      [viewDate]="viewDate"
+      [events]="events"
+      [cellTemplate]="customCellTemplate"
+      [excludeDays]="excludeDays"
+    >
+    </mwl-calendar-month-view>
+    <mwl-calendar-week-view
+      *ngSwitchCase="'week'"
+      [viewDate]="viewDate"
+      [events]="events"
+      [excludeDays]="excludeDays"
+    >
+    </mwl-calendar-week-view>
+    <mwl-calendar-day-view
+      *ngSwitchCase="'day'"
+      [viewDate]="viewDate"
+      [events]="events"
+    >
+    </mwl-calendar-day-view>
+  </div>
+</ion-content>
