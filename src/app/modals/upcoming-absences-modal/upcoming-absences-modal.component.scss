@@ -15,7 +15,12 @@
 
     .circle {
       flex: 20px 0 0;
-      margin-right: 10px;
+      margin-left: 10px;
       margin-bottom: 10px;
     }
+}
+
+ion-avatar {
+    width: 20px;
+    height: 20px;
 }

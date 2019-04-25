@@ -20,15 +20,44 @@
       <span class="cal-day-number"
         >{{ day.date | calendarDate:'monthViewDayNumber':locale }}</span
       >
-    </div>
-    <!--
-    <small style="margin: 5px"
-      >There are {{ day.events.length }} events on this day</small
+      <small *ngIf="day.badgeTotal > 0" style="margin: 5px"
+      >{{ day.events[0].meta }}</small
     >
-    -->
-    <div class="colors">
-        <div *ngFor="let paint of defaultColors" class="circle" [ngStyle]="{'background': paint}"></div>
     </div>
+    <ion-grid *ngIf="day.badgeTotal > 0">
+        <ion-row>
+          <ion-col size="4">
+              <ion-avatar>
+                  <img src="http://i.pravatar.cc/150?img=7">
+              </ion-avatar>
+          </ion-col>
+          <ion-col size="4">
+              <ion-avatar>
+                  <img src="http://i.pravatar.cc/150?img=8">
+              </ion-avatar>
+          </ion-col>
+          <ion-col size="4">
+              <ion-avatar>
+                  <img src="http://i.pravatar.cc/150?img=9">
+              </ion-avatar>
+          </ion-col>
+          <ion-col size="4">
+              <ion-avatar>
+                  <img src="http://i.pravatar.cc/150?img=7">
+              </ion-avatar>
+          </ion-col>
+          <ion-col size="4">
+              <ion-avatar>
+                  <img src="http://i.pravatar.cc/150?img=8">
+              </ion-avatar>
+          </ion-col>
+          <ion-col size="4">
+              <ion-avatar>
+                  <img src="http://i.pravatar.cc/150?img=9">
+              </ion-avatar>
+          </ion-col>
+        </ion-row>
+    </ion-grid>
   </ng-template>
 
   <div [ngSwitch]="view">
@@ -38,6 +67,7 @@
       [events]="events"
       [cellTemplate]="customCellTemplate"
       [excludeDays]="excludeDays"
+      (dayClicked)="dayClicked($event.day)"
     >
     </mwl-calendar-month-view>
     <mwl-calendar-week-view
