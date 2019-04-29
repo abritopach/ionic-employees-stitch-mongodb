@@ -1,13 +1,26 @@
-import { Component, OnInit } from '@angular/core';
-import { CalendarEvent } from 'angular-calendar';
+import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { CalendarEvent, DAYS_OF_WEEK } from 'angular-calendar';
 import { ModalController } from '@ionic/angular';
 
 import { StitchMongoService } from '../../services/stitch-mongo.service';
 import config from '../../config/config';
 import { Holiday } from '../../models/holiday.model';
 
+import * as moment from 'moment';
+import { Subject } from 'rxjs';
+
+// weekStartsOn option is ignored when using moment, as it needs to be configured globally for the moment locale
+moment.updateLocale('en', {
+  week: {
+    dow: DAYS_OF_WEEK.MONDAY,
+    doy: 0
+  }
+});
+
+
 @Component({
   selector: 'app-upcoming-absences-modal',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './upcoming-absences-modal.component.html',
   styleUrls: ['./upcoming-absences-modal.component.scss'],
 })
@@ -23,8 +36,11 @@ export class UpcomingAbsencesModalComponent implements OnInit {
   excludeDays: number[] = [0, 6];
 
   holidays: Holiday = null;
+  activeDayIsOpen = false;
 
-  constructor(private modalCtrl: ModalController, private stitchMongoService: StitchMongoService) { }
+  refresh: Subject<any> = new Subject();
+
+  constructor(private modalCtrl: ModalController, private stitchMongoService: StitchMongoService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.fetchEmployees();
@@ -56,17 +72,31 @@ export class UpcomingAbsencesModalComponent implements OnInit {
         const formattedEvent = {
           start: new Date(holiday.startDate),
           end: new Date(holiday.endDate),
-          title: holiday.type,
+          title: holiday.type + ' - ' + holiday.reason,
           meta: avatar
         };
         console.log(formattedEvent);
-        this.events.push(formattedEvent);
+        this.events = [
+          ...this.events, formattedEvent];
+        // this.events.push(formattedEvent);
       }
     });
+    console.log('events', this.events);
+    this.cd.detectChanges();
   }
+
 
   dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
     console.log('UpcomingAbsencesModalComponent::dayClicked() | method called', date, events);
+    if (moment(date).isSame(moment(this.viewDate), 'month')) {
+      this.viewDate = date;
+      if ((moment(date).isSame(moment(this.viewDate), 'day') && this.activeDayIsOpen === true) || events.length === 0) {
+        this.activeDayIsOpen = false;
+      } else {
+        this.activeDayIsOpen = true;
+      }
+    }
+    this.cd.detectChanges();
   }
 
 }

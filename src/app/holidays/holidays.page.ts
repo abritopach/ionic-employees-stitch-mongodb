@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { ModalController, PopoverController } from '@ionic/angular';
 
 import { RequestHolidaysModalComponent } from '../modals/request-holidays-modal/request-holidays-modal.component';
@@ -41,6 +41,7 @@ const colors: any = {
 
 @Component({
   selector: 'app-holidays',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './holidays.page.html',
   styleUrls: ['./holidays.page.scss'],
 })
@@ -68,7 +69,7 @@ export class HolidaysPage implements OnInit {
   employeesHolidaysRequests: RequestHolidays[] = [];
 
   constructor(private modalCtrl: ModalController, private storage: Storage, private stitchMongoService: StitchMongoService,
-              private popoverCtrl: PopoverController, private iziToast: IziToastService) { }
+              private popoverCtrl: PopoverController, private iziToast: IziToastService, private cd: ChangeDetectorRef) { }
 
   ngOnInit() {
     this.storage.get(config.TOKEN_KEY).then(res => {
@@ -128,6 +129,7 @@ export class HolidaysPage implements OnInit {
         this.activeDayIsOpen = true;
       }
     }
+    this.cd.detectChanges();
   }
 
   handleEvent(action: string, event: CalendarEvent): void {
@@ -152,6 +154,7 @@ export class HolidaysPage implements OnInit {
         this.eventsCalendar.push(formattedEvent);
       }
     });
+    this.cd.detectChanges();
     console.log(this.infoHolidaysByType);
   }
 

@@ -44,7 +44,9 @@
       [events]="events"
       [cellTemplate]="customCellTemplate"
       [excludeDays]="excludeDays"
+      [activeDayIsOpen]="activeDayIsOpen"
       (dayClicked)="dayClicked($event.day)"
+      [refresh]="refresh"
     >
     </mwl-calendar-month-view>
     <mwl-calendar-week-view
@@ -52,12 +54,14 @@
       [viewDate]="viewDate"
       [events]="events"
       [excludeDays]="excludeDays"
+      [refresh]="refresh"
     >
     </mwl-calendar-week-view>
     <mwl-calendar-day-view
       *ngSwitchCase="'day'"
       [viewDate]="viewDate"
       [events]="events"
+      [refresh]="refresh"
     >
     </mwl-calendar-day-view>
   </div>

@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener, ViewChild, TemplateRef } from '@angular/core';
+import { Component, OnInit, HostListener, ViewChild, TemplateRef, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 
 import { PopoverController, ModalController } from '@ionic/angular';
 
@@ -48,6 +48,7 @@ const colors: any = {
 
 @Component({
   selector: 'app-schedule',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './schedule.page.html',
   styleUrls: ['./schedule.page.scss']
 })
@@ -94,7 +95,7 @@ export class SchedulePage implements OnInit {
   }
 
   constructor(private popoverCtrl: PopoverController, private stitchMongoService: StitchMongoService,
-              private storage: Storage, private modalCtrl: ModalController) {
+              private storage: Storage, private modalCtrl: ModalController, private cd: ChangeDetectorRef) {
     console.log('SchedulePage::constructor() | method called');
   }
 
@@ -338,6 +339,7 @@ export class SchedulePage implements OnInit {
         this.activeDayIsOpen = true;
       }
     }
+    this.cd.detectChanges();
   }
 
   handleEvent(action: string, event: CalendarEvent): void {
