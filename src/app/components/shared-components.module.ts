@@ -4,21 +4,30 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { FooterComponent } from './common/footer/footer.component';
 import { HeaderComponent } from './common/header/header.component';
+import { AngularCalendarComponent } from './common/angular-calendar/angular-calendar.component';
 
 import { TodoListHeaderComponent, TodoListComponent, TodoListItemComponent, TodoListFooterComponent } from './todo/';
 
 import { MoreOptionsPopoverComponent } from '../popovers/more-options/more-options.popover';
 
+// Angular Calendar
+import { CalendarModule, DateAdapter } from 'angular-calendar';
+import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
+
 @NgModule({
   declarations: [FooterComponent, HeaderComponent, TodoListHeaderComponent, TodoListComponent,
-     TodoListItemComponent, TodoListFooterComponent, MoreOptionsPopoverComponent],
+     TodoListItemComponent, TodoListFooterComponent, MoreOptionsPopoverComponent, AngularCalendarComponent],
   imports: [
     CommonModule,
     FormsModule,
-    IonicModule
+    IonicModule,
+    CalendarModule.forRoot({
+      provide: DateAdapter,
+      useFactory: adapterFactory
+    })
   ],
   exports: [FooterComponent, HeaderComponent, TodoListHeaderComponent, TodoListComponent, TodoListItemComponent,
-            TodoListFooterComponent, MoreOptionsPopoverComponent],
+            TodoListFooterComponent, MoreOptionsPopoverComponent, AngularCalendarComponent],
   entryComponents: [MoreOptionsPopoverComponent]
 })
 export class SharedComponentsModule { }
