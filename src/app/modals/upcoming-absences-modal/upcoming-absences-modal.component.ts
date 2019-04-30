@@ -31,6 +31,7 @@ export class UpcomingAbsencesModalComponent implements OnInit {
   viewDate: Date = new Date();
 
   events: CalendarEvent[] = [];
+  nextAbsences: any[] = [];
 
   // exclude weekends
   excludeDays: number[] = [0, 6];
@@ -57,23 +58,27 @@ export class UpcomingAbsencesModalComponent implements OnInit {
     this.stitchMongoService.find(config.COLLECTION_KEY, {})
     .then(docs => {
       console.log(docs);
-      if ((docs.length !== 0) && (typeof docs[0]['holidays'] !== 'undefined')) {
-        this.holidays = docs[0]['holidays'];
-        this.formatEventsCalendar(docs[0]['avatar']);
+      if (docs.length !== 0) {
+        docs.map(doc => {
+          if ((typeof doc['holidays'] !== 'undefined')) {
+            this.formatEventsCalendar(doc);
+          }
+        });
       }
     });
   }
 
-  formatEventsCalendar(avatar) {
+  formatEventsCalendar(doc) {
+    console.log('doc', doc);
     this.events = [];
-    this.holidays.taken.info.map(holiday => {
+    doc.holidays.taken.info.map(holiday => {
       if ((holiday.status !== 'pending') && (holiday.status !== 'rejected')) {
         console.log(holiday);
         const formattedEvent = {
           start: new Date(holiday.startDate),
           end: new Date(holiday.endDate),
           title: holiday.type + ' - ' + holiday.reason,
-          meta: avatar
+          meta: {avatar: doc.avatar, status: holiday.status}
         };
         console.log(formattedEvent);
         this.events = [
@@ -82,6 +87,8 @@ export class UpcomingAbsencesModalComponent implements OnInit {
       }
     });
     console.log('events', this.events);
+    this.nextAbsences = this.events.filter(event => moment(event.start).isSameOrAfter(moment(), 'day'));
+    console.log('nextAbsences', this.nextAbsences);
     this.cd.detectChanges();
   }
 

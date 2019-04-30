@@ -30,7 +30,7 @@
       <ion-row align-items-start>
         <ion-col *ngFor="let event of day.events">
             <ion-avatar>
-                <img [src]="event.meta">
+                <img [src]="event.meta.avatar">
             </ion-avatar>
         </ion-col>
       </ion-row>
@@ -65,4 +65,20 @@
     >
     </mwl-calendar-day-view>
   </div>
+
+  <ion-list>
+    <ion-list-header>
+      <ion-label>Next Absences</ion-label>
+    </ion-list-header>
+    <ion-item *ngFor="let event of nextAbsences">
+      <ion-avatar slot="start">
+        <img [src]="event.meta.avatar" onError="src='assets/images/login-avatar.png'" alt="Avatar" />
+      </ion-avatar>
+      <ion-label>
+        <h2>{{ event.start | date }} - {{ event.end | date }}</h2>
+        <h3>{{ event.title }}</h3>
+      </ion-label>
+      <ion-badge slot="end" color="primary">{{ event.meta.status }}</ion-badge>
+    </ion-item>
+  </ion-list>
 </ion-content>
