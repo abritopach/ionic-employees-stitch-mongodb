@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
-import { CalendarEvent, DAYS_OF_WEEK } from 'angular-calendar';
+import { CalendarEvent, DAYS_OF_WEEK, CalendarView } from 'angular-calendar';
 import { ModalController } from '@ionic/angular';
 
 import { StitchMongoService } from '../../services/stitch-mongo.service';
@@ -38,6 +38,8 @@ export class UpcomingAbsencesModalComponent implements OnInit {
 
   holidays: Holiday = null;
   activeDayIsOpen = false;
+
+  CalendarView = CalendarView;
 
   refresh: Subject<any> = new Subject();
 
