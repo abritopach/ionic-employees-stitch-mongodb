@@ -88,75 +88,7 @@
     </ion-card-content>
   </ion-card>
 
-  <!--<app-angular-calendar [eventsCalendar]="eventsCalendar"></app-angular-calendar>-->
-
-  <ion-card>
-      <h3 text-center>Holidays Schedule</h3>
-      <br>
-  <ion-grid>
-      <ion-row align-items-center>
-          <ion-col size-md="4" size-xs="12" align-self-center>
-        <div text-center>
-          <ion-button size="small" shape="round" fill="outline">
-            <div mwlCalendarPreviousView [view]="view" [(viewDate)]="viewDate" [excludeDays]="excludeDays" (viewDateChange)="activeDayIsOpen = false">
-              Prev
-            </div>
-          </ion-button>
-          <ion-button size="small" shape="round" fill="outline">
-            <div mwlCalendarToday [(viewDate)]="viewDate">
-              Today
-            </div>
-          </ion-button>
-          <ion-button size="small" shape="round" fill="outline">
-            <div mwlCalendarNextView [view]="view" [(viewDate)]="viewDate" [excludeDays]="excludeDays" (viewDateChange)="activeDayIsOpen = false">
-              Next
-            </div>
-          </ion-button>
-        </div>
-      </ion-col>
-      <ion-col size-md="4" size-xs="12" align-self-center>
-        <h3 text-center>{{ viewDate | calendarDate:(view + 'ViewTitle'):'en' }}</h3>
-      </ion-col>
-      <ion-col size-md="4" size-xs="12" align-self-center>
-        <div text-center>
-          <ion-button size="small" shape="round" fill="outline" (click)="view = CalendarView.Month" [class.active]="view === CalendarView.Month">
-              Month
-          </ion-button>
-          <ion-button size="small" shape="round" fill="outline" (click)="view = CalendarView.Week" [class.active]="view === CalendarView.Week">
-            Week
-          </ion-button>
-          <ion-button size="small" shape="round" fill="outline" (click)="view = CalendarView.Day" [class.active]="view === CalendarView.Day">
-            Day
-          </ion-button>
-        </div>
-    </ion-col>
-    </ion-row>
-    <div [ngSwitch]="view">
-        <mwl-calendar-month-view
-          *ngSwitchCase="CalendarView.Month"
-          [viewDate]="viewDate"
-          [events]="eventsCalendar"
-          [excludeDays]="excludeDays"
-          [activeDayIsOpen]="activeDayIsOpen"
-          (dayClicked)="dayClicked($event.day)"
-          (eventClicked)="handleEvent('Clicked', $event.event)">
-        </mwl-calendar-month-view>
-        <mwl-calendar-week-view
-          *ngSwitchCase="CalendarView.Week"
-          [viewDate]="viewDate"
-          [events]="eventsCalendar"
-          [excludeDays]="excludeDays"
-          (eventClicked)="handleEvent('Clicked', $event.event)">
-        </mwl-calendar-week-view>
-        <mwl-calendar-day-view
-          *ngSwitchCase="CalendarView.Day"
-          [viewDate]="viewDate"
-          [events]="eventsCalendar"
-          (eventClicked)="handleEvent('Clicked', $event.event)">
-        </mwl-calendar-day-view>
-      </div>
-  </ion-grid>
-</ion-card>
+  <app-angular-calendar title="Holidays Calendar" [eventsCalendar]="eventsCalendar" (event)="handleEvent($event)"></app-angular-calendar>
 
 </ion-content>
 

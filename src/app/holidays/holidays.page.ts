@@ -2,14 +2,13 @@ import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@
 import { ModalController, PopoverController } from '@ionic/angular';
 
 import { RequestHolidaysModalComponent } from '../modals/request-holidays-modal/request-holidays-modal.component';
-import { CalendarView, CalendarEvent } from 'angular-calendar';
+import { CalendarEvent } from 'angular-calendar';
 import config from '../config/config';
 import { ObjectId } from 'bson';
 import { Storage } from '@ionic/storage';
 import { StitchMongoService } from '../services/stitch-mongo.service';
 import { Holiday } from '../models/holiday.model';
 import { HolidayDetail } from '../models/holiday.detail.model';
-import * as moment from 'moment';
 import { MoreOptionsPopoverComponent } from '../popovers/more-options/more-options.popover';
 import { IziToastService } from '../services/izi-toast.service';
 import { HistoryHolidaysModalComponent } from '../modals/history-holidays-modal/history-holidays-modal.component';
@@ -50,12 +49,7 @@ export class HolidaysPage implements OnInit {
   Object = Object;
 
    // Calendar
-   // eventsCalendar: CalendarEvent[] = [];
    eventsCalendar: Array<CalendarEvent<HolidayDetail>> = [];
-   view: CalendarView = CalendarView.Month;
-   CalendarView = CalendarView;
-   viewDate: Date = new Date();
-   activeDayIsOpen = false;
    holidays: Holiday = null;
    infoHolidaysByType = {
     holiday: {count: 0, color: colors.indigo},
@@ -64,8 +58,6 @@ export class HolidaysPage implements OnInit {
     meeting: {count: 0, color: colors.deepOrange},
     home: {count: 0, color: colors.pink}
    };
-   // exclude weekends
-  excludeDays: number[] = [0, 6];
   employeesHolidaysRequests: RequestHolidays[] = [];
 
   constructor(private modalCtrl: ModalController, private storage: Storage, private stitchMongoService: StitchMongoService,
@@ -115,25 +107,8 @@ export class HolidaysPage implements OnInit {
     }
   }
 
-  dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
-    console.log('HolidaysPage::dayClicked() | method called');
-
-    if (moment(date).isSame(this.viewDate, 'month')) {
-      this.viewDate = date;
-      if (
-        (moment(date).isSame(this.viewDate, 'day') && this.activeDayIsOpen === true) ||
-        events.length === 0
-      ) {
-        this.activeDayIsOpen = false;
-      } else {
-        this.activeDayIsOpen = true;
-      }
-    }
-    this.cd.detectChanges();
-  }
-
-  handleEvent(action: string, event: CalendarEvent): void {
-    console.log('HolidaysPage::handleEvent() | method called');
+  handleEvent(event): void {
+    console.log('HolidaysPage::handleEvent() | method called', event);
     this.onClickMoreOptions(event);
   }
 

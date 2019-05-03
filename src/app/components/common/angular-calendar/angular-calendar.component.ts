@@ -1,4 +1,5 @@
-import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, Input, SimpleChanges, OnChanges } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, Input, SimpleChanges,
+         OnChanges, Output, EventEmitter } from '@angular/core';
 import { CalendarView, CalendarEvent } from 'angular-calendar';
 import * as moment from 'moment';
 
@@ -10,6 +11,7 @@ import * as moment from 'moment';
 })
 export class AngularCalendarComponent implements OnInit, OnChanges {
 
+  @Input() title = '';
   @Input() eventsCalendar: CalendarEvent[] = [];
   view: CalendarView = CalendarView.Month;
   CalendarView = CalendarView;
@@ -17,6 +19,8 @@ export class AngularCalendarComponent implements OnInit, OnChanges {
   activeDayIsOpen = false;
   // exclude weekends
   excludeDays: number[] = [0, 6];
+
+  @Output() event: EventEmitter<any> = new EventEmitter<any>();
 
   constructor(private cd: ChangeDetectorRef) { }
 
@@ -51,6 +55,7 @@ export class AngularCalendarComponent implements OnInit, OnChanges {
 
   handleEvent(action: string, event: CalendarEvent): void {
     console.log('AngularCalendarComponent::handleEvent() | method called');
+    this.event.emit(event);
   }
 
 }
