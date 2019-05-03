@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
-import { CalendarEvent, DAYS_OF_WEEK, CalendarView } from 'angular-calendar';
+import { CalendarEvent, DAYS_OF_WEEK } from 'angular-calendar';
 import { ModalController } from '@ionic/angular';
 
 import { StitchMongoService } from '../../services/stitch-mongo.service';
@@ -7,7 +7,6 @@ import config from '../../config/config';
 import { Holiday } from '../../models/holiday.model';
 
 import * as moment from 'moment';
-import { Subject } from 'rxjs';
 
 // weekStartsOn option is ignored when using moment, as it needs to be configured globally for the moment locale
 moment.updateLocale('en', {
@@ -26,10 +25,6 @@ moment.updateLocale('en', {
 })
 export class UpcomingAbsencesModalComponent implements OnInit {
 
-  view = 'month';
-
-  viewDate: Date = new Date();
-
   events: CalendarEvent[] = [];
   nextAbsences: any[] = [];
 
@@ -37,11 +32,6 @@ export class UpcomingAbsencesModalComponent implements OnInit {
   excludeDays: number[] = [0, 6];
 
   holidays: Holiday = null;
-  activeDayIsOpen = false;
-
-  CalendarView = CalendarView;
-
-  refresh: Subject<any> = new Subject();
 
   constructor(private modalCtrl: ModalController, private stitchMongoService: StitchMongoService, private cd: ChangeDetectorRef) { }
 
@@ -91,20 +81,6 @@ export class UpcomingAbsencesModalComponent implements OnInit {
     console.log('events', this.events);
     this.nextAbsences = this.events.filter(event => moment(event.start).isSameOrAfter(moment(), 'day'));
     console.log('nextAbsences', this.nextAbsences);
-    this.cd.detectChanges();
-  }
-
-
-  dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
-    console.log('UpcomingAbsencesModalComponent::dayClicked() | method called', date, events);
-    if (moment(date).isSame(moment(this.viewDate), 'month')) {
-      this.viewDate = date;
-      if ((moment(date).isSame(moment(this.viewDate), 'day') && this.activeDayIsOpen === true) || events.length === 0) {
-        this.activeDayIsOpen = false;
-      } else {
-        this.activeDayIsOpen = true;
-      }
-    }
     this.cd.detectChanges();
   }
 

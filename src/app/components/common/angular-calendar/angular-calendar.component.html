@@ -47,7 +47,8 @@
           [excludeDays]="excludeDays"
           [activeDayIsOpen]="activeDayIsOpen"
           (dayClicked)="dayClicked($event.day)"
-          (eventClicked)="handleEvent('Clicked', $event.event)">
+          (eventClicked)="handleEvent('Clicked', $event.event)"
+          [cellTemplate]="customCellTemplate">
         </mwl-calendar-month-view>
         <mwl-calendar-week-view
           *ngSwitchCase="CalendarView.Week"

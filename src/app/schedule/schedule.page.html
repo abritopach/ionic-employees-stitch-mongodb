@@ -1,22 +1,3 @@
-<!--
-<ion-header>
-  <ion-toolbar color="primary">
-      <ion-buttons slot="start">
-        <ion-menu-button></ion-menu-button>
-      </ion-buttons>
-    <ion-title>My Schedule</ion-title>
-    <ion-buttons slot='end'>
-      <ion-button (click)="showCalendar()">
-          <ion-icon slot="icon-only" name="grid"></ion-icon>
-      </ion-button>
-      <ion-button (click)="addEvent()">
-        <ion-icon slot="icon-only" name="add-circle-outline"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
--->
-
 <app-header title="My Schedule">
   <ion-buttons buttons-start slot="start">
     <ion-menu-button></ion-menu-button>
@@ -33,136 +14,76 @@
 
 <ion-content padding>
 
-    <ion-toolbar color="secondary" *ngIf="!showCalendarFlag">
-        <ion-segment [(ngModel)]="option" (ionChange)="segmentChanged($event)">
-            <ion-segment-button fill="outline" value="previous">
-              <ion-label>PREVIOUS</ion-label>
-            </ion-segment-button>
-            <ion-segment-button value="today">
-              <ion-label>TODAY</ion-label>
-            </ion-segment-button>
-            <ion-segment-button value="upcoming">
-              <ion-label>UPCOMING</ion-label>
-            </ion-segment-button>
-          </ion-segment>
-    </ion-toolbar>
+  <ion-toolbar color="secondary" *ngIf="!showCalendarFlag">
+      <ion-segment [(ngModel)]="option" (ionChange)="segmentChanged($event)">
+          <ion-segment-button fill="outline" value="previous">
+            <ion-label>PREVIOUS</ion-label>
+          </ion-segment-button>
+          <ion-segment-button value="today">
+            <ion-label>TODAY</ion-label>
+          </ion-segment-button>
+          <ion-segment-button value="upcoming">
+            <ion-label>UPCOMING</ion-label>
+          </ion-segment-button>
+        </ion-segment>
+  </ion-toolbar>
 
-    <ion-list *ngIf="!showCalendarFlag">
-        <ion-grid fixed>
-          <ion-row *ngFor="let event of events; let i = index" align-items-stretch >
-          <ion-col col-12 align-self-stretch align-self-center>
+  <!-- Schedule list. -->
+  <ion-list *ngIf="!showCalendarFlag">
+      <ion-grid fixed>
+        <ion-row *ngFor="let event of events; let i = index" align-items-stretch >
+        <ion-col col-12 align-self-stretch align-self-center>
+          <ion-card>
+            <ion-item class="eventClass">
+              <b>{{ event.title }}</b>
+              <ion-icon name="arrow-dropright" slot="end" (click)="onClickMoreOptions(event)"></ion-icon>
+            </ion-item>
+              <ion-item lines="none">
+                <span class="spanClass">YOUR NEXT EVENT</span>
+              </ion-item>
+              <ion-item lines="none">
+                  <span class="timeClass">{{ event.time }}</span>
+              </ion-item>
+              <ion-item lines="none" class="spanClass">
+                  <ion-icon name="calendar"></ion-icon><b>{{ event.date }}</b>
+              </ion-item>
+              <ion-card-content *ngIf="event.lat !== undefined && event.lat !== ''">
+                  <agm-map [zoom]="13" [latitude]="event.lat" [longitude]="event.lng">
+                      <agm-marker [latitude]="event.lat" [longitude]="event.lng"></agm-marker>
+                  </agm-map>
+              </ion-card-content>
+            </ion-card>
             <ion-card>
               <ion-item class="eventClass">
-                <b>{{ event.title }}</b>
-                <ion-icon name="arrow-dropright" slot="end" (click)="onClickMoreOptions(event)"></ion-icon>
+                <b>Meeting Participants</b>
+                <!--<ion-icon name="arrow-dropright" slot="end"></ion-icon>-->
               </ion-item>
-                <ion-item lines="none">
-                  <span class="spanClass">YOUR NEXT EVENT</span>
-                </ion-item>
-                <ion-item lines="none">
-                    <span class="timeClass">{{ event.time }}</span>
-                </ion-item>
-                <ion-item lines="none" class="spanClass">
-                    <ion-icon name="calendar"></ion-icon><b>{{ event.date }}</b>
-                </ion-item>
-                <ion-card-content *ngIf="event.lat !== undefined && event.lat !== ''">
-                    <agm-map [zoom]="13" [latitude]="event.lat" [longitude]="event.lng">
-                        <agm-marker [latitude]="event.lat" [longitude]="event.lng"></agm-marker>
-                    </agm-map>
-                </ion-card-content>
-              </ion-card>
-              <ion-card>
-                <ion-item class="eventClass">
-                  <b>Meeting Participants</b>
-                  <!--<ion-icon name="arrow-dropright" slot="end"></ion-icon>-->
-                </ion-item>
-                <ion-item *ngIf="participants.length != 0">
-                  <ion-row>
-                    <ion-col size="avatarColSize" *ngFor="let participant of participants[i]">
-                      <!--<ion-badge class="avatarBadge"><ion-icon name="calendar"></ion-icon></ion-badge>-->
-                      <ion-avatar tappable>
-                        <img [src]="participant.avatar">
-                      </ion-avatar>
-                    </ion-col>
-                    <ion-col class="chipCol" size="chipColSize">
-                      <ion-chip *ngIf="event.meeting_participants.length - participants[i].length !== 0" tappable color="tertiary" (click)="onClickShowPeople(event)">
-                        <ion-label>+ {{event.meeting_participants.length - participants[i].length}} MORE</ion-label>
-                      </ion-chip>
-                    </ion-col>
-                  </ion-row>
-                </ion-item>
-                <ion-card-content>
-                </ion-card-content>
-              </ion-card>
-            </ion-col>
-        </ion-row>
-      </ion-grid>
-      </ion-list>
+              <ion-item *ngIf="participants.length != 0">
+                <ion-row>
+                  <ion-col size="avatarColSize" *ngFor="let participant of participants[i]">
+                    <!--<ion-badge class="avatarBadge"><ion-icon name="calendar"></ion-icon></ion-badge>-->
+                    <ion-avatar tappable>
+                      <img [src]="participant.avatar">
+                    </ion-avatar>
+                  </ion-col>
+                  <ion-col class="chipCol" size="chipColSize">
+                    <ion-chip *ngIf="event.meeting_participants.length - participants[i].length !== 0" tappable color="tertiary" (click)="onClickShowPeople(event)">
+                      <ion-label>+ {{event.meeting_participants.length - participants[i].length}} MORE</ion-label>
+                    </ion-chip>
+                  </ion-col>
+                </ion-row>
+              </ion-item>
+              <ion-card-content>
+              </ion-card-content>
+            </ion-card>
+          </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-list>
 
-      <ion-grid *ngIf="showCalendarFlag">
-          <ion-row align-items-center>
-            <ion-col size-md="4" size-xs="12" align-self-center>
-            <div text-center>
-              <ion-button size="small" shape="round" fill="outline">
-                <div mwlCalendarPreviousView [view]="view" [(viewDate)]="viewDate" (viewDateChange)="activeDayIsOpen = false">
-                  Prev
-                </div>
-              </ion-button>
-              <ion-button size="small" shape="round" fill="outline">
-                <div mwlCalendarToday [(viewDate)]="viewDate">
-                  Today
-                </div>
-              </ion-button>
-              <ion-button size="small" shape="round" fill="outline">
-                <div mwlCalendarNextView [view]="view" [(viewDate)]="viewDate" (viewDateChange)="activeDayIsOpen = false">
-                  Next
-                </div>
-              </ion-button>
-            </div>
-          </ion-col>
-          <ion-col size-md="4" size-xs="12" align-self-center>
-            <h3 text-center>{{ viewDate | calendarDate:(view + 'ViewTitle'):'en' }}</h3>
-          </ion-col>
-          <ion-col size-md="4" size-xs="12" align-self-center>
-              <div text-center>
-              <ion-button size="small" shape="round" fill="outline" (click)="view = CalendarView.Month" [class.active]="view === CalendarView.Month">
-                  Month
-              </ion-button>
-              <ion-button size="small" shape="round" fill="outline" (click)="view = CalendarView.Week" [class.active]="view === CalendarView.Week">
-                Week
-              </ion-button>
-              <ion-button size="small" shape="round" fill="outline" (click)="view = CalendarView.Day" [class.active]="view === CalendarView.Day">
-                Day
-              </ion-button>
-            </div>
-        </ion-col>
-        </ion-row>
-        <div [ngSwitch]="view">
-            <mwl-calendar-month-view
-              *ngSwitchCase="CalendarView.Month"
-              [viewDate]="viewDate"
-              [events]="eventsCalendar"
-              [refresh]="refresh"
-              [activeDayIsOpen]="activeDayIsOpen"
-              (dayClicked)="dayClicked($event.day)"
-              (eventClicked)="handleEvent('Clicked', $event.event)">
-            </mwl-calendar-month-view>
-            <mwl-calendar-week-view
-              *ngSwitchCase="CalendarView.Week"
-              [viewDate]="viewDate"
-              [events]="eventsCalendar"
-              [refresh]="refresh"
-              (eventClicked)="handleEvent('Clicked', $event.event)">
-            </mwl-calendar-week-view>
-            <mwl-calendar-day-view
-              *ngSwitchCase="CalendarView.Day"
-              [viewDate]="viewDate"
-              [events]="eventsCalendar"
-              [refresh]="refresh"
-              (eventClicked)="handleEvent('Clicked', $event.event)">
-            </mwl-calendar-day-view>
-          </div>
-      </ion-grid>
+  <!-- Schedule calendar. -->
+  <app-angular-calendar *ngIf="showCalendarFlag" title="Schedule Calendar" [excludeDays]="excludeDays" [eventsCalendar]="eventsCalendar" (event)="handleEvent($event)"></app-angular-calendar>
+
 </ion-content>
 
 <app-footer></app-footer>

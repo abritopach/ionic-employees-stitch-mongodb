@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener, ViewChild, TemplateRef, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, HostListener, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 
 import { PopoverController, ModalController } from '@ionic/angular';
 
@@ -18,18 +18,7 @@ import { MoreOptionsPopoverComponent } from '../popovers/more-options/more-optio
 
 import * as moment from 'moment';
 
-import { CalendarView, CalendarEvent, CalendarEventAction } from 'angular-calendar';
-
-import {
-  startOfDay,
-  endOfDay,
-  subDays,
-  addDays,
-  endOfMonth,
-  isSameDay,
-  isSameMonth,
-  addHours
-} from 'date-fns';
+import { CalendarEvent } from 'angular-calendar';
 
 const colors: any = {
   red: {
@@ -70,17 +59,11 @@ export class SchedulePage implements OnInit {
 
     // Calendar demo
 
-  view: CalendarView = CalendarView.Month;
-
-  CalendarView = CalendarView;
-
-  viewDate: Date = new Date();
-
-  activeDayIsOpen = false;
-
   showCalendarFlag = false;
 
   eventsCalendar: CalendarEvent[] = [];
+
+  excludeDays: number[] = [];
 
 
   // **********
@@ -311,6 +294,7 @@ export class SchedulePage implements OnInit {
       };
       this.eventsCalendar.push(formattedEvent);
     });
+    this.cd.detectChanges();
   }
 
   showCalendar() {
@@ -323,26 +307,8 @@ export class SchedulePage implements OnInit {
     }
   }
 
-  dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
-    console.log('SchedulePage::dayClicked() | method called');
-
-    // if (isSameMonth(date, this.viewDate)) {
-    if (moment(date).isSame(this.viewDate, 'month')) {
-      this.viewDate = date;
-      if (
-        // (isSameDay(this.viewDate, date) && this.activeDayIsOpen === true) ||
-        (moment(date).isSame(this.viewDate, 'day') && this.activeDayIsOpen === true) ||
-        events.length === 0
-      ) {
-        this.activeDayIsOpen = false;
-      } else {
-        this.activeDayIsOpen = true;
-      }
-    }
-    this.cd.detectChanges();
-  }
-
-  handleEvent(action: string, event: CalendarEvent): void {
+  handleEvent(event): void {
+    console.log('SchedulePage::handleEvent() | method called', event);
     this.onClickMoreOptions(event);
   }
 

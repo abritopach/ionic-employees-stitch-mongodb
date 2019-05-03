@@ -50,6 +50,7 @@ export class HolidaysPage implements OnInit {
 
    // Calendar
    eventsCalendar: Array<CalendarEvent<HolidayDetail>> = [];
+   excludeDays: number[] = [0, 6];
    holidays: Holiday = null;
    infoHolidaysByType = {
     holiday: {count: 0, color: colors.indigo},

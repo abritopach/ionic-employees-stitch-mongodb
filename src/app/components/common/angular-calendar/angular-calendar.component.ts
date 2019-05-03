@@ -13,12 +13,13 @@ export class AngularCalendarComponent implements OnInit, OnChanges {
 
   @Input() title = '';
   @Input() eventsCalendar: CalendarEvent[] = [];
+  // Exclude weekends [0, 6]
+  @Input() excludeDays: number[] = [];
+  @Input() customCellTemplate = '';
   view: CalendarView = CalendarView.Month;
   CalendarView = CalendarView;
   viewDate: Date = new Date();
   activeDayIsOpen = false;
-  // exclude weekends
-  excludeDays: number[] = [0, 6];
 
   @Output() event: EventEmitter<any> = new EventEmitter<any>();
 
