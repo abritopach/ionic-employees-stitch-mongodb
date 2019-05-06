@@ -111,6 +111,7 @@ export class HolidaysPage implements OnInit {
           this.stitchMongoService.find(config.COLLECTION_KEY, {user_id: objectId}).then(result => {
             this.employeesHolidaysRequests = result[0]['employees_holidays_requests'];
             console.log(this.employeesHolidaysRequests);
+            this.cd.detectChanges();
           });
         }
       });

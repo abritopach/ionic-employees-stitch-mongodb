@@ -8,8 +8,8 @@ import { ObjectId } from 'bson';
 import { Storage } from '@ionic/storage';
 import { StitchMongoService } from '../../services/stitch-mongo.service';
 import { IziToastService } from '../../services/izi-toast.service';
-import { request } from 'https';
 import { RequestHolidays } from '../../models/request.holidays.model';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-history-holidays-modal',
@@ -36,7 +36,8 @@ export class HistoryHolidaysModalComponent implements OnInit {
       this.holidays = this.navParams.data.modalProps.holidays;
       this.rejectedRequests = this.holidays.taken.info.filter(h => h.status === 'rejected');
       this.pendingRequests = this.holidays.taken.info.filter(h => h.status === 'pending');
-      this.approvedRequests = this.holidays.taken.info.filter(h => h.status === 'approved');
+      this.approvedRequests = this.holidays.taken.info.filter(h => h.status === 'approved' &&
+      moment(h.startDate).isSameOrAfter(moment(), 'day'));
       console.log('pendingRequests', this.pendingRequests);
       console.log('approvedRequests', this.approvedRequests);
     }
@@ -72,7 +73,8 @@ export class HistoryHolidaysModalComponent implements OnInit {
       console.log('data presentModal', data);
       this.holidays = data;
       this.pendingRequests = this.holidays.taken.info.filter(h => h.status === 'pending');
-      this.approvedRequests = this.holidays.taken.info.filter(h => h.status === 'approved');
+      this.approvedRequests = this.holidays.taken.info.filter(h => h.status === 'approved' &&
+      moment(h.startDate).isSameOrAfter(moment(), 'day'));
     }
   }
 
@@ -128,11 +130,13 @@ export class HistoryHolidaysModalComponent implements OnInit {
             console.log(docs);
             this.iziToast.success('Delete holidays', 'Holidays deleted successfully.');
             this.pendingRequests = this.holidays.taken.info.filter(h => h.status === 'pending');
-            this.approvedRequests = this.holidays.taken.info.filter(h => h.status === 'approved');
+            this.approvedRequests = this.holidays.taken.info.filter(h => h.status === 'approved' &&
+            moment(h.startDate).isSameOrAfter(moment(), 'day'));
             if (selectedHolidays.status === 'pending') {
               this.deleteRequest({user_id: selectedHolidays.whoFor},
                 { $pull: { 'employees_holidays_requests': { id: selectedHolidays.id } } });
             }
+            this.modalCtrl.dismiss(this.holidays);
 
         }).catch(err => {
             console.error(err);
@@ -166,17 +170,20 @@ export class HistoryHolidaysModalComponent implements OnInit {
             console.log('Confirm Cancel');
 
             alert.onDidDismiss().then((alertData) => {
-              req.holidaysDetail.status = 'rejected';
-              req.holidaysDetail.managerComment = alertData.data.values.reason;
-              this.updateRequest({user_id: req.userId, 'holidays.taken.info.id': req.holidaysDetail.id},
-                {$set: { 'holidays.taken.info.$': req.holidaysDetail}
-              }).then(docs => {
-                console.log(docs);
-                this.deleteRequest({user_id: req.userId}, { $pull: { 'employees_holidays_requests': { id: req.id } } });
-                this.requests = this.requests.filter(r => r.holidaysDetail.status === 'pending');
-              }).catch(err => {
-                  console.error(err);
-              });
+
+              if (typeof alertData.data !== 'undefined') {
+                req.holidaysDetail.status = 'rejected';
+                req.holidaysDetail.managerComment = alertData.data.values.reason;
+                this.updateRequest({user_id: req.userId, 'holidays.taken.info.id': req.holidaysDetail.id},
+                  {$set: { 'holidays.taken.info.$': req.holidaysDetail}
+                }).then(docs => {
+                  console.log(docs);
+                  this.deleteRequest({user_id: req.userId}, { $pull: { 'employees_holidays_requests': { id: req.id } } });
+                  this.requests = this.requests.filter(r => r.holidaysDetail.status === 'pending');
+                }).catch(err => {
+                    console.error(err);
+                });
+              }
             });
           }
         }, {
