@@ -108,10 +108,12 @@ export class RequestHolidaysModalComponent implements OnInit {
             this.stitchMongoService.update(config.COLLECTION_KEY, {user_id: objectId}, {$set: { holidays: this.holidays }})
             .then(result => {
               console.log('result', result);
-              this.addHolidaysRequestToSupervisor(this.requestHolidaysForm.value, objectId);
-              this.dismissLoading();
-              this.dismiss(this.holidays);
-              this.iziToast.success('Holiday request', 'Holiday request sent successfully.');
+              this.addHolidaysRequestToSupervisor(this.requestHolidaysForm.value, objectId).then(r => {
+                console.log(r);
+                this.dismissLoading();
+                this.dismiss(this.holidays);
+                this.iziToast.success('Holiday request', 'Holiday request sent successfully.');
+              });
             });
           }
         });
@@ -164,12 +166,8 @@ export class RequestHolidaysModalComponent implements OnInit {
       holidaysDetail: holidaysDetail
     };
     console.log('request', request);
-    this.stitchMongoService.update(config.COLLECTION_KEY, {user_id: new ObjectId(holidaysDetail.whoFor)},
-    {$push: { employees_holidays_requests: request }})
-    .then(result => {
-      console.log(result);
-    });
-
+    return this.stitchMongoService.update(config.COLLECTION_KEY, {user_id: new ObjectId(holidaysDetail.whoFor)},
+    {$push: { employees_holidays_requests: request }});
   }
 
 }

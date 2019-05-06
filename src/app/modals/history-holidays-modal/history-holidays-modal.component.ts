@@ -111,8 +111,7 @@ export class HistoryHolidaysModalComponent implements OnInit {
   }
 
   deleteHolidays(selectedHolidays) {
-    console.log(selectedHolidays);
-
+    console.log('deleteHolidays selectedHolidays', selectedHolidays);
     this.storage.get(config.TOKEN_KEY).then(res => {
       if (res) {
         const objectId = new ObjectId(res);
@@ -130,12 +129,19 @@ export class HistoryHolidaysModalComponent implements OnInit {
             this.iziToast.success('Delete holidays', 'Holidays deleted successfully.');
             this.pendingRequests = this.holidays.taken.info.filter(h => h.status === 'pending');
             this.approvedRequests = this.holidays.taken.info.filter(h => h.status === 'approved');
+
+            // TODO: Remove holiday request.
+            /*
+            if (selectedHolidays.status === 'pending') {
+              this.deleteRequest(selectedHolidays);
+            }
+            */
+
         }).catch(err => {
             console.error(err);
         });
       }
     });
-
   }
 
   onClickEditRequest(req: RequestHolidays) {
@@ -229,6 +235,7 @@ export class HistoryHolidaysModalComponent implements OnInit {
   }
 
   deleteRequest(req: RequestHolidays) {
+    console.log('deleteRequest req', req);
     this.stitchMongoService.update(config.COLLECTION_KEY, {user_id: req.userId},
       { $pull: { 'employees_holidays_requests': { id: req.id } } })
       .then(result => {

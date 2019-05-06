@@ -105,6 +105,15 @@ export class HolidaysPage implements OnInit {
         home: {count: 0, color: colors.pink}
       };
       this.formatEventsCalendar();
+      this.storage.get(config.TOKEN_KEY).then(res => {
+        if (res) {
+          const objectId = new ObjectId(res);
+          this.stitchMongoService.find(config.COLLECTION_KEY, {user_id: objectId}).then(result => {
+            this.employeesHolidaysRequests = result[0]['employees_holidays_requests'];
+            console.log(this.employeesHolidaysRequests);
+          });
+        }
+      });
     }
   }
 
@@ -117,7 +126,7 @@ export class HolidaysPage implements OnInit {
     this.eventsCalendar = [];
     this.holidays.taken.info.map(holiday => {
       if ((holiday.status !== 'pending') && (holiday.status !== 'rejected')) {
-        console.log(holiday);
+        // console.log(holiday);
         this.holidaysByType(holiday);
         const formattedEvent = {
           start: new Date(holiday.startDate),
@@ -126,12 +135,12 @@ export class HolidaysPage implements OnInit {
           color: this.infoHolidaysByType[holiday.type].color,
           meta: holiday
         };
-        console.log(formattedEvent);
+        // console.log(formattedEvent);
         this.eventsCalendar.push(formattedEvent);
       }
     });
     this.cd.detectChanges();
-    console.log(this.infoHolidaysByType);
+    // console.log(this.infoHolidaysByType);
   }
 
   holidaysByType(holiday: HolidayDetail) {
