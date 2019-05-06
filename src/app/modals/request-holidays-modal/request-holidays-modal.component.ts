@@ -161,7 +161,7 @@ export class RequestHolidaysModalComponent implements OnInit {
   addHolidaysRequestToSupervisor(holidaysDetail: HolidayDetail, userId: ObjectId) {
     console.log('holidaysDetail', holidaysDetail);
     const request: RequestHolidays = {
-      id: new ObjectId(),
+      id: holidaysDetail.id,
       userId: userId,
       holidaysDetail: holidaysDetail
     };

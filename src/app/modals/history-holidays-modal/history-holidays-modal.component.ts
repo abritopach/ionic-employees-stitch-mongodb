@@ -129,13 +129,10 @@ export class HistoryHolidaysModalComponent implements OnInit {
             this.iziToast.success('Delete holidays', 'Holidays deleted successfully.');
             this.pendingRequests = this.holidays.taken.info.filter(h => h.status === 'pending');
             this.approvedRequests = this.holidays.taken.info.filter(h => h.status === 'approved');
-
-            // TODO: Remove holiday request.
-            /*
             if (selectedHolidays.status === 'pending') {
-              this.deleteRequest(selectedHolidays);
+              this.deleteRequest({user_id: selectedHolidays.whoFor},
+                { $pull: { 'employees_holidays_requests': { id: selectedHolidays.id } } });
             }
-            */
 
         }).catch(err => {
             console.error(err);
@@ -175,7 +172,7 @@ export class HistoryHolidaysModalComponent implements OnInit {
                 {$set: { 'holidays.taken.info.$': req.holidaysDetail}
               }).then(docs => {
                 console.log(docs);
-                this.deleteRequest(req);
+                this.deleteRequest({user_id: req.userId}, { $pull: { 'employees_holidays_requests': { id: req.id } } });
                 this.requests = this.requests.filter(r => r.holidaysDetail.status === 'pending');
               }).catch(err => {
                   console.error(err);
@@ -193,7 +190,7 @@ export class HistoryHolidaysModalComponent implements OnInit {
             }
             ).then(docs => {
               console.log(docs);
-              this.deleteRequest(req);
+              this.deleteRequest({user_id: req.userId}, { $pull: { 'employees_holidays_requests': { id: req.id } } });
               this.requests = this.requests.filter(r => r.holidaysDetail.status === 'pending');
             }).catch(err => {
                 console.error(err);
@@ -234,10 +231,8 @@ export class HistoryHolidaysModalComponent implements OnInit {
     return this.stitchMongoService.update(config.COLLECTION_KEY, filter, action);
   }
 
-  deleteRequest(req: RequestHolidays) {
-    console.log('deleteRequest req', req);
-    this.stitchMongoService.update(config.COLLECTION_KEY, {user_id: req.userId},
-      { $pull: { 'employees_holidays_requests': { id: req.id } } })
+  deleteRequest(filter, action) {
+    this.stitchMongoService.update(config.COLLECTION_KEY, filter, action)
       .then(result => {
           console.log(result);
       }).catch(err => {
