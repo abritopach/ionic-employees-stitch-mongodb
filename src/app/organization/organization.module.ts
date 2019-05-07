@@ -8,6 +8,7 @@ import { IonicModule } from '@ionic/angular';
 import { OrganizationPage } from './organization.page';
 
 import { OrganizationChartComponent } from '../components/organization-chart/organization-chart.component';
+import { ChartModalComponent } from '../modals/chart-modal/chart-modal.component';
 
 import { SharedComponentsModule } from '../components/shared-components.module';
 
@@ -26,7 +27,7 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     SharedComponentsModule
   ],
-  declarations: [OrganizationPage, OrganizationChartComponent],
-  entryComponents: [OrganizationChartComponent]
+  declarations: [OrganizationPage, OrganizationChartComponent, ChartModalComponent],
+  entryComponents: [OrganizationChartComponent, ChartModalComponent]
 })
 export class OrganizationPageModule {}
