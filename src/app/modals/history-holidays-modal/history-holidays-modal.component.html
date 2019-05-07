@@ -1,6 +1,9 @@
 <ion-header>
     <ion-toolbar color="tertiary">
         <ion-buttons slot="end">
+            <ion-button (click)="showAllRequests = !showAllRequests">
+                <ion-icon name="list" color="light"></ion-icon>
+            </ion-button>
             <ion-button (click)="dismiss()">
                 <ion-icon name="close" color="light"></ion-icon>
             </ion-button>
@@ -12,7 +15,7 @@
   </ion-header>
 
 <ion-content padding>
-  <div *ngIf="holidays !== null">
+  <div *ngIf="holidays !== null && showAllRequests === false">
   <ion-list-header>
       <ion-label>
         <ion-text color="danger">
@@ -97,5 +100,29 @@
             <ion-icon tappable name="create" slot="end" (click)="onClickEditRequest(request)"></ion-icon>
           </ion-item>
         </ion-card>
+  </div>
+  <div *ngIf="showAllRequests">
+  <ion-list-header>
+      <ion-label>
+        <ion-text>
+          <h2><b>All requests</b></h2>
+        </ion-text>
+      </ion-label>
+    </ion-list-header>
+    <ion-card>
+      <ion-item lines="none" *ngFor="let holiday of holidays.taken.info">
+        <ion-thumbnail slot="start">
+          <img *ngIf="holiday.status === 'rejected'" src="assets/images/rejected.png">
+          <img *ngIf="holiday.status === 'approved'" src="assets/images/approved.png">
+          <img *ngIf="holiday.status === 'pending'" src="assets/images/pending.png">
+        </ion-thumbnail>
+        <ion-label text-wrap>
+            <h2><b> {{holiday.startDate | date:'fullDate'}} </b></h2>
+            <p><b> {{holiday.countDays}}  days <span *ngIf="holiday.reason !== ''">( {{holiday.reason}} )</span></b></p>
+            <p><b> {{holiday.status.toUpperCase()}} ( {{holiday.managerComment}} ) </b></p>
+        </ion-label>
+        <ion-icon tappable name="more" slot="end" (click)="onClickMoreOptions(holiday)"></ion-icon>
+      </ion-item>
+    </ion-card>
   </div>
 </ion-content>

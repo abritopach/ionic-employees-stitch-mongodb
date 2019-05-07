@@ -25,6 +25,7 @@ export class HistoryHolidaysModalComponent implements OnInit {
   title = '';
   requests = null;
   avatars = null;
+  showAllRequests = false;
 
   constructor(private modalCtrl: ModalController, private navParams: NavParams, private popoverCtrl: PopoverController,
               private storage: Storage, private stitchMongoService: StitchMongoService, private iziToast: IziToastService,
