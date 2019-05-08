@@ -127,6 +127,16 @@ export class StitchMongoService {
     }}, { $sort: { _id: 1 } }]).asArray();
   }
 
+  employeesCountByDepartment(collection: string, field: string) {
+    return this.db.collection(collection).aggregate(
+      [{
+        $group: {
+          _id: field,
+          count: { $sum: 1 }
+        }
+      }]).asArray();
+  }
+
   insertMany(collection: string, docs: any) {
     this.db.collection(collection).insertMany(docs).then(results => {
       const { insertedIds } = results;

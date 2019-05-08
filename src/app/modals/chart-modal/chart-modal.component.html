@@ -14,7 +14,12 @@
 <ion-content padding>
   <ion-card>
     <ion-card-header>
-        Salsa Company
+      <ion-item>
+        <ion-label>
+            Company employees
+        </ion-label>
+        <ion-badge slor="end" color="primary">Total: {{employeesCount}}</ion-badge>
+      </ion-item>
     </ion-card-header>
     <ion-card-content>
       <canvas #doughnutCanvas></canvas>
