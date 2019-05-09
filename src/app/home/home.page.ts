@@ -26,11 +26,6 @@ export class HomePage implements OnInit {
               private loadingCtrl: LoadingController, private authenticationService: AuthenticationService) {
     console.log('HomePage::constructor() | method called');
 
-    if ((this.stichMongoService.client === null) && (this.stichMongoService.db === null)) {
-      this.stichMongoService.initializeAppClient('ionic-employees-priuv');
-      this.stichMongoService.getServiceClient('mongo-employees');
-    }
-
     this.fetchEmployees();
     this.fetchEmployeesGroupByFirstLetter();
 

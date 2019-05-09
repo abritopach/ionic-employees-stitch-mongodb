@@ -5,6 +5,20 @@
         <ion-toolbar color="tertiary">
           <ion-title>Menu</ion-title>
         </ion-toolbar>
+        <ion-toolbar color="tertiary">
+          <ion-item color="tertiary">
+            <ion-avatar *ngIf="profilePicture === null || profilePicture === ''" slot="start">
+              <img src="assets/images/login-avatar.png">
+            </ion-avatar>
+            <ion-avatar *ngIf="profilePicture !== null && profilePicture !== ''" slot="start">
+              <img [src]="profilePicture">
+            </ion-avatar>
+            <ion-label text-wrap>
+              <h2> {{name}} </h2>
+            </ion-label>
+            <ion-icon tappable slot="end" color="light" name="create" (click)="editUserProfile()"></ion-icon>
+          </ion-item>
+        </ion-toolbar>
       </ion-header>
       <ion-content>
         <ion-list>

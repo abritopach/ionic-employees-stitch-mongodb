@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
 import config from '../../config/config';
 
 import { LoadingController } from '@ionic/angular';
+import { Storage } from '@ionic/storage';
 
 @Component({
   selector: 'app-login',
@@ -24,7 +25,7 @@ export class LoginPage implements OnInit {
 
   constructor(private formBuilder: FormBuilder, private stitchMongoService: StitchMongoService,
               private authService: AuthenticationService, private router: Router, private iziToast: IziToastService,
-              private loadingCtrl: LoadingController) {
+              private loadingCtrl: LoadingController, private storage: Storage) {
     this.createForm();
   }
 
@@ -43,13 +44,14 @@ export class LoginPage implements OnInit {
     // this.stichMongoService.login(this.loginForm.value);
     this.presentLoading();
     this.stitchMongoService.login(this.loginForm.value).then(authedId => {
-      // console.log(authedId);
+      console.log(authedId);
       // console.log(`successfully logged in with id: ${authedId.id}`);
       this.authService.login(authedId.id).then(result => {
         this.stitchMongoService.find(config.COLLECTION_KEY, {user_id: new ObjectId(authedId.id)}).then(employee => {
           // console.log(employee);
           if ((typeof employee[0]['avatar'] !== 'undefined') && (employee[0]['avatar'] !== null)) {
             this.avatar = employee[0]['avatar'];
+            this.storage.set(config.AVATAR_KEY, this.avatar);
           }
           if (this.loading !== null) {
             this.dismissLoading();
