@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { Platform } from '@ionic/angular';
+import { Platform, ModalController } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 
@@ -9,6 +9,7 @@ import { Router, RoutesRecognized } from '@angular/router';
 import { AuthenticationService, IziToastService, StitchMongoService } from './services/';
 import config from './config/config';
 import { Storage } from '@ionic/storage';
+import { UserProfileModalComponent } from './modals/user-profile-modal/user-profile-modal.component';
 
 @Component({
   selector: 'app-root',
@@ -17,6 +18,7 @@ import { Storage } from '@ionic/storage';
 export class AppComponent implements OnInit {
 
   profilePicture = null;
+  name = '';
 
   public appPages = [
     {groupName: 'General', groupItems: [
@@ -71,7 +73,8 @@ export class AppComponent implements OnInit {
     private authenticationService: AuthenticationService,
     private iziToast: IziToastService,
     private stichMongoService: StitchMongoService,
-    private storage: Storage
+    private storage: Storage,
+    private modalCtrl: ModalController
   ) {
     this.initializeApp();
   }
@@ -115,6 +118,13 @@ export class AppComponent implements OnInit {
               this.profilePicture = res;
             }
           });
+
+          this.storage.get(config.EMPLOYEE_KEY).then(res => {
+            console.log(res);
+            if (res) {
+              this.name = res;
+            }
+          });
         }
       });
     });
@@ -126,5 +136,19 @@ export class AppComponent implements OnInit {
 
   editUserProfile() {
     console.log('editUserProfile');
+    const componentProps = { modalProps: { title: 'User Profile'}};
+    this.presentModal(UserProfileModalComponent, componentProps);
+  }
+
+  async presentModal(component, componentProps) {
+    const modal = await this.modalCtrl.create({
+      component: component,
+      componentProps: componentProps
+    });
+    await modal.present();
+
+    const {data} = await modal.onWillDismiss();
+    if (data) {
+    }
   }
 }

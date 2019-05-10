@@ -52,6 +52,7 @@ export class LoginPage implements OnInit {
           if ((typeof employee[0]['avatar'] !== 'undefined') && (employee[0]['avatar'] !== null)) {
             this.avatar = employee[0]['avatar'];
             this.storage.set(config.AVATAR_KEY, this.avatar);
+            this.storage.set(config.EMPLOYEE_KEY, employee[0]['employee_name']);
           }
           if (this.loading !== null) {
             this.dismissLoading();

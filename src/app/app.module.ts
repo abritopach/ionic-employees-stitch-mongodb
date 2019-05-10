@@ -16,9 +16,11 @@ import { IonicStorageModule } from '@ionic/storage';
 
 import { AgmCoreModule } from '@agm/core';
 
+import { UserProfileModalComponent } from './modals/user-profile-modal/user-profile-modal.component';
+
 @NgModule({
-  declarations: [AppComponent, ShowPeoplePopoverComponent],
-  entryComponents: [ShowPeoplePopoverComponent],
+  declarations: [AppComponent, ShowPeoplePopoverComponent, UserProfileModalComponent],
+  entryComponents: [ShowPeoplePopoverComponent, UserProfileModalComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
