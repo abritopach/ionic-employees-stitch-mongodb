@@ -13,12 +13,18 @@ import { StitchMongoService } from '../../services/stitch-mongo.service';
 })
 export class UserProfileModalComponent implements OnInit {
 
+  departments = [
+    {name: 'Technical', icon: 'assets/images/technical-icon.png'},
+    {name: 'Marketing', icon: 'assets/images/marketing-icon.png'},
+  ];
+
   constructor(private modalCtrl: ModalController, private formBuilder: FormBuilder, private storage: Storage,
               private stitchMongoService: StitchMongoService) {
     this.createForm();
   }
 
   userProfileForm: FormGroup;
+  avatar = null;
 
   ngOnInit() {
     this.getUserDetails();
@@ -37,11 +43,13 @@ export class UserProfileModalComponent implements OnInit {
       job_position: new FormControl('', Validators.required),
       description: new FormControl(''),
       phone: new FormControl(''),
+      department: new FormControl('', Validators.required),
     });
   }
 
-  eventFormSubmit() {
-    console.log('EventModalComponent::eventFormSubmit | method called');
+  userProfileFormSubmit() {
+    console.log('UserProfileModalComponent::userProfileFormSubmit | method called');
+    this.updateUserProfile();
   }
 
   getUserDetails() {
@@ -51,6 +59,21 @@ export class UserProfileModalComponent implements OnInit {
         this.stitchMongoService.find(config.COLLECTION_KEY, {user_id: objectId}).then(result => {
           console.log(result);
           this.userProfileForm.patchValue(result[0]);
+          this.avatar = result[0]['avatar'];
+          console.log(this.userProfileForm.value);
+        });
+      }
+    });
+  }
+
+  updateUserProfile() {
+    this.storage.get(config.TOKEN_KEY).then(res => {
+      if (res) {
+        const objectId = new ObjectId(res);
+        console.log('objectId', objectId);
+        this.stitchMongoService.update(config.COLLECTION_KEY, {user_id: objectId},
+        { $set: this.userProfileForm.value }).then(result => {
+          console.log('result', result);
         });
       }
     });

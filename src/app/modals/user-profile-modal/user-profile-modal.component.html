@@ -15,8 +15,8 @@
 
   <ion-card>
     <ion-card-header>
-      <ion-avatar class="avatar">
-        <img src="assets/images/login-avatar.png">
+      <ion-avatar *ngIf="avatar !== null" class="avatar">
+        <img [src]="avatar" onError="src='assets/images/login-avatar.png'">
       </ion-avatar>
     </ion-card-header>
     <ion-card-content>
@@ -54,6 +54,29 @@
               <ion-input type="text" formControlName="phone"></ion-input>
           </ion-item>
           <ion-item lines="none" *ngIf="userProfileForm.get('phone').hasError('required') && userProfileForm.get('phone').touched">
+              <div class="error-message">
+                  This field is required.
+              </div>
+          </ion-item>
+          <br>
+          <ion-item lines="none">
+              <ng-select [class.has-error]="userProfileForm.get('department').hasError('required') && userProfileForm.get('department').touched" [items]="departments"
+                          bindLabel="name"
+                          bindValue="name"
+                          placeholder="Select"
+                          formControlName="department"
+                          appendTo="body">
+                  <ng-template ng-label-tmp let-item="item">
+                      <img class="department" [src]="item.icon"/>
+                      <b>{{item.name}}</b>
+                  </ng-template>
+                  <ng-template ng-option-tmp let-item="item" let-index="index">
+                      <img class="department" [src]="item.icon"/>
+                      <b> {{item.name}}</b>
+                  </ng-template>
+              </ng-select>
+          </ion-item>
+          <ion-item lines="none" *ngIf="userProfileForm.get('department').hasError('required') && userProfileForm.get('department').touched">
               <div class="error-message">
                   This field is required.
               </div>

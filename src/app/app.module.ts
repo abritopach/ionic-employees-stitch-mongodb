@@ -18,6 +18,7 @@ import { AgmCoreModule } from '@agm/core';
 
 import { UserProfileModalComponent } from './modals/user-profile-modal/user-profile-modal.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @NgModule({
   declarations: [AppComponent, ShowPeoplePopoverComponent, UserProfileModalComponent],
@@ -33,7 +34,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
       libraries: ['places']
     }),
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgSelectModule
   ],
   providers: [
     StatusBar,
