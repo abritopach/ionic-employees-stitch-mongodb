@@ -12,4 +12,62 @@
 </ion-header>
 
 <ion-content padding>
+
+  <ion-card>
+    <ion-card-header>
+      <ion-avatar class="avatar">
+        <img src="assets/images/login-avatar.png">
+      </ion-avatar>
+    </ion-card-header>
+    <ion-card-content>
+      <form [formGroup]="userProfileForm" novalidate (ngSubmit)="userProfileFormSubmit()">
+        <ion-list inset>
+          <ion-item [class.has-error]="userProfileForm.get('employee_name').hasError('required') && userProfileForm.get('employee_name').touched">
+              <ion-label position="floating">Employee Name *</ion-label>
+              <ion-input type="text" formControlName="employee_name"></ion-input>
+          </ion-item>
+          <ion-item lines="none" *ngIf="userProfileForm.get('employee_name').hasError('required') && userProfileForm.get('employee_name').touched">
+              <div class="error-message">
+                  This field is required.
+              </div>
+          </ion-item>
+          <ion-item [class.has-error]="userProfileForm.get('job_position').hasError('required') && userProfileForm.get('job_position').touched">
+              <ion-label position="floating">Job Position *</ion-label>
+              <ion-input type="text" formControlName="job_position"></ion-input>
+          </ion-item>
+          <ion-item lines="none" *ngIf="userProfileForm.get('job_position').hasError('required') && userProfileForm.get('job_position').touched">
+              <div class="error-message">
+                  This field is required.
+              </div>
+          </ion-item>
+          <ion-item [class.has-error]="userProfileForm.get('description').hasError('required') && userProfileForm.get('description').touched">
+              <ion-label position="floating">Description</ion-label>
+              <ion-textarea formControlName="description"></ion-textarea>
+          </ion-item>
+          <ion-item lines="none" *ngIf="userProfileForm.get('description').hasError('required') && userProfileForm.get('description').touched">
+              <div class="error-message">
+                  This field is required.
+              </div>
+          </ion-item>
+          <ion-item [class.has-error]="userProfileForm.get('phone').hasError('required') && userProfileForm.get('phone').touched">
+              <ion-label position="floating">Phone *</ion-label>
+              <ion-input type="text" formControlName="phone"></ion-input>
+          </ion-item>
+          <ion-item lines="none" *ngIf="userProfileForm.get('phone').hasError('required') && userProfileForm.get('phone').touched">
+              <div class="error-message">
+                  This field is required.
+              </div>
+          </ion-item>
+        </ion-list>
+        <ion-row no-padding justify-content-center>
+            <ion-col col-auto text-right>
+                <ion-button [disabled]='!userProfileForm.valid' type="submit" fill="clear" size="small" color="primary">
+                <ion-icon name='send' slot="start"></ion-icon>
+                Update
+                </ion-button>
+            </ion-col>
+        </ion-row>
+      </form>
+    </ion-card-content>
+  </ion-card>
 </ion-content>

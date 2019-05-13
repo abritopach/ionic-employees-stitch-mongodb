@@ -17,6 +17,7 @@ import { IonicStorageModule } from '@ionic/storage';
 import { AgmCoreModule } from '@agm/core';
 
 import { UserProfileModalComponent } from './modals/user-profile-modal/user-profile-modal.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [AppComponent, ShowPeoplePopoverComponent, UserProfileModalComponent],
@@ -31,6 +32,8 @@ import { UserProfileModalComponent } from './modals/user-profile-modal/user-prof
       apiKey: 'AIzaSyDB9__kjPlloGKBm6moXS9hrRbmJ4-gXXc', // Google API key for maps
       libraries: ['places']
     }),
+    FormsModule,
+    ReactiveFormsModule
   ],
   providers: [
     StatusBar,
