@@ -19,6 +19,7 @@ import { AgmCoreModule } from '@agm/core';
 import { UserProfileModalComponent } from './modals/user-profile-modal/user-profile-modal.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { Ng2ImgMaxModule } from 'ng2-img-max';
 
 @NgModule({
   declarations: [AppComponent, ShowPeoplePopoverComponent, UserProfileModalComponent],
@@ -35,7 +36,8 @@ import { NgSelectModule } from '@ng-select/ng-select';
     }),
     FormsModule,
     ReactiveFormsModule,
-    NgSelectModule
+    NgSelectModule,
+    Ng2ImgMaxModule
   ],
   providers: [
     StatusBar,

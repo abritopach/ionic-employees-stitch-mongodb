@@ -5,6 +5,7 @@ import config from '../../config/config';
 import { ObjectId } from 'bson';
 import { Storage } from '@ionic/storage';
 import { StitchMongoService } from '../../services/stitch-mongo.service';
+import { Ng2ImgMaxService } from 'ng2-img-max';
 
 @Component({
   selector: 'app-user-profile-modal',
@@ -19,7 +20,7 @@ export class UserProfileModalComponent implements OnInit {
   ];
 
   constructor(private modalCtrl: ModalController, private formBuilder: FormBuilder, private storage: Storage,
-              private stitchMongoService: StitchMongoService) {
+              private stitchMongoService: StitchMongoService, private ng2ImgMax: Ng2ImgMaxService) {
     this.createForm();
   }
 
@@ -44,6 +45,7 @@ export class UserProfileModalComponent implements OnInit {
       description: new FormControl(''),
       phone: new FormControl(''),
       department: new FormControl('', Validators.required),
+      avatar: new FormControl(''),
     });
   }
 
@@ -77,6 +79,53 @@ export class UserProfileModalComponent implements OnInit {
         });
       }
     });
+  }
+
+  editAvatar() {
+    const element: HTMLElement = document.querySelector('input[type="file"]') as HTMLElement;
+    element.click();
+  }
+
+  handleInputChange(event) {
+    console.log('UserDetailsPage::handleInputChange() | method called', event);
+    const file = event.dataTransfer ? event.dataTransfer.files[0] : event.target.files[0];
+    console.log('size', file.size);
+    console.log('type', file.type);
+
+    const pattern = /image-*/;
+    const reader = new FileReader();
+    if (!file.type.match(pattern)) {
+      console.log('Invalid format');
+      return;
+    }
+    reader.onload = this._handleReaderLoaded.bind(this);
+
+
+    if (file.size >= 300000) {
+      this.ng2ImgMax.compressImage(file, 0.300).subscribe(
+        result => {
+          console.log('image compress', result);
+          reader.readAsDataURL(result);
+        },
+        error => {
+          console.log(error);
+        }
+      );
+    } else {
+      reader.readAsDataURL(file);
+    }
+  }
+
+  _handleReaderLoaded(e) {
+    const reader = e.target;
+    console.log(reader.result);
+
+    /*
+    this.user.profilePicture = reader.result;
+    this.userForm.patchValue({
+      profilePicture: reader.result,
+    });
+    */
   }
 
 }

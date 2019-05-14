@@ -16,6 +16,9 @@
   <ion-card>
     <ion-card-header>
       <ion-avatar *ngIf="avatar !== null" class="avatar">
+        <ion-button size="small" (click)="editAvatar()">
+          <ion-icon slot="icon-only" name="create"></ion-icon>
+        </ion-button>
         <img [src]="avatar" onError="src='assets/images/login-avatar.png'">
       </ion-avatar>
     </ion-card-header>
@@ -80,6 +83,10 @@
               <div class="error-message">
                   This field is required.
               </div>
+          </ion-item>
+          <ion-item style="display:none">
+              <ion-label position="floating">Avatar</ion-label>
+              <ion-input #file type="file" formControlName="avatar" accept="image/*" (change)="handleInputChange($event)"></ion-input>
           </ion-item>
         </ion-list>
         <ion-row no-padding justify-content-center>

@@ -41,6 +41,7 @@
     "moment": "^2.24.0",
     "mongodb-stitch-browser-sdk": "^4.3.2",
     "ng2-dragula": "^2.1.1",
+    "ng2-img-max": "^2.1.18",
     "rxjs": "6.5.2",
     "zone.js": "^0.9.1"
   },
