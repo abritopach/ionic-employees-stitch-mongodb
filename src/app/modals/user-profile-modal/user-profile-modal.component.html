@@ -25,6 +25,9 @@
     <ion-card-content>
       <form [formGroup]="userProfileForm" novalidate (ngSubmit)="userProfileFormSubmit()">
         <ion-list inset>
+          <ion-list-header>
+            <ion-label>Personal Info</ion-label>
+          </ion-list-header>
           <ion-item [class.has-error]="userProfileForm.get('employee_name').hasError('required') && userProfileForm.get('employee_name').touched">
               <ion-label position="floating">Employee Name *</ion-label>
               <ion-input type="text" formControlName="employee_name"></ion-input>
@@ -88,6 +91,28 @@
               <ion-label position="floating">Avatar</ion-label>
               <ion-input #file type="file" formControlName="avatar" accept="image/*" (change)="handleInputChange($event)"></ion-input>
           </ion-item>
+        </ion-list>
+        <ion-list>
+          <ion-list-header>
+            <ion-label>Projects</ion-label>
+            <ion-button fill="clear" (click)="showProjects = !showProjects">
+                <ion-icon slot="icon-only" name="eye"></ion-icon>
+            </ion-button>
+          </ion-list-header>
+          <div *ngIf="showProjects">
+          <ion-item *ngFor="let project of userProfileForm.value.projects">
+              <ion-thumbnail slot="start">
+                  <img *ngIf="project.thumbnail !== ''" [src]="project.thumbnail" class="thumbnailImg">
+                  <img *ngIf="project.thumbnail === ''" src="assets/images/thumb-not-available.png" class="thumbnailImg">
+              </ion-thumbnail>
+              <ion-label>
+              <h2>{{ project.name }}</h2>
+              <h3>{{ project.description }}</h3>
+              <p>Technologies</p>
+              <ion-badge class="technology" *ngFor="let technology of project.technologies.split(',')" color="primary">{{technology}}</ion-badge>
+              </ion-label>
+          </ion-item>
+          </div>
         </ion-list>
         <ion-row no-padding justify-content-center>
             <ion-col col-auto text-right>

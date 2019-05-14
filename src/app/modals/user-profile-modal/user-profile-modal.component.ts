@@ -26,6 +26,7 @@ export class UserProfileModalComponent implements OnInit {
 
   userProfileForm: FormGroup;
   avatar = null;
+  showProjects = false;
 
   ngOnInit() {
     this.getUserDetails();
@@ -46,6 +47,7 @@ export class UserProfileModalComponent implements OnInit {
       phone: new FormControl(''),
       department: new FormControl('', Validators.required),
       avatar: new FormControl(''),
+      projects: new FormControl('')
     });
   }
 
@@ -120,12 +122,12 @@ export class UserProfileModalComponent implements OnInit {
     const reader = e.target;
     console.log(reader.result);
 
-    /*
-    this.user.profilePicture = reader.result;
-    this.userForm.patchValue({
-      profilePicture: reader.result,
+    this.avatar = reader.result;
+    this.storage.set(config.AVATAR_KEY, this.avatar);
+    this.storage.set(config.EMPLOYEE_KEY, this.userProfileForm.value.employee_name);
+    this.userProfileForm.patchValue({
+      avatar: reader.result,
     });
-    */
   }
 
 }
