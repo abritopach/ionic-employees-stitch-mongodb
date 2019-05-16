@@ -95,9 +95,14 @@
         <ion-list>
           <ion-list-header>
             <ion-label>Projects</ion-label>
-            <ion-button fill="clear" (click)="showProjects = !showProjects">
-                <ion-icon slot="icon-only" name="eye"></ion-icon>
-            </ion-button>
+            <ion-buttons>
+                <ion-button color="primary" fill="clear" (click)="showProjects = !showProjects">
+                    <ion-icon slot="icon-only" name="eye"></ion-icon>
+                </ion-button>
+                <ion-button color="primary" fill="clear">
+                    <ion-icon slot="icon-only" name="add-circle-outline"></ion-icon>
+                </ion-button>
+            </ion-buttons>
           </ion-list-header>
           <div *ngIf="showProjects">
           <ion-item *ngFor="let project of userProfileForm.value.projects">
