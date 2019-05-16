@@ -20,10 +20,11 @@ import { UserProfileModalComponent } from './modals/user-profile-modal/user-prof
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { Ng2ImgMaxModule } from 'ng2-img-max';
+import { ProjectsPopoverComponent } from './popovers/projects-popover/projects-popover/projects-popover.component';
 
 @NgModule({
-  declarations: [AppComponent, ShowPeoplePopoverComponent, UserProfileModalComponent],
-  entryComponents: [ShowPeoplePopoverComponent, UserProfileModalComponent],
+  declarations: [AppComponent, ShowPeoplePopoverComponent, UserProfileModalComponent, ProjectsPopoverComponent],
+  entryComponents: [ShowPeoplePopoverComponent, UserProfileModalComponent, ProjectsPopoverComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,

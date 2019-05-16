@@ -1,3 +1,22 @@
-<p>
-  projects-popover works!
-</p>
+<ion-header>
+  <ion-toolbar color="tertiary">
+      <ion-title>
+        Projects
+      </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-item lines="none">
+    <ion-label position="floating">Projects</ion-label>
+    <ion-select [(ngModel)]="selectedProjects" multiple interface="popover">
+        <ion-select-option *ngFor="let project of projects" [value]="project"> {{project.name}} </ion-select-option>
+    </ion-select>
+  </ion-item>
+  <ion-item text-center lines="none">
+    <ion-button fill="clear" (click)="onClickAccept()">
+      <ion-icon name="checkmark"></ion-icon>
+      Accept
+    </ion-button>
+  </ion-item>
+</ion-content>

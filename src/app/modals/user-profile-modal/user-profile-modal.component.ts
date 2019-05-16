@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { ModalController } from '@ionic/angular';
+import { ModalController, PopoverController } from '@ionic/angular';
 import { FormControl, Validators, FormBuilder, FormGroup } from '@angular/forms';
 import config from '../../config/config';
 import { ObjectId } from 'bson';
 import { Storage } from '@ionic/storage';
 import { StitchMongoService } from '../../services/stitch-mongo.service';
 import { Ng2ImgMaxService } from 'ng2-img-max';
+import { ProjectsPopoverComponent } from '../../popovers/projects-popover/projects-popover/projects-popover.component';
 
 @Component({
   selector: 'app-user-profile-modal',
@@ -20,7 +21,8 @@ export class UserProfileModalComponent implements OnInit {
   ];
 
   constructor(private modalCtrl: ModalController, private formBuilder: FormBuilder, private storage: Storage,
-              private stitchMongoService: StitchMongoService, private ng2ImgMax: Ng2ImgMaxService) {
+              private stitchMongoService: StitchMongoService, private ng2ImgMax: Ng2ImgMaxService,
+              private popoverCtrl: PopoverController) {
     this.createForm();
   }
 
@@ -128,6 +130,29 @@ export class UserProfileModalComponent implements OnInit {
     this.userProfileForm.patchValue({
       avatar: reader.result,
     });
+  }
+
+  async presentPopover() {
+    const componentProps = { popoverProps: { title: 'Projects'}};
+    const popover = await this.popoverCtrl.create({
+      component: ProjectsPopoverComponent,
+      componentProps: componentProps
+    });
+
+    await popover.present();
+
+    const { data } = await popover.onWillDismiss();
+
+    if (data) {
+      console.log('data popover.onWillDismiss', data);
+      this.userProfileForm.value.projects = [...this.userProfileForm.value.projects, ...data];
+      console.log(this.userProfileForm.value);
+    }
+
+  }
+
+  addProject() {
+    this.presentPopover();
   }
 
 }
