@@ -116,6 +116,7 @@
               <p>Technologies</p>
               <ion-badge class="technology" *ngFor="let technology of project.technologies.split(',')" color="primary">{{technology}}</ion-badge>
               </ion-label>
+              <ion-button color="danger" fill="outline" slot="end" (click)="deleteProject(project)">Delete</ion-button>
           </ion-item>
           </div>
         </ion-list>

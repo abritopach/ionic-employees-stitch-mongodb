@@ -16,7 +16,7 @@
             <ion-label text-wrap>
               <h2> {{name}} </h2>
             </ion-label>
-            <ion-icon tappable slot="end" color="light" name="create" (click)="editUserProfile()"></ion-icon>
+            <ion-icon *ngIf="name !== ''" tappable slot="end" color="light" name="create" (click)="editUserProfile()"></ion-icon>
           </ion-item>
         </ion-toolbar>
       </ion-header>

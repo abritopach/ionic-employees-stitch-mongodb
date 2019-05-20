@@ -55,7 +55,13 @@ export class UserProfileModalComponent implements OnInit {
 
   userProfileFormSubmit() {
     console.log('UserProfileModalComponent::userProfileFormSubmit | method called');
-    this.updateUserProfile();
+    this.storage.get(config.TOKEN_KEY).then(res => {
+      if (res) {
+        const objectId = new ObjectId(res);
+        console.log('objectId', objectId);
+        this.updateUserProfile({user_id: objectId}, { $set: this.userProfileForm.value });
+      }
+    });
   }
 
   getUserDetails() {
@@ -72,16 +78,9 @@ export class UserProfileModalComponent implements OnInit {
     });
   }
 
-  updateUserProfile() {
-    this.storage.get(config.TOKEN_KEY).then(res => {
-      if (res) {
-        const objectId = new ObjectId(res);
-        console.log('objectId', objectId);
-        this.stitchMongoService.update(config.COLLECTION_KEY, {user_id: objectId},
-        { $set: this.userProfileForm.value }).then(result => {
-          console.log('result', result);
-        });
-      }
+  updateUserProfile(filter, action) {
+    this.stitchMongoService.update(config.COLLECTION_KEY, filter, action).then(result => {
+      console.log('result', result);
     });
   }
 
@@ -91,7 +90,7 @@ export class UserProfileModalComponent implements OnInit {
   }
 
   handleInputChange(event) {
-    console.log('UserDetailsPage::handleInputChange() | method called', event);
+    console.log('UserProfileModalComponent::handleInputChange() | method called', event);
     const file = event.dataTransfer ? event.dataTransfer.files[0] : event.target.files[0];
     console.log('size', file.size);
     console.log('type', file.type);
@@ -153,6 +152,17 @@ export class UserProfileModalComponent implements OnInit {
 
   addProject() {
     this.presentPopover();
+  }
+
+  deleteProject(project) {
+    console.log('UserProfileModalComponent::deleteProject() | method called', project);
+    this.storage.get(config.TOKEN_KEY).then(res => {
+      if (res) {
+        const objectId = new ObjectId(res);
+        console.log('objectId', objectId);
+        this.updateUserProfile({user_id: objectId}, { $pull: { 'projects': { name: project.name } } });
+      }
+    });
   }
 
 }
