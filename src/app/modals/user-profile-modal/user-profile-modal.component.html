@@ -24,10 +24,10 @@
     </ion-card-header>
     <ion-card-content>
       <form [formGroup]="userProfileForm" novalidate (ngSubmit)="userProfileFormSubmit()">
-        <ion-list inset>
-          <ion-list-header>
-            <ion-label>Personal Info</ion-label>
-          </ion-list-header>
+        <ion-list>
+            <ion-list-header>
+                <h2>Personal Info</h2>
+              </ion-list-header>
           <ion-item [class.has-error]="userProfileForm.get('employee_name').hasError('required') && userProfileForm.get('employee_name').touched">
               <ion-label position="floating">Employee Name *</ion-label>
               <ion-input type="text" formControlName="employee_name"></ion-input>
@@ -94,7 +94,7 @@
         </ion-list>
         <ion-list>
           <ion-list-header>
-            <ion-label>Projects</ion-label>
+            <h2>Projects</h2>
             <ion-buttons>
                 <ion-button color="primary" fill="clear" (click)="showProjects = !showProjects">
                     <ion-icon slot="icon-only" name="eye"></ion-icon>

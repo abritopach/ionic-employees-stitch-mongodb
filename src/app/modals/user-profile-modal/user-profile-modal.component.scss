@@ -16,7 +16,7 @@
 ion-avatar {
 	ion-button {
         position: absolute;
-        right: 7.5rem;
+        right: calc(50% - 80px);
 	}
 }
 
