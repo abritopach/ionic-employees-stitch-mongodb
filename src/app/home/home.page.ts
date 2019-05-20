@@ -4,11 +4,10 @@ import { Router } from '@angular/router';
 import { FormControl } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
 
-import { LoadingController } from '@ionic/angular';
-
 import { StitchMongoService, AuthenticationService } from './../services';
 
 import config from '../config/config';
+import { LoaderService } from '../services/loader.service';
 
 @Component({
   selector: 'app-home',
@@ -23,7 +22,8 @@ export class HomePage implements OnInit {
   result: any;
 
   constructor(private router: Router, private stichMongoService: StitchMongoService,
-              private loadingCtrl: LoadingController, private authenticationService: AuthenticationService) {
+              private authenticationService: AuthenticationService,
+              private loaderService: LoaderService) {
     console.log('HomePage::constructor() | method called');
 
     this.fetchEmployees();
@@ -78,7 +78,7 @@ export class HomePage implements OnInit {
   }
 
   fetchEmployees() {
-    this.presentLoading();
+    this.loaderService.present('Please wait, loading employees...');
     this.stichMongoService.login(null).then(user => {
       return this.stichMongoService.find(config.COLLECTION_KEY, {});
     })/*.then(() =>
@@ -89,7 +89,7 @@ export class HomePage implements OnInit {
           this.stichMongoService.populateFakeEmployees();
         } else {
           this.employees = docs;
-          setTimeout(() => this.dismissLoading(), 2000);
+          setTimeout(() => this.loaderService.dismiss(), 2000);
         }
         console.log('[MongoDB Stitch] Connected to Stitch');
     }).catch(err => {
@@ -112,19 +112,6 @@ export class HomePage implements OnInit {
     }).catch(err => {
         console.error(err);
     });
-  }
-
-  async presentLoading() {
-    this.loading = await this.loadingCtrl.create({
-      message: 'Please wait, loading employees...',
-    });
-
-    return await this.loading.present();
-  }
-
-  async dismissLoading() {
-    this.loading.dismiss();
-    this.loading = null;
   }
 
   logout() {

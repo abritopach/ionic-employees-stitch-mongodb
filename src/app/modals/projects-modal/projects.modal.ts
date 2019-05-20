@@ -1,11 +1,12 @@
 import { Component, ViewEncapsulation, OnInit } from '@angular/core';
-import { ModalController, NavParams, PopoverController, LoadingController } from '@ionic/angular';
+import { ModalController, NavParams, PopoverController } from '@ionic/angular';
 
 import { ShowPeoplePopoverComponent } from '../../popovers/show-people.popover';
 
 import { StitchMongoService } from './../../services/stitch-mongo.service';
 
 import config from '../../config/config';
+import { LoaderService } from '../../services/loader.service';
 
 @Component({
   selector: 'app-projects-modal',
@@ -21,11 +22,11 @@ export class ProjectsModalComponent implements OnInit {
   loading: any;
 
   constructor(private modalCtrl: ModalController, private navParams: NavParams, private popoverCtrl: PopoverController,
-    private stitchMongoService: StitchMongoService, private loadingCtrl: LoadingController) {
+    private stitchMongoService: StitchMongoService, private loaderService: LoaderService) {
   }
 
   ngOnInit() {
-    this.presentLoading();
+    this.loaderService.present('Please wait, loading...');
     // console.log(this.navParams.data.modalProps.projects);
     this.projects = this.navParams.data.modalProps.projects;
     // console.log('this.projects', this.projects);
@@ -40,7 +41,7 @@ export class ProjectsModalComponent implements OnInit {
       results.map((result, index) => {
         // console.log(result);
         this.people.push(result);
-        setTimeout(() => this.dismissLoading(), 1000);
+        setTimeout(() => this.loaderService.dismiss(), 1000);
       });
     });
   }
@@ -78,19 +79,6 @@ export class ProjectsModalComponent implements OnInit {
 
   async findPeople(projectName) {
       return this.stitchMongoService.find(config.COLLECTION_KEY, {'projects.name' : { $in : [projectName]}});
-  }
-
-  async presentLoading() {
-    this.loading = await this.loadingCtrl.create({
-      message: 'Please wait, loading...',
-    });
-
-    return await this.loading.present();
-  }
-
-  async dismissLoading() {
-    this.loadingCtrl.dismiss();
-    this.loading = null;
   }
 
 }

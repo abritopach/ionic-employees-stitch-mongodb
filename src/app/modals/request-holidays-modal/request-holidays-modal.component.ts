@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Validators, FormControl, FormBuilder, FormGroup } from '@angular/forms';
 import config from '../../config/config';
 import { StitchMongoService } from '../../services/stitch-mongo.service';
-import { ModalController, LoadingController, NavParams } from '@ionic/angular';
+import { ModalController, NavParams } from '@ionic/angular';
 import { ObjectId } from 'bson';
 import * as moment from 'moment';
 import { Storage } from '@ionic/storage';
@@ -10,6 +10,7 @@ import { Holiday } from '../../models/holiday.model';
 import { IziToastService } from '../../services/izi-toast.service';
 import { HolidayDetail } from '../../models/holiday.detail.model';
 import { RequestHolidays } from '../../models/request.holidays.model';
+import { LoaderService } from '../../services/loader.service';
 
 @Component({
   selector: 'app-request-holidays-modal',
@@ -28,7 +29,7 @@ export class RequestHolidaysModalComponent implements OnInit {
   loading: any;
 
   constructor(private formBuilder: FormBuilder, private stitchMongoService: StitchMongoService, private modalCtrl: ModalController,
-              private storage: Storage, private navParams: NavParams, private loadingCtrl: LoadingController,
+              private storage: Storage, private navParams: NavParams, private loaderService: LoaderService,
               private iziToast: IziToastService) {
     this.createForm();
   }
@@ -104,13 +105,13 @@ export class RequestHolidaysModalComponent implements OnInit {
           if (res) {
             const objectId = new ObjectId(res);
             console.log('objectId', objectId);
-            this.presentLoading('Please wait, adding holiday...');
+            this.loaderService.present('Please wait, adding holiday...');
             this.stitchMongoService.update(config.COLLECTION_KEY, {user_id: objectId}, {$set: { holidays: this.holidays }})
             .then(result => {
               console.log('result', result);
               this.addHolidaysRequestToSupervisor(this.requestHolidaysForm.value, objectId).then(r => {
                 console.log(r);
-                this.dismissLoading();
+                this.loaderService.dismiss();
                 this.dismiss(this.holidays);
                 this.iziToast.success('Holiday request', 'Holiday request sent successfully.');
               });
@@ -143,19 +144,6 @@ export class RequestHolidaysModalComponent implements OnInit {
     // can "dismiss" itself and pass back data.
     // console.log('dismiss', data);
     this.modalCtrl.dismiss(info);
-  }
-
-  async presentLoading(message) {
-    this.loading = await this.loadingCtrl.create({
-      message: message,
-    });
-
-    return await this.loading.present();
-  }
-
-  async dismissLoading() {
-    this.loading.dismiss();
-    this.loading = null;
   }
 
   addHolidaysRequestToSupervisor(holidaysDetail: HolidayDetail, userId: ObjectId) {

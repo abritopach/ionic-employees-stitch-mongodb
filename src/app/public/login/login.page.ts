@@ -9,8 +9,8 @@ import { Router } from '@angular/router';
 
 import config from '../../config/config';
 
-import { LoadingController } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
+import { LoaderService } from '../../services/loader.service';
 
 @Component({
   selector: 'app-login',
@@ -25,7 +25,7 @@ export class LoginPage implements OnInit {
 
   constructor(private formBuilder: FormBuilder, private stitchMongoService: StitchMongoService,
               private authService: AuthenticationService, private router: Router, private iziToast: IziToastService,
-              private loadingCtrl: LoadingController, private storage: Storage) {
+              private storage: Storage, private loaderService: LoaderService) {
     this.createForm();
   }
 
@@ -42,7 +42,7 @@ export class LoginPage implements OnInit {
   loginFormSubmit() {
     console.log('HomePage::loginFormSubmit() | method called');
     // this.stichMongoService.login(this.loginForm.value);
-    this.presentLoading();
+    this.loaderService.present('Please wait, authenticating user...');
     this.stitchMongoService.login(this.loginForm.value).then(authedId => {
       console.log(authedId);
       // console.log(`successfully logged in with id: ${authedId.id}`);
@@ -55,7 +55,7 @@ export class LoginPage implements OnInit {
             this.storage.set(config.EMPLOYEE_KEY, employee[0]['employee_name']);
           }
           if (this.loading !== null) {
-            this.dismissLoading();
+            this.loaderService.dismiss();
           }
           setTimeout(() => this.router.navigateByUrl('/home'), 2000);
         });
@@ -63,24 +63,11 @@ export class LoginPage implements OnInit {
     })
     .catch(err => {
       if (this.loading !== null) {
-        this.dismissLoading();
+        this.loaderService.dismiss();
       }
       this.iziToast.show('Login', 'You have entered an invalid username or password.', 'red', 'ico-error', 'assets/avatar.png');
       console.error(`login failed with error: ${err}`);
     });
-  }
-
-  async presentLoading() {
-    this.loading = await this.loadingCtrl.create({
-      message: 'Please wait, authenticating user...',
-    });
-
-    return await this.loading.present();
-  }
-
-  async dismissLoading() {
-    this.loading.dismiss();
-    this.loading = null;
   }
 
 }

@@ -1,8 +1,8 @@
 import { Injectable, NgZone } from '@angular/core';
 
-import { LoadingController } from '@ionic/angular';
 import { MapsAPILoader } from '@agm/core';
 import { Subject } from 'rxjs';
+import { LoaderService } from './loader.service';
 
 declare const google: any;
 
@@ -14,20 +14,7 @@ export class GeolocationService {
   loading: any;
   placeSubject: Subject<Object> = new Subject<Object>() ;
 
-  constructor(private loadingCtrl: LoadingController, private ngZone: NgZone, private mapsApiLoader: MapsAPILoader) { }
-
-  async presentLoading(message) {
-    this.loading = await this.loadingCtrl.create({
-      message: message,
-    });
-
-    return await this.loading.present();
-  }
-
-  async dismissLoading() {
-    this.loading.dismiss();
-    this.loading = null;
-  }
+  constructor(private loaderService: LoaderService, private ngZone: NgZone, private mapsApiLoader: MapsAPILoader) { }
 
   locate() {
     console.log('GeolocationService::locate() | method called');
@@ -38,7 +25,7 @@ export class GeolocationService {
 
   async getAddress() {
     console.log('GeolocationService::getAddress() | method called');
-    this.presentLoading('Please wait, geolocating...');
+    this.loaderService.present('Please wait, geolocating...');
     const position = await this.locate();
     const lat = position['coords'].latitude;
     const lng = position['coords'].longitude;
@@ -63,15 +50,15 @@ export class GeolocationService {
             alert('No address available!');
             reject('No address available!');
           }
-          this.dismissLoading();
+          this.loaderService.dismiss();
         } else if (status === google.maps.GeocoderStatus.ZERO_RESULTS) {
           console.log('Bad destination address.');
           reject('Bad destination address.');
-          this.dismissLoading();
+          this.loaderService.dismiss();
       } else {
           console.log('Error calling Google Geocode API.');
           reject('Error calling Google Geocode API.');
-          this.dismissLoading();
+          this.loaderService.dismiss();
       }
       });
     });

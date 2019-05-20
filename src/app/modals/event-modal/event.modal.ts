@@ -1,14 +1,13 @@
 import { FormControl, Validators, FormGroup, FormBuilder } from '@angular/forms';
-import { Component, ViewEncapsulation, OnInit, ViewChild, ElementRef, NgZone, AfterViewInit } from '@angular/core';
-import { ModalController, LoadingController, NavParams } from '@ionic/angular';
+import { Component, ViewEncapsulation, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { ModalController, NavParams } from '@ionic/angular';
 import { StitchMongoService, IziToastService, GeolocationService } from './../../services';
 import config from '../../config/config';
 import { Storage } from '@ionic/storage';
 import { ObjectId } from 'bson';
 
 import * as moment from 'moment';
-
-import { MapsAPILoader } from '@agm/core';
+import { LoaderService } from '../../services/loader.service';
 
 declare const google: any;
 
@@ -29,8 +28,8 @@ export class EventModalComponent implements OnInit, AfterViewInit {
   @ViewChild('address') addressElementRef: ElementRef;
 
   constructor(private modalCtrl: ModalController, private formBuilder: FormBuilder, private stitchMongoService: StitchMongoService,
-              private storage: Storage, private iziToast: IziToastService, private loadingCtrl: LoadingController,
-              private navParams: NavParams, private mapsApiLoader: MapsAPILoader, private ngZone: NgZone,
+              private storage: Storage, private iziToast: IziToastService, private loaderService: LoaderService,
+              private navParams: NavParams,
               private geolocationService: GeolocationService) {
     this.createForm();
   }
@@ -96,25 +95,25 @@ export class EventModalComponent implements OnInit, AfterViewInit {
           console.log('objectId', objectId);
           // Update event.
           if (typeof this.navParams.data.modalProps.event !== 'undefined') {
-            this.presentLoading('Please wait, updating event...');
+            this.loaderService.present('Please wait, updating event...');
             console.log('Update event');
             // this.stitchMongoService.updateEvent(config.COLLECTION_KEY, objectId, this.eventForm.value).then(result => {
             this.stitchMongoService.update(config.COLLECTION_KEY, {user_id: objectId, 'events._id': this.eventForm.value._id},
             { $set: { 'events.$' : this.eventForm.value } }).then(result => {
               console.log('result', result);
-              this.dismissLoading();
+              this.loaderService.dismiss();
               this.dismiss();
               this.iziToast.success('Update event', 'Event updated successfully.');
             });
           } else { // Add new event.
-            this.presentLoading('Please wait, adding event...');
+            this.loaderService.present('Please wait, adding event...');
             // Add id event.
             this.eventForm.value._id = new ObjectId();
             // this.stitchMongoService.updateOne(config.COLLECTION_KEY, objectId, this.eventForm.value).then(result => {
             this.stitchMongoService.update(config.COLLECTION_KEY, {user_id: objectId}, {$push: { events: this.eventForm.value }})
             .then(result => {
               console.log('result', result);
-              this.dismissLoading();
+              this.loaderService.dismiss();
               this.dismiss();
               this.iziToast.success('Add event', 'Event added successfully.');
             });
@@ -138,19 +137,6 @@ export class EventModalComponent implements OnInit, AfterViewInit {
     });
   }
 
-  async presentLoading(message) {
-    this.loading = await this.loadingCtrl.create({
-      message: message,
-    });
-
-    return await this.loading.present();
-  }
-
-  async dismissLoading() {
-    this.loading.dismiss();
-    this.loading = null;
-  }
-
   locate() {
     console.log('EventModalComponent::locate | method called');
     this.geolocationService.getAddress().then(result => {
@@ -159,71 +145,6 @@ export class EventModalComponent implements OnInit, AfterViewInit {
       this.eventForm.patchValue({lat: result['lat']});
       this.eventForm.patchValue({lng: result['lng']});
     });
-    /*
-    this.presentLoading('Please wait, geolocating...');
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        position => {
-          const lat = position.coords.latitude; // Works fine
-          const lng = position.coords.longitude;  // Works fine
-          console.log('Coords', lat, lng);
-          this.getAddress(lat, lng);
-        },
-        error => {
-          console.log('Error code: ' + error.code + '<br /> Error message: ' + error.message);
-        }
-      );
-    }
-    */
   }
-
-  /*
-  getAddress(lat: number, lng: number) {
-    console.log('EventModalComponent::getAddress | method called');
-    if (navigator.geolocation) {
-      const geocoder = new google.maps.Geocoder();
-      const latlng = new google.maps.LatLng(lat, lng);
-      const request = { latLng: latlng };
-      geocoder.geocode(request, (results, status) => {
-        if (status === google.maps.GeocoderStatus.OK) {
-          const result = results[0];
-          if (result != null) {
-            console.log(result.formatted_address);
-            this.eventForm.patchValue({address: result.formatted_address});
-            this.eventForm.patchValue({lat: lat});
-            this.eventForm.patchValue({lng: lng});
-          } else {
-            alert('No address available!');
-          }
-          this.dismissLoading();
-        } else if (status === google.maps.GeocoderStatus.ZERO_RESULTS) {
-          console.log('Bad destination address.');
-          this.dismissLoading();
-      } else {
-          console.log('Error calling Google Geocode API.');
-          this.dismissLoading();
-      }
-      });
-    }
-  }
-
-  findAdress() {
-    this.mapsApiLoader.load().then(() => {
-         const inputElement = this.addressElementRef.nativeElement;
-         const autocomplete = new google.maps.places.Autocomplete(inputElement);
-         autocomplete.addListener('place_changed', () => {
-           this.ngZone.run(() => {
-             // some details
-              const place = google.maps.places.PlaceResult = autocomplete.getPlace();
-              console.log('place', place);
-
-              this.eventForm.patchValue({address: place.formatted_address});
-              this.eventForm.patchValue({lat: place.geometry.location.lat()});
-              this.eventForm.patchValue({lng: place.geometry.location.lng()});
-           });
-         });
-       });
-   }
-   */
 
 }

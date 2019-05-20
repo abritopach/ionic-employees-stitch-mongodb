@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { ToastController, LoadingController } from '@ionic/angular';
+import { ToastController } from '@ionic/angular';
 
 import { Plugins, Capacitor } from '@capacitor/core';
+import { LoaderService } from './loader.service';
 
 const { Network } = Plugins;
 
@@ -17,9 +18,8 @@ export enum ConnectionStatus {
 export class NetworkService {
 
   private status: BehaviorSubject<ConnectionStatus> = new BehaviorSubject(ConnectionStatus.Offline);
-  private loading: any;
 
-  constructor(private toastController: ToastController, private loadingCtrl: LoadingController) {
+  constructor(private toastController: ToastController, private loaderService: LoaderService) {
     console.log('NetworkService::constructor | method called');
 
     let status = ConnectionStatus.Offline;
@@ -41,7 +41,7 @@ export class NetworkService {
     if (this.status.getValue() === ConnectionStatus.Offline) {
       console.log('Network connected!');
       console.log('navigator.onLine', navigator.onLine);
-      this.dismissLoading();
+      this.loaderService.dismiss();
       this.updateNetworkStatus(ConnectionStatus.Online);
     }
   }
@@ -50,7 +50,7 @@ export class NetworkService {
     if (this.status.getValue() === ConnectionStatus.Online) {
       console.log('Network was disconnected :-(');
       console.log('navigator.onLine', navigator.onLine);
-      this.presentLoading();
+      this.loaderService.present('Waiting for connection...');
       this.updateNetworkStatus(ConnectionStatus.Offline);
     }
   }
@@ -86,19 +86,6 @@ export class NetworkService {
 
   public getCurrentNetworkStatus(): ConnectionStatus {
     return this.status.getValue();
-  }
-
-  private async presentLoading() {
-    this.loading = await this.loadingCtrl.create({
-      message: 'Waiting for connection...',
-    });
-
-    return await this.loading.present();
-  }
-
-  private async dismissLoading() {
-    this.loading.dismiss();
-    this.loading = null;
   }
 
 }

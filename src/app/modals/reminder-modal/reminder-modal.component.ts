@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
-import { ModalController, NavParams, PopoverController, LoadingController } from '@ionic/angular';
+import { ModalController, NavParams, PopoverController } from '@ionic/angular';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 
 import * as moment from 'moment';
@@ -9,6 +9,7 @@ import { FrequencyComponent } from '../../popovers/frequency/frequency.component
 import { GeolocationService } from '../../services/geolocation.service';
 import { Note } from '../../models/note.model';
 import { Frequency } from '../../models/frequency.model';
+import { LoaderService } from '../../services/loader.service';
 
 @Component({
   selector: 'app-reminder-modal',
@@ -56,7 +57,7 @@ export class ReminderModalComponent implements OnInit, AfterViewInit {
   frequencyTexts = ['noRepetition', 'daily', 'weekly', 'monthly', 'annually'];
 
   constructor(private modalCtrl: ModalController, private navParams: NavParams, private formBuilder: FormBuilder,
-              private popoverCtrl: PopoverController, private loadingCtrl: LoadingController,
+              private popoverCtrl: PopoverController, private loaderService: LoaderService,
               private geolocationService: GeolocationService) {
     this.createForm();
   }
@@ -215,19 +216,6 @@ export class ReminderModalComponent implements OnInit, AfterViewInit {
       setTimeout(() => this.reminderForm.patchValue({frequency: this.frequencyOptions.customize.text }), 1000);
     }
 
-  }
-
-  async presentLoading(message) {
-    this.loading = await this.loadingCtrl.create({
-      message: message,
-    });
-
-    return await this.loading.present();
-  }
-
-  async dismissLoading() {
-    this.loading.dismiss();
-    this.loading = null;
   }
 
   locate() {
