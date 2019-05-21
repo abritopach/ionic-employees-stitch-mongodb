@@ -112,4 +112,24 @@ export class DetailPage implements OnInit {
     });
   }
 
+  checkFavorites(employee) {
+    this.storage.get(config.TOKEN_KEY).then(res => {
+      if (res) {
+        const objectId = new ObjectId(res);
+        this.stitchMongoService.find(config.COLLECTION_KEY, {user_id: objectId}).then(result => {
+          if (typeof result[0]['favorites'] !== 'undefined') {
+            const favorites = result[0]['favorites'];
+            const check = favorites.filter(favorite => favorite._id.toString() === employee._id.toString());
+            if (check.length === 0) {
+              this.addToFavorites(employee);
+            } else {
+              this.iziToast.show('Error', 'Employee is already on your favorites list.',
+       'red', 'ico-error', 'assets/avatar.png');
+            }
+          }
+        });
+      }
+    });
+  }
+
 }
