@@ -56,7 +56,7 @@
               <ion-icon color="tertiary" name="people" slot="start"></ion-icon>
               <ion-label>Add to my Team</ion-label>
             </ion-item>
-            <ion-item class="activated">
+            <ion-item tappable (click)="addToFavorites(employee)">
               <ion-icon color="tertiary" name="star" slot="start"></ion-icon>
               <ion-label>Add to Favorites</ion-label>
             </ion-item>

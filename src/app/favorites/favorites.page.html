@@ -1,0 +1,23 @@
+<app-header title="Favorites List">
+  <ion-buttons buttons-start slot="start">
+    <ion-menu-button></ion-menu-button>
+  </ion-buttons>
+</app-header>
+  
+<ion-content padding>
+  <ion-list>
+    <ion-item *ngFor="let favorite of favorites" tappable routerLink="/detail/{{ favorite.employee_name }}">
+      <ion-avatar slot="start">
+        <img [src]="favorite.avatar" onError="src='assets/images/login-avatar.png'" alt="Avatar" />
+      </ion-avatar>
+      <ion-label>
+        <h2>{{ favorite.employee_name }}</h2>
+        <h3>{{ favorite.job_position }}</h3>
+        <p>{{ favorite.description }}</p>
+      </ion-label>
+      <ion-badge slot="end" color="primary">{{ favorite.department }}</ion-badge>
+    </ion-item>
+  </ion-list>
+</ion-content>
+
+<app-footer></app-footer>

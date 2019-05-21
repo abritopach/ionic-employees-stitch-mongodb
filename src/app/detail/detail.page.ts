@@ -8,6 +8,9 @@ import { ProjectsModalComponent } from '../modals/projects-modal/projects.modal'
 import { SendSMSModalComponent } from './../modals/send-sms-modal/send-sms.modal';
 
 import config from '../config/config';
+import { Storage } from '@ionic/storage';
+import { ObjectId } from 'bson';
+import { IziToastService } from '../services/izi-toast.service';
 
 @Component({
   selector: 'app-detail',
@@ -19,7 +22,8 @@ export class DetailPage implements OnInit {
   employee: any = null;
 
   constructor(private route: ActivatedRoute, private stichMongoService: StitchMongoService,
-              private modalCtrl: ModalController) { }
+              private modalCtrl: ModalController, private storage: Storage, private stitchMongoService: StitchMongoService,
+              private iziToast: IziToastService) { }
 
   ngOnInit() {
   }
@@ -45,7 +49,7 @@ export class DetailPage implements OnInit {
   }
 
   onClickEmail(employee) {
-    console.log('HomePage::onClickEmail() | method called');
+    console.log('DetailPage::onClickEmail() | method called');
     const windowRef = window.open(`mailto:${employee.email}`, '_blank');
 
     windowRef.focus();
@@ -58,12 +62,12 @@ export class DetailPage implements OnInit {
   }
 
   onClickCall(employee) {
-    console.log('HomePage::onClickCall() | method called');
+    console.log('DetailPage::onClickCall() | method called');
     window.open(`tel:${employee.phone}`, '_system', 'location=yes');
   }
 
   onClickMessage() {
-    console.log('HomePage::onClickMessage() | method called');
+    console.log('DetailPage::onClickMessage() | method called');
     this.presentSendSMSModal();
   }
 
@@ -91,6 +95,21 @@ export class DetailPage implements OnInit {
     if (data) {
       console.log('data', data);
     }
+  }
+
+  addToFavorites(employee) {
+    console.log('DetailPage::addToFavorites() | method called', employee);
+    this.storage.get(config.TOKEN_KEY).then(res => {
+      if (res) {
+        const objectId = new ObjectId(res);
+        this.stitchMongoService.update(config.COLLECTION_KEY, {user_id: objectId},
+          {$push: { 'favorites': employee }})
+          .then(result => {
+            console.log('result', result);
+            this.iziToast.success('Favorites', 'Employee added successfully to favorites list.');
+          });
+        }
+    });
   }
 
 }

@@ -60,6 +60,11 @@ export class AppComponent implements OnInit {
         title: 'My Holidays',
         url: '/holidays',
         icon: 'airplane'
+      },
+      {
+        title: 'My Favorites',
+        url: '/favorites',
+        icon: 'star'
       }
     ]
   }
