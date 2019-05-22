@@ -132,4 +132,19 @@ export class DetailPage implements OnInit {
     });
   }
 
+  addToMyTeam(employee) {
+    console.log('DetailPage::addToMyTeam() | method called', employee);
+    this.storage.get(config.TOKEN_KEY).then(res => {
+      if (res) {
+        const objectId = new ObjectId(res);
+        this.stitchMongoService.update(config.COLLECTION_KEY, {user_id: objectId},
+          {$push: { 'team': employee._id }})
+          .then(result => {
+            console.log('result', result);
+            this.iziToast.success('Favorites', 'Employee added successfully to your team.');
+          });
+        }
+    });
+  }
+
 }
