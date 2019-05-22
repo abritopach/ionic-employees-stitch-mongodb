@@ -33,4 +33,20 @@ export class FavoritesPage implements OnInit {
     });
   }
 
+  deleteFavorite(favorite) {
+    this.storage.get(config.TOKEN_KEY).then(res => {
+      if (res) {
+        const objectId = new ObjectId(res);
+        this.stitchMongoService.update(config.COLLECTION_KEY, {user_id: objectId},
+        { $pull: { 'favorites': { _id: favorite._id } } })
+        .then(result => {
+            console.log(result);
+            this.favorites = this.favorites.filter(f => f._id !== favorite._id);
+        }).catch(err => {
+            console.error(err);
+        });
+      }
+    });
+  }
+
 }
