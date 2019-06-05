@@ -87,3 +87,5 @@ import 'zone.js/dist/zone';  // Included with Angular CLI.
  */
 
 (window as any).global = window;
+
+import '@webcomponents/webcomponentsjs/custom-elements-es5-adapter.js';

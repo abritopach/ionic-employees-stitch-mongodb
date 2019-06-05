@@ -11,7 +11,7 @@ import config from '../../config/config';
 })
 export class ChartModalComponent implements OnInit {
 
-  @ViewChild('doughnutCanvas', { read: ElementRef }) doughnutCanvas: ElementRef;
+  @ViewChild('doughnutCanvas', { read: ElementRef, static: true }) doughnutCanvas: ElementRef;
 
   doughnutChart: any;
   data: any[] = [];

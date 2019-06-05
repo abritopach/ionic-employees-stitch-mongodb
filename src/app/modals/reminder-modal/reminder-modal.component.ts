@@ -23,9 +23,9 @@ export class ReminderModalComponent implements OnInit, AfterViewInit {
   reminderForm: FormGroup;
   showHourItems = true;
   showLocationItems = false;
-  @ViewChild('datePicker') datePicker;
-  @ViewChild('hourPicker') hourPicker;
-  @ViewChild('location') locationElementRef: ElementRef;
+  @ViewChild('datePicker', { read: ElementRef, static: true }) datePicker;
+  @ViewChild('hourPicker', { read: ElementRef, static: true }) hourPicker;
+  @ViewChild('location', { read: ElementRef, static: true }) locationElementRef: ElementRef;
   loading: any;
   note: Note;
   frequencyPopoverData = null;

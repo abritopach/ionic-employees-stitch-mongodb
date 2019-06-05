@@ -23,7 +23,7 @@ export class HomePage implements OnInit {
 
   constructor(private router: Router, private stichMongoService: StitchMongoService,
               private authenticationService: AuthenticationService,
-              private loaderService: LoaderService) {
+              /*private loaderService: LoaderService*/) {
     console.log('HomePage::constructor() | method called');
 
     this.fetchEmployees();
@@ -78,7 +78,7 @@ export class HomePage implements OnInit {
   }
 
   fetchEmployees() {
-    this.loaderService.present('Please wait, loading employees...');
+    // this.loaderService.present('Please wait, loading employees...');
     this.stichMongoService.login(null).then(user => {
       return this.stichMongoService.find(config.COLLECTION_KEY, {});
     })/*.then(() =>
@@ -89,7 +89,7 @@ export class HomePage implements OnInit {
           this.stichMongoService.populateFakeEmployees();
         } else {
           this.employees = docs;
-          setTimeout(() => this.loaderService.dismiss(), 2000);
+          // setTimeout(() => this.loaderService.dismiss(), 2000);
         }
         console.log('[MongoDB Stitch] Connected to Stitch');
     }).catch(err => {

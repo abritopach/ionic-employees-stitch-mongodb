@@ -25,7 +25,7 @@ export class EventModalComponent implements OnInit, AfterViewInit {
   employees: any;
   loading: any;
   // @ViewChild('address', { read: ElementRef }) addressElementRef: ElementRef;
-  @ViewChild('address') addressElementRef: ElementRef;
+  @ViewChild('address', { read: ElementRef, static: true }) addressElementRef: ElementRef;
 
   constructor(private modalCtrl: ModalController, private formBuilder: FormBuilder, private stitchMongoService: StitchMongoService,
               private storage: Storage, private iziToast: IziToastService, private loaderService: LoaderService,
