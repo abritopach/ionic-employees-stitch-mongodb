@@ -12,11 +12,6 @@ import { RequestHolidaysModalComponent } from '../modals/request-holidays-modal/
 import { HistoryHolidaysModalComponent } from '../modals/history-holidays-modal/history-holidays-modal.component';
 import { UpcomingAbsencesModalComponent } from '../modals/upcoming-absences-modal/upcoming-absences-modal.component';
 
-import { NgSelectModule } from '@ng-select/ng-select';
-
-// Angular Calendar
-import { CalendarModule, DateAdapter } from 'angular-calendar';
-import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 
 const routes: Routes = [
   {
@@ -32,12 +27,7 @@ const routes: Routes = [
     ReactiveFormsModule,
     IonicModule,
     RouterModule.forChild(routes),
-    SharedComponentsModule,
-    NgSelectModule,
-    CalendarModule.forRoot({
-      provide: DateAdapter,
-      useFactory: adapterFactory
-    })
+    SharedComponentsModule
   ],
   declarations: [HolidaysPage, RequestHolidaysModalComponent, HistoryHolidaysModalComponent, UpcomingAbsencesModalComponent],
   entryComponents: [RequestHolidaysModalComponent, HistoryHolidaysModalComponent, UpcomingAbsencesModalComponent]

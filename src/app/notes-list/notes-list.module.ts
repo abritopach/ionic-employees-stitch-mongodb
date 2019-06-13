@@ -10,8 +10,6 @@ import { NotesListPage } from './notes-list.page';
 import { SharedComponentsModule } from '../components/shared-components.module';
 import { NgSelectModalComponent } from '../modals/ngselect-modal/ngselect.modal';
 
-import { NgSelectModule } from '@ng-select/ng-select';
-
 import { ColorPickerComponent } from '../components/color-picker/color-picker.component';
 import { ColorsModalComponent } from '../modals/colors-modal/colors-modal.component';
 import { ReminderModalComponent } from '../modals/reminder-modal/reminder-modal.component';
@@ -37,7 +35,6 @@ const routes: Routes = [
     IonicModule,
     RouterModule.forChild(routes),
     SharedComponentsModule,
-    NgSelectModule,
     DragulaModule.forRoot(),
     AgmCoreModule,
   ],

@@ -11,12 +11,6 @@ import { AgmCoreModule } from '@agm/core';
 
 import { EventModalComponent } from './../modals/event-modal/event.modal';
 
-import { NgSelectModule } from '@ng-select/ng-select';
-
-// Angular Calendar
-import { CalendarModule, DateAdapter } from 'angular-calendar';
-import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
-
 import { SharedComponentsModule } from '../components/shared-components.module';
 
 const routes: Routes = [
@@ -40,11 +34,6 @@ const routes: Routes = [
       libraries: ['places']
     }),
     */
-    NgSelectModule,
-    CalendarModule.forRoot({
-      provide: DateAdapter,
-      useFactory: adapterFactory
-    }),
     SharedComponentsModule
   ],
   declarations: [SchedulePage, EventModalComponent],
