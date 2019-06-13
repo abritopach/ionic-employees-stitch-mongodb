@@ -32,7 +32,7 @@ import { ProjectsPopoverComponent } from './popovers/projects-popover/projects-p
     AppRoutingModule,
     IonicStorageModule.forRoot(),
     AgmCoreModule.forRoot({
-      apiKey: 'AIzaSyDB9__kjPlloGKBm6moXS9hrRbmJ4-gXXc', // Google API key for maps
+      apiKey: 'apiKey', // Google API key for maps
       libraries: ['places']
     }),
     FormsModule,
