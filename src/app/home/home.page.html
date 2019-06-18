@@ -71,7 +71,7 @@
     </ion-item>
     -->
   </ion-list>
-  <st-3D-card-carousel slides="slides"></st-3D-card-carousel>
+  <st-3D-card-carousel *ngIf="slides.length !== 0" [slides]="slides" [autoloop]="autoloop" (selectedItem)="handleSelectedItem($event)"></st-3D-card-carousel>
 </ion-content>
 
 <app-footer></app-footer>

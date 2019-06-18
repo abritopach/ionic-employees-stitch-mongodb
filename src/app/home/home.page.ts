@@ -22,6 +22,11 @@ export class HomePage implements OnInit {
   loading: any;
   result: any;
   slides: CardItem[] = [];
+  autoloop = {
+    enabled: false,
+    seconds: 2000
+  };
+  slidesColors = ['#1abc9c', '#e67e22', '#e74c3c', '#2c3e50', '#2980b9', '#9b59b6'];
 
   constructor(private router: Router, private stichMongoService: StitchMongoService,
               private authenticationService: AuthenticationService,
@@ -32,6 +37,19 @@ export class HomePage implements OnInit {
     this.fetchEmployeesGroupByFirstLetter();
 
     this.searchControl = new FormControl();
+
+    /*
+    this.slides = [
+      {id: 0, title: 'Adrián Brito Pacheco',
+      imgUrl: '',
+       color: '#1abc9c', currentPlacement: 0},
+      {id: 1, title: 'José Antonio Pérez Florencia', imgUrl: 'http://i.pravatar.cc/150?img=2', color: '#1abc9c', currentPlacement: 0},
+      {id: 2, title: 'Patricia Acosta García', imgUrl: 'http://i.pravatar.cc/150?img=5', color: '#1abc9c', currentPlacement: 0},
+      {id: 3, title: 'Ana Ruiz Pérez', imgUrl: 'http://i.pravatar.cc/150?img=9', color: '#1abc9c', currentPlacement: 0},
+      {id: 4, title: 'Juan Olmos Gil', imgUrl: 'http://i.pravatar.cc/150?img=4', color: '#1abc9c', currentPlacement: 0},
+      {id: 5, title: 'Test', imgUrl: '', color: '#1abc9c', currentPlacement: 0}
+    ];
+    */
 
   }
 
@@ -130,12 +148,25 @@ export class HomePage implements OnInit {
         id: index,
         title: employee.employee_name,
         imgUrl: employee.avatar,
-        color: '#1abc9c',
-        currentPlacement: 0
+        color: this.slidesColors[index],
+        currentPlacement: 0,
+        subtitle: {
+          text: employee.job_position,
+          icon: 'fa fa-info-circle'
+        },
       };
       this.slides.push(cardItem);
     });
     console.log('slides', this.slides);
   }
+
+  handleSelectedItem(event) {
+    console.log('HomePage::handleSelectedItem() | method called');
+    const selectedItem = event.detail;
+    console.log('Received event from component: ', selectedItem);
+    setTimeout(() => {
+      this.router.navigateByUrl(`/detail/${selectedItem.title}`);
+    }, 2000);
+   }
 
 }
