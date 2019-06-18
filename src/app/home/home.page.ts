@@ -8,6 +8,7 @@ import { StitchMongoService, AuthenticationService } from './../services';
 
 import config from '../config/config';
 import { LoaderService } from '../services/loader.service';
+import { CardItem } from 'st-three-dimensional-card-carousel/dist/types/models/cardItem.model';
 
 @Component({
   selector: 'app-home',
@@ -20,6 +21,7 @@ export class HomePage implements OnInit {
   searchControl: FormControl;
   loading: any;
   result: any;
+  slides: CardItem[] = [];
 
   constructor(private router: Router, private stichMongoService: StitchMongoService,
               private authenticationService: AuthenticationService,
@@ -89,6 +91,8 @@ export class HomePage implements OnInit {
           this.stichMongoService.populateFakeEmployees();
         } else {
           this.employees = docs;
+          console.log('employees', this.employees);
+          this.builtCarouselSlides();
           // setTimeout(() => this.loaderService.dismiss(), 2000);
         }
         console.log('[MongoDB Stitch] Connected to Stitch');
@@ -117,6 +121,21 @@ export class HomePage implements OnInit {
   logout() {
     console.log('HomePage::logout() | method called');
     this.authenticationService.logout();
+  }
+
+  builtCarouselSlides() {
+    console.log('HomePage::builtCarouselSlides() | method called');
+    this.employees.map((employee, index) => {
+      const cardItem: CardItem = {
+        id: index,
+        title: employee.employee_name,
+        imgUrl: employee.avatar,
+        color: '#1abc9c',
+        currentPlacement: 0
+      };
+      this.slides.push(cardItem);
+    });
+    console.log('slides', this.slides);
   }
 
 }

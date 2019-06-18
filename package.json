@@ -43,7 +43,7 @@
     "ng2-dragula": "^2.1.1",
     "ng2-img-max": "^2.1.18",
     "rxjs": "6.5.2",
-    "st-three-dimensional-card-carousel": "0.0.4",
+    "st-three-dimensional-card-carousel": "0.0.5",
     "zone.js": "^0.9.1"
   },
   "devDependencies": {
