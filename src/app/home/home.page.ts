@@ -27,6 +27,7 @@ export class HomePage implements OnInit {
     seconds: 2000
   };
   slidesColors = ['#1abc9c', '#e67e22', '#e74c3c', '#2c3e50', '#2980b9', '#9b59b6'];
+  slideDistance = 200;
 
   constructor(private router: Router, private stichMongoService: StitchMongoService,
               private authenticationService: AuthenticationService,
@@ -150,10 +151,21 @@ export class HomePage implements OnInit {
         imgUrl: employee.avatar,
         color: this.slidesColors[index],
         currentPlacement: 0,
+        description: employee.description,
         subtitle: {
           text: employee.job_position,
           icon: 'fa fa-info-circle'
         },
+        footer: {
+          icons: {
+              leftIcon: 'fa fa-tasks',
+              rightIcon: ''
+          },
+          values: {
+              leftValue: employee.projects ? employee.projects.length : 0,
+              rightValue: null
+          }
+        }
       };
       this.slides.push(cardItem);
     });
@@ -167,6 +179,10 @@ export class HomePage implements OnInit {
     setTimeout(() => {
       this.router.navigateByUrl(`/detail/${selectedItem.title}`);
     }, 2000);
-   }
+  }
+
+  handleSlideChange(event) {
+    console.log('HomePage::handleSlideChange() | method called', event.detail);
+  }
 
 }
