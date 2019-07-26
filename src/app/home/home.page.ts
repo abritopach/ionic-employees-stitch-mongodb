@@ -185,4 +185,13 @@ export class HomePage implements OnInit {
     console.log('HomePage::handleSlideChange() | method called', event.detail);
   }
 
+  loadMoreSlides() {
+    console.log('HomePage::loadMoreSlides() | method called');
+
+    const cardCarouselElement = document.querySelector('st-3D-card-carousel');
+    (cardCarouselElement as any).getActiveIndex().then((activeIndex) => {
+      console.log('Active index: ' + activeIndex);
+    });
+  }
+
 }

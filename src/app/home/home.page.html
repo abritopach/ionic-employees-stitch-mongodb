@@ -73,6 +73,12 @@
   </ion-list>
   <st-3D-card-carousel *ngIf="slides.length !== 0" [slides]="slides" [autoloop]="autoloop" [distance]="slideDistance" (selectedItem)="handleSelectedItem($event)"
   (slideChange)="handleSlideChange($event)"></st-3D-card-carousel>
+  <ion-item lines="none">
+      <ion-button fill="clear" size="small" color="primary" (click)="loadMoreSlides()">
+          <ion-icon name='add-circle-outline' slot="start"></ion-icon>
+          Load more slides
+        </ion-button>
+  </ion-item>
 </ion-content>
 
 <app-footer></app-footer>
