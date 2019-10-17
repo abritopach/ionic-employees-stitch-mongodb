@@ -272,12 +272,14 @@ export class SchedulePage implements OnInit {
       const todayEvents = this.eventsCopy.filter(event => moment(event.date).isSame(moment(), 'day'));
       console.log('todayEvents', todayEvents);
       this.events = [...todayEvents];
+      console.log('events', this.events);
     }
     if (option === 'upcoming') {
       const upcomingEvents = this.eventsCopy.filter(event => moment(event.date).isAfter(moment(), 'day'));
       console.log('upcomingEvents', upcomingEvents);
       this.events = [...upcomingEvents];
     }
+    this.cd.detectChanges();
     this.updateParticipants();
   }
 

@@ -12,7 +12,7 @@
   </ion-buttons>
 </app-header>
 
-<ion-content padding>
+<ion-content class="ion-padding">
 
   <ion-toolbar color="secondary" *ngIf="!showCalendarFlag">
       <ion-segment [(ngModel)]="option" (ionChange)="segmentChanged($event)">
@@ -31,8 +31,8 @@
   <!-- Schedule list. -->
   <ion-list *ngIf="!showCalendarFlag">
       <ion-grid fixed>
-        <ion-row *ngFor="let event of events; let i = index" align-items-stretch >
-        <ion-col col-12 align-self-stretch align-self-center>
+        <ion-row *ngFor="let event of events; let i = index" class="ion-align-items-stretch" >
+        <ion-col col-12 class="ion-align-self-center ion-align-self-stretch">
           <ion-card>
             <ion-item class="eventClass">
               <b>{{ event.title }}</b>

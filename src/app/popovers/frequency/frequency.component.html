@@ -5,7 +5,7 @@
       </ion-title>
   </ion-toolbar>
 </ion-header>
-<ion-content padding>
+<ion-content class="ion-padding">
   <ion-list>
     <ion-item>
       <ion-label>Enabled</ion-label>
@@ -30,11 +30,11 @@
     </div>
     <div *ngIf="options.repeat === 'monthly'">
       <ion-item>
-        <ion-label text-wrap>The same day of the month</ion-label>
+        <ion-label class="ion-text-wrap">The same day of the month</ion-label>
         <ion-toggle [(ngModel)]="toggle" color="primary" (ionChange)="ionChangeCondition1($event)"></ion-toggle>
       </ion-item>
       <ion-item>
-        <ion-label text-wrap>The third Tuesday of the month</ion-label>
+        <ion-label class="ion-text-wrap">The third Tuesday of the month</ion-label>
         <ion-toggle [(ngModel)]="!toggle" color="primary" (ionChange)="ionChangeCondition2($event)"></ion-toggle>
       </ion-item>
     </div>

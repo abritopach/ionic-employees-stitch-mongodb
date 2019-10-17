@@ -9,7 +9,7 @@
       </ion-buttons>
   </app-header>
 
-<ion-content padding>
+<ion-content class="ion-padding">
 
     <ion-fab vertical="top" horizontal="end" slot="fixed">
         <ion-fab-button size="small" (click)="addNewNote()">
@@ -23,7 +23,7 @@
         <ion-col dragula="NOTES" align-self-center size-lg="4" size-md="6" size-xs="6" *ngFor="let note of notes">
           <ion-card [ngStyle]="{'background': note.color}">
               <ion-item>
-                <ion-label text-wrap><b>{{ note?.title }}</b></ion-label>
+                <ion-label class="ion-text-wrap"><b>{{ note?.title }}</b></ion-label>
                 <!--
                 <ion-button slot='end' (click)="presentPopover('optionsNote', note)" fill="clear">
                     <ion-icon slot="icon-only" name="more"></ion-icon>
@@ -97,7 +97,7 @@
       <ion-col align-self-center size-lg="4" size-md="6" size-xs="6" *ngFor="let note of archivedNotes">
         <ion-card>
             <ion-item>
-              <ion-label text-wrap>{{ note?.title }}</ion-label>
+              <ion-label class="ion-text-wrap">{{ note?.title }}</ion-label>
               <ion-button slot='end' (click)="presentPopover('optionsArchivedNote', note)" fill="clear">
                   <ion-icon slot="icon-only" name="more"></ion-icon>
               </ion-button>

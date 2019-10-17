@@ -13,7 +13,7 @@
             <ion-avatar *ngIf="profilePicture !== null && profilePicture !== ''" slot="start">
               <img [src]="profilePicture">
             </ion-avatar>
-            <ion-label text-wrap>
+            <ion-label class="ion-text-wrap">
               <h2> {{name}} </h2>
             </ion-label>
             <ion-icon *ngIf="name !== ''" tappable slot="end" color="light" name="create" (click)="editUserProfile()"></ion-icon>

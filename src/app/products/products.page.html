@@ -4,7 +4,7 @@
     </ion-buttons>
 </app-header>
 
-<ion-content padding>
+<ion-content class="ion-padding">
     <ion-card class="product" *ngFor="let product of stitchMongoService.fakeProducts">
         <ion-img [src]="product.image" (ionError)="loadDefaultImg($event)"></ion-img>
         <ion-card-header>

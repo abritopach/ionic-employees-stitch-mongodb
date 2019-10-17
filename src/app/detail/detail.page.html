@@ -15,11 +15,11 @@
   </ion-buttons>
 </app-header>
 
-<ion-content padding>
+<ion-content class="ion-padding">
   <ion-list>
     <ion-grid fixed>
-      <ion-row align-items-stretch>
-      <ion-col col-12 align-self-stretch align-self-center>
+      <ion-row class="ion-align-items-stretch">
+      <ion-col col-12 class="ion-align-self-center ion-align-self-stretch">
         <ion-card *ngIf="employee !== null">
             <ion-item lines="none">
               <h2><b>{{ employee.employee_name }}</b></h2>
@@ -80,20 +80,20 @@
                   Contact
                 </ion-label>
               </ion-item-divider>
-            <ion-row justify-content-center>
-              <ion-col col-auto text-center>
+            <ion-row class="ion-justify-content-center">
+              <ion-col col-auto class="ion-text-center">
                 <ion-button fill="clear" size="small" color="primary" (click)="onClickEmail(employee)">
                   <ion-icon name="mail" slot="start"></ion-icon>
                   Email
                 </ion-button>
               </ion-col>
-              <ion-col col-auto text-center>
+              <ion-col col-auto class="ion-text-center">
                 <ion-button fill="clear" size="small" color="primary" (click)="onClickCall(employee)">
                   <ion-icon name='call' slot="start"></ion-icon>
                   Call
                 </ion-button>
               </ion-col>
-              <ion-col col-auto text-center>
+              <ion-col col-auto class="ion-text-center">
                 <ion-button fill="clear" size="small" color="primary" (click)="onClickMessage()">
                   <ion-icon name='chatbubbles' slot="start"></ion-icon>
                   message
