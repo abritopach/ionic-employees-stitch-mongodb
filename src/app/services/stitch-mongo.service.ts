@@ -67,7 +67,7 @@ export class StitchMongoService {
 
   fakeProducts = [
     {product_name: 'Bitbucket', company: 'Atlassian',
-    image: 'https://marketplace-cdn.atlassian.com/files/images/e985b232-8f32-42a3-867b-39432debf22f.png',
+    image: 'https://wac-cdn.atlassian.com/dam/jcr:b8da9d36-3498-41fc-9806-75796e73fca0/bitbucket-pull-requests.2017-12-12-00-28-16.png',
     description: 'Bitbucket is more than just Git code management. Bitbucket gives teams one place to plan projects,' +
     'collaborate on code, test, and deploy.',
      url: ''

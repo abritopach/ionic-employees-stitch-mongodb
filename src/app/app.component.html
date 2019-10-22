@@ -1,6 +1,6 @@
 <ion-app>
-  <ion-split-pane>
-    <ion-menu>
+  <ion-split-pane contentId="menu-content">
+    <ion-menu contentId="menu-content">
       <ion-header>
         <ion-toolbar color="tertiary">
           <ion-title>Menu</ion-title>
@@ -40,6 +40,6 @@
         </ion-list>
       </ion-content>
     </ion-menu>
-    <ion-router-outlet main></ion-router-outlet>
+    <ion-router-outlet id="menu-content"></ion-router-outlet>
   </ion-split-pane>
 </ion-app>

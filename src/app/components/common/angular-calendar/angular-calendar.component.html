@@ -1,10 +1,10 @@
 <ion-card>
-  <h3 text-center> {{title}} </h3>
+  <h3 class="ion-text-center"> {{title}} </h3>
   <br>
   <ion-grid>
-    <ion-row align-items-center>
-        <ion-col size-md="4" size-xs="12" align-self-center>
-        <div text-center>
+    <ion-row class="ion-align-items-center">
+        <ion-col size-md="4" size-xs="12" class="ion-align-self-center">
+        <div class="ion-text-center">
           <ion-button size="small" shape="round" fill="outline">
             <div mwlCalendarPreviousView [view]="view" [(viewDate)]="viewDate" [excludeDays]="excludeDays" (viewDateChange)="activeDayIsOpen = false">
               Prev
@@ -22,11 +22,11 @@
           </ion-button>
         </div>
       </ion-col>
-      <ion-col size-md="4" size-xs="12" align-self-center>
-        <h3 text-center>{{ viewDate | calendarDate:(view + 'ViewTitle'):'en' }}</h3>
+      <ion-col size-md="4" size-xs="12" class="ion-align-self-center">
+        <h3 class="ion-text-center">{{ viewDate | calendarDate:(view + 'ViewTitle'):'en' }}</h3>
       </ion-col>
-      <ion-col size-md="4" size-xs="12" align-self-center>
-        <div text-center>
+      <ion-col size-md="4" size-xs="12" class="ion-align-self-center">
+        <div class="ion-text-center">
           <ion-button size="small" shape="round" fill="outline" (click)="view = CalendarView.Month" [class.active]="view === CalendarView.Month">
             Month
           </ion-button>

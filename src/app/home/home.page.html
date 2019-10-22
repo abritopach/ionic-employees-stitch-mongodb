@@ -36,7 +36,7 @@
 <ion-content class="ion-padding">
 
   <ion-toolbar>
-    <ion-searchbar [formControl]="searchControl" animated="true" show-cancel-button (ionInput)="searchEmployees($event)" (ionCancel)="cancelSearch($event)" placeholder="Search">
+    <ion-searchbar [formControl]="searchControl" animated="true" showCancelButton="focus" (ionInput)="searchEmployees($event)" (ionCancel)="cancelSearch($event)" placeholder="Search">
     </ion-searchbar>
   </ion-toolbar>
 

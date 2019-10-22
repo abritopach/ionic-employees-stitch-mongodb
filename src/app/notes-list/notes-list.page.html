@@ -20,7 +20,7 @@
    <!-- Notes List Grid view. -->
    <ion-grid>
       <ion-row>
-        <ion-col dragula="NOTES" align-self-center size-lg="4" size-md="6" size-xs="6" *ngFor="let note of notes">
+        <ion-col dragula="NOTES" class="ion-align-self-center" size-lg="4" size-md="6" size-xs="6" *ngFor="let note of notes">
           <ion-card [ngStyle]="{'background': note.color}">
               <ion-item>
                 <ion-label class="ion-text-wrap"><b>{{ note?.title }}</b></ion-label>
@@ -68,7 +68,7 @@
                   </ion-item>
                   <ion-item *ngIf="note.collaborators" lines="none">
                     <ion-row nowrap>
-                    <ion-col align-self-baseline *ngFor="let collaborator of note.collaborators">
+                    <ion-col class="ion-align-self-baseline" *ngFor="let collaborator of note.collaborators">
                       <ion-avatar>
                         <img class="avatarImg" [src]="this.getAvatarById(collaborator.toString()).avatar">
                       </ion-avatar>
@@ -94,7 +94,7 @@
     <!-- Archived Notes List Grid view. -->
    <ion-grid *ngIf="showArchivedNotes">
     <ion-row>
-      <ion-col align-self-center size-lg="4" size-md="6" size-xs="6" *ngFor="let note of archivedNotes">
+      <ion-col class="ion-align-self-center" size-lg="4" size-md="6" size-xs="6" *ngFor="let note of archivedNotes">
         <ion-card>
             <ion-item>
               <ion-label class="ion-text-wrap">{{ note?.title }}</ion-label>
@@ -112,7 +112,7 @@
             </ion-item>
             <ion-item *ngIf="note.collaborators" lines="none">
                 <ion-row nowrap>
-                <ion-col align-self-baseline *ngFor="let collaborator of note.collaborators">
+                <ion-col aclass="ion-align-self-baseline" *ngFor="let collaborator of note.collaborators">
                   <ion-avatar>
                     <img class="avatarImg" [src]="this.getAvatarById(collaborator.toString()).avatar">
                   </ion-avatar>

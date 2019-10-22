@@ -11,7 +11,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content padding>
+<ion-content class="ion-padding">
   <form [formGroup]="requestHolidaysForm" novalidate (ngSubmit)="requestHolidaysFormSubmit()">
       <ion-list inset>
         <ion-item class="whoFor" lines="none">
@@ -74,8 +74,8 @@
           <ion-textarea formControlName="reason"></ion-textarea>
         </ion-item>
       </ion-list>
-      <ion-row no-padding justify-content-center>
-          <ion-col col-auto text-right>
+      <ion-row class="ion-justify-content-center ion-no-padding">
+          <ion-col col-auto class="ion-text-right">
               <ion-button [disabled]='!requestHolidaysForm.valid' type="submit" fill="clear" size="small" color="primary">
               <ion-icon name='send' slot="start"></ion-icon>
               Book
