@@ -16,6 +16,8 @@ import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 
 import { NgSelectModule } from '@ng-select/ng-select';
 
+import {NtkmeButtonModule} from '@ctrl/ngx-github-buttons';
+
 @NgModule({
   declarations: [FooterComponent, HeaderComponent, TodoListHeaderComponent, TodoListComponent,
      TodoListItemComponent, TodoListFooterComponent, MoreOptionsPopoverComponent, AngularCalendarComponent],
@@ -27,10 +29,12 @@ import { NgSelectModule } from '@ng-select/ng-select';
       provide: DateAdapter,
       useFactory: adapterFactory
     }),
-    NgSelectModule
+    NgSelectModule,
+    NtkmeButtonModule
   ],
   exports: [FooterComponent, HeaderComponent, TodoListHeaderComponent, TodoListComponent, TodoListItemComponent,
-            TodoListFooterComponent, MoreOptionsPopoverComponent, AngularCalendarComponent, CalendarModule, NgSelectModule],
+            TodoListFooterComponent, MoreOptionsPopoverComponent, AngularCalendarComponent, CalendarModule, NgSelectModule,
+            NtkmeButtonModule],
   entryComponents: [MoreOptionsPopoverComponent]
 })
 export class SharedComponentsModule { }
