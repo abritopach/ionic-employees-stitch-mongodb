@@ -1,5 +1,9 @@
 # IonicEmployeesStitchMongoDB
 
+**If you want to help me to keep contributing to open source with projects, examples, plugins,... help me and buy me a coffee.**
+
+<a href="https://www.buymeacoffee.com/h6WVj4HcD" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/yellow_img.png" alt="Buy Me A Coffee"></a>
+
 Sample project that shows how to build a Employees List with Angular, Ionic 4 and Stitch MongoDB.
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.7.4.
@@ -35,10 +39,6 @@ This project shows you how to:
 Technologies: Angular, Ionic, Stitch MongoDB, TypeScript.
 
 ![Technologies](readme_resources/technologies.jpg "Technologies")
-
-If you want to help me to keep contributing to open source with projects, examples, plugins,... help me and buy me a coffee.
-
-<a href="https://www.buymeacoffee.com/h6WVj4HcD" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/yellow_img.png" alt="Buy Me A Coffee"></a>
 
 ## App Example
 
