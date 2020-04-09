@@ -33,7 +33,7 @@
             <p><b> {{request.countDays}}  days <span *ngIf="request.reason !== ''">( {{request.reason}} )</span></b></p>
             <p><b> {{request.status.toUpperCase()}} ( {{request.managerComment}} ) </b></p>
         </ion-label>
-        <ion-icon tappable name="more" slot="end" (click)="onClickMoreOptions(request)"></ion-icon>
+        <ion-icon tappable name="ellipsis-vertical" slot="end" (click)="onClickMoreOptions(request)"></ion-icon>
       </ion-item>
     </ion-card>
     <br/>
@@ -54,7 +54,7 @@
             <p><b> {{request.countDays}}  days <span *ngIf="request.reason !== ''">( {{request.reason}} )</span></b></p>
             <p><b> {{request.status.toUpperCase()}} </b></p>
         </ion-label>
-        <ion-icon tappable name="more" slot="end" (click)="onClickMoreOptions(request)"></ion-icon>
+        <ion-icon tappable name="ellipsis-vertical" slot="end" (click)="onClickMoreOptions(request)"></ion-icon>
       </ion-item>
     </ion-card>
     <br/>
@@ -75,7 +75,7 @@
               <p><b> {{request.countDays}}  days <span *ngIf="request.reason !== ''">( {{request.reason}} ) </span></b></p>
               <p><b> {{request.status.toUpperCase()}} </b></p>
           </ion-label>
-          <ion-icon tappable name="more" slot="end" (click)="onClickMoreOptions(request)"></ion-icon>
+          <ion-icon tappable name="ellipsis-vertical" slot="end" (click)="onClickMoreOptions(request)"></ion-icon>
         </ion-item>
       </ion-card>
   </div>
@@ -121,7 +121,7 @@
             <p><b> {{holiday.countDays}}  days <span *ngIf="holiday.reason !== ''">( {{holiday.reason}} )</span></b></p>
             <p><b> {{holiday.status.toUpperCase()}} ( {{holiday.managerComment}} ) </b></p>
         </ion-label>
-        <ion-icon tappable name="more" slot="end" (click)="onClickMoreOptions(holiday)"></ion-icon>
+        <ion-icon tappable name="ellipsis-vertical" slot="end" (click)="onClickMoreOptions(holiday)"></ion-icon>
       </ion-item>
     </ion-card>
   </div>

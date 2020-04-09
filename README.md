@@ -36,6 +36,10 @@ Technologies: Angular, Ionic, Stitch MongoDB, TypeScript.
 
 ![Technologies](readme_resources/technologies.jpg "Technologies")
 
+If you want to help me to keep contributing to open source with projects, examples, plugins,... help me and buy me a coffee.
+
+<a href="https://www.buymeacoffee.com/h6WVj4HcD" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/yellow_img.png" alt="Buy Me A Coffee"></a>
+
 ## App Example
 
 ![App](readme_resources/app.gif "App")

@@ -4,7 +4,7 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { AppModule } from './app/app.module';
 import { environment } from './environments/environment';
 
-import { defineCustomElements } from 'st-three-dimensional-card-carousel/loader';
+import { defineCustomElements } from 'st-three-dimensional-card-carousel/dist/loader';
 
 if (environment.production) {
   enableProdMode();

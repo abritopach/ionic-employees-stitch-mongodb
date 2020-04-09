@@ -70,8 +70,8 @@ export class HolidaysPage implements OnInit {
         const objectId = new ObjectId(res);
         this.stitchMongoService.find(config.COLLECTION_KEY, {user_id: objectId}).then(result => {
           console.log(result);
-          this.employeesHolidaysRequests = result[0]['employees_holidays_requests'];
           if ((result.length !== 0) && (typeof result[0]['holidays'] !== 'undefined')) {
+            this.employeesHolidaysRequests = result[0]['employees_holidays_requests'];
             this.holidays = result[0]['holidays'];
             this.formatEventsCalendar();
           }

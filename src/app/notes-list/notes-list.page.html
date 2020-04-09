@@ -4,7 +4,7 @@
     </ion-buttons>
     <ion-buttons buttons-end slot='end'>
         <ion-button (click)="presentPopover('optionsAllNotes')">
-            <ion-icon slot="icon-only" name="more"></ion-icon>
+            <ion-icon slot="icon-only" name="ellipsis-vertical"></ion-icon>
         </ion-button>
       </ion-buttons>
   </app-header>
@@ -26,7 +26,7 @@
                 <ion-label class="ion-text-wrap"><b>{{ note?.title }}</b></ion-label>
                 <!--
                 <ion-button slot='end' (click)="presentPopover('optionsNote', note)" fill="clear">
-                    <ion-icon slot="icon-only" name="more"></ion-icon>
+                    <ion-icon slot="icon-only" name="ellipsis-vertical"></ion-icon>
                 </ion-button>
                 -->
                 <ion-buttons slot='end'>
@@ -38,7 +38,7 @@
                     <ion-icon slot="icon-only" name="notifications" color="primary"></ion-icon>
                   </ion-button>
                   <ion-button (click)="presentPopover('optionsNote', note)" fill="clear">
-                    <ion-icon slot="icon-only" name="more"></ion-icon>
+                    <ion-icon slot="icon-only" name="ellipsis-vertical"></ion-icon>
                   </ion-button>
                 </ion-buttons>
               </ion-item>
@@ -86,7 +86,7 @@
 
     <!-- Archived notes. -->
     <ion-item-divider>
-      <ion-icon [name]="showArchivedNotes ? 'arrow-dropup' : 'arrow-dropdown'" (click)="showArchivedNotes = !showArchivedNotes"></ion-icon>
+      <ion-icon [name]="showArchivedNotes ? 'arrow-up' : 'arrow-down'" (click)="showArchivedNotes = !showArchivedNotes"></ion-icon>
       <ion-label>
           {{archivedNotes.length}} archived notes
       </ion-label>
@@ -99,7 +99,7 @@
             <ion-item>
               <ion-label class="ion-text-wrap">{{ note?.title }}</ion-label>
               <ion-button slot='end' (click)="presentPopover('optionsArchivedNote', note)" fill="clear">
-                  <ion-icon slot="icon-only" name="more"></ion-icon>
+                  <ion-icon slot="icon-only" name="ellipsis-vertical"></ion-icon>
               </ion-button>
             </ion-item>
             <ion-card-content tappable routerLink="/todo/{{ note.id }}">

@@ -50,7 +50,7 @@
 
 /** Evergreen browsers require these. **/
 // Used for reflect-metadata in JIT. If you use AOT (and only Angular decorators), you can remove.
-import 'core-js/es7/reflect';
+// import 'core-js/es7/reflect';
 
 
 /**
@@ -87,5 +87,3 @@ import 'zone.js/dist/zone';  // Included with Angular CLI.
  */
 
 (window as any).global = window;
-
-import '@webcomponents/webcomponentsjs/custom-elements-es5-adapter.js';

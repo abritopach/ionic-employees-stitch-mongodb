@@ -25,8 +25,10 @@ export class FavoritesPage implements OnInit {
         const objectId = new ObjectId(res);
         this.stitchMongoService.find(config.COLLECTION_KEY, {user_id: objectId}).then(result => {
           console.log(result);
-          if (typeof result[0]['favorites'] !== 'undefined') {
-            this.favorites = result[0]['favorites'];
+          if (result.length !== 0) {
+            if (typeof result[0]['favorites'] !== 'undefined') {
+              this.favorites = result[0]['favorites'];
+            }
           }
         });
       }
